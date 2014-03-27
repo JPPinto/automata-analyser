@@ -10,18 +10,20 @@ public class EG1{  public static void main(String args []) throws ParseExcepti
 | < OPEN1: "[" >
 | < CLOSE1: "]" >
 | < LABEL: "label=" >
-| < FIRST: "[style=invis]" >
+| < FIRST: "\"\" [shape=none]" >
+| < INITIAL: "\"\"" >
 | < FINAL: "[shape=doublecircle]" >
 | < OP: "*"|"+" >
 | < DIGIT:(["0"-"9"])+ >
 | < VAR: (["a"-"z"])+ >
+| < TERM: (["a"-"z"]|["A"-"Z"]|["0"-"9"])* >
 }
 
 void ExprS() : {}
 {
   try {
     (
-      < DIGIT >
+      < TYPE >< OPEN >< FIRST >< INITIAL >< EDGE >< VAR > (< VAR >< EDGE >< VAR >(< OPEN1 >< LABEL >< TERM >< CLOSE1 >))*<  VAR >< FINAL >
     )
         { System.out.println("MATCH"); }
   }catch (ParseException e) {
