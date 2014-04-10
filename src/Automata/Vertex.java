@@ -1,8 +1,4 @@
-package com.Compiladores;
 
-/**
- * Created by Jose on 09/04/2014.
- */
 public class Vertex {
 
 	private String name;

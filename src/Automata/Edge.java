@@ -1,5 +1,3 @@
-package com.Compiladores;
-
 import org.jgraph.graph.DefaultEdge;
 
 import java.util.Objects;
