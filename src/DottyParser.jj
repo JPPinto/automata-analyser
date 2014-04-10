@@ -1,7 +1,7 @@
 /**
  * JavaCC template file created by SF JavaCC plugin 1.5.17+ wizard for JavaCC 1.5.0+
  */options{  JDK_VERSION = "1.5";  FORCE_LA_CHECK=true;
-  LOOKAHEAD=2;  static = true;}PARSER_BEGIN(EG1)import javax.swing.*;import javax.swing.filechooser.FileNameExtensionFilter;import java.awt.*;import javax.swing.*;import java.awt.event.KeyEvent;import java.awt.event.ActionEvent;import java.awt.event.ActionListener;import java.io.*;public class EG1{  private static FileInputStream in = null;  private static EG1 parser = null;  public static void main(String args []) throws ParseException  {    //SET LOOK AND FEEL    try    {      UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());    }    catch (UnsupportedLookAndFeelException e)    {}    catch (ClassNotFoundException e)    {}    catch (InstantiationException e)    {}    catch (IllegalAccessException e)    {}    //JFRAME    JFrame frame = new JFrame("Autoanaly - The Automata Analyzer");    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);    JTextArea text=new JTextArea();
+  LOOKAHEAD=1;  static = true;}PARSER_BEGIN(EG1)import javax.swing.*;import javax.swing.filechooser.FileNameExtensionFilter;import java.awt.*;import javax.swing.*;import java.awt.event.KeyEvent;import java.awt.event.ActionEvent;import java.awt.event.ActionListener;import java.io.*;public class EG1{  private static FileInputStream in = null;  private static EG1 parser = null;  public static void main(String args []) throws ParseException  {    //SET LOOK AND FEEL    try    {      UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());    }    catch (UnsupportedLookAndFeelException e)    {}    catch (ClassNotFoundException e)    {}    catch (InstantiationException e)    {}    catch (IllegalAccessException e)    {}    //JFRAME    JFrame frame = new JFrame("Autoanaly - The Automata Analyzer");    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);    JTextArea text=new JTextArea();
     text.setEditable(false);    text.setPreferredSize(new Dimension(500, 200));
     redirectConsoleTo(text);
     JScrollPane scroll=new JScrollPane(text);    frame.add(scroll, BorderLayout.CENTER);    //JMENU BAR
@@ -12,7 +12,7 @@
 
 void Graph():{}
 {
-	(< INITIAL > < SHAPE > < INITIAL > < EDGE > < VAR >{Vev();} (< VAR > < FINAL >)+)
+	(< INITIAL > < SHAPE > (< VAR > < FINAL >)+ < INITIAL > < EDGE > < VAR >{Vev();})
 }
 
 void Vev():{}
