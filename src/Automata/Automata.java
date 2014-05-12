@@ -12,13 +12,11 @@ package Automata;
 
 import org.jgraph.JGraph;
 import org.jgraph.graph.*;
-import org.jgrapht.DirectedGraph;
 import org.jgrapht.ext.JGraphModelAdapter;
 import org.jgrapht.graph.*;
 import org.jgrapht.graph.DefaultEdge;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -32,14 +30,11 @@ public class Automata extends JFrame {
 	public ListenableDirectedGraph g;
 	public static int edgeCount = 0;
 	public static int vertexCount = 0;
-	public static final int MAX_SIZE = 2048;
 	public HashMap<String, Vertex> vertexes;
 	public ArrayList<Edge> edges;
 	//private String[] acceptedAlphabet;
 
 	public static final long serialVersionUID = 3256444702936019250L;
-	public static final Color DEFAULT_BG_COLOR = Color.decode("#FAFBFF");
-	public static final Dimension DEFAULT_SIZE = new Dimension(530, 320);
 
 	public JGraphModelAdapter<String, DefaultEdge> jgAdapter;
 
@@ -54,7 +49,7 @@ public class Automata extends JFrame {
 		init();
 		setFocusable(true);
 		setFocusTraversalKeysEnabled(false);
-		setTitle("Auto Analyze");
+		setTitle(Constants.guiName);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		pack();
 		setVisible(true);
@@ -63,11 +58,13 @@ public class Automata extends JFrame {
 	}
 
 	public void parseDottyfile(File file) {
-		String graph = "";
+		String graph = null;
+
+        // TODO: Fix file loading (Size limit)
 		try {
 			FileReader fr = new FileReader(file);
 
-			char[] content = new char[MAX_SIZE];
+			char[] content = new char[Constants.maxFileSize];
 			fr.read(content);
 
 			graph = new String(content);
@@ -76,12 +73,14 @@ public class Automata extends JFrame {
 			System.out.println("File " + file.getName() + "not found!");
 		} catch (IOException e) {
 			e.printStackTrace();
+            return;
 		}
 
 		String[] lines = graph.split("\r\n");
 
-		for (int i = 0; i < lines.length; i++)
-			parseLine(lines[i]);
+		for (int i = 0; i < lines.length; i++) {
+            parseLine(lines[i]);
+        }
 
 	}
 
@@ -146,7 +145,7 @@ public class Automata extends JFrame {
 			String[] content = s.split("\\[");
 			String shape = content[1].substring(0, content[1].length() - 1);
 
-			if (shape.equals("shape=doublecircle")) {
+			if (shape.equals(Constants.dottyAcceptanceState)) {
 				Vertex tempVertex = new Vertex(content[0], true, false);
 				if (!vertexes.containsKey(content[0]))
 					vertexes.put(content[0],tempVertex);
@@ -172,8 +171,7 @@ public class Automata extends JFrame {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void init()
-	{
+	public void init() {
 		// create a visualization using JGraph, via an adapter
 		jgAdapter = new JGraphModelAdapter<String, DefaultEdge>(this.g);
 
@@ -207,16 +205,12 @@ public class Automata extends JFrame {
 
 	private void adjustDisplaySettings(JGraph jg)
 	{
-		jg.setPreferredSize(DEFAULT_SIZE);
-
-		Color c = DEFAULT_BG_COLOR;
-
-		jg.setBackground(c);
+		jg.setPreferredSize(Constants.guiDefaultWindowSize);
+		jg.setBackground(Constants.guiDefaultBackgroundColor);
 	}
 
 	@SuppressWarnings("unchecked") // FIXME hb 28-nov-05: See FIXME below
-	private void positionVertexAt(Object vertex, int x, int y)
-	{
+	private void positionVertexAt(Object vertex, int x, int y) {
 		DefaultGraphCell cell = jgAdapter.getVertexCell(vertex);
 		AttributeMap attr = cell.getAttributes();
 		Rectangle2D bounds = GraphConstants.getBounds(attr);
@@ -234,18 +228,6 @@ public class Automata extends JFrame {
 		AttributeMap cellAttr = new AttributeMap();
 		cellAttr.put(cell, attr);
 		jgAdapter.edit(cellAttr, null, null, null);
-	}
-
-	private static class ListenableDirectedMultigraph<V, E>
-			extends DefaultListenableGraph<V, E>
-			implements DirectedGraph<V, E>
-	{
-		private static final long serialVersionUID = 1L;
-
-		ListenableDirectedMultigraph(Class<E> edgeClass)
-		{
-			super(new DirectedMultigraph<V, E>(edgeClass));
-		}
 	}
 
 	public static void main(String[] args) {
