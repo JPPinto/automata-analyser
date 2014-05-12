@@ -9,19 +9,19 @@ import java.util.Objects;
  */
 public class Edge extends DefaultEdge {
 
-	private String simbol;
+	private String symbol;
 	private int number;
 
 	public Edge(int n, String sim){
 		number = n;
-		simbol = sim;
+		symbol = sim;
 	}
 
-	public String getSimbol() {
-		return simbol;
+	public String getSymbol() {
+		return symbol;
 	}
 
-	public void setSimbol(String simbol) {
-		this.simbol = simbol;
+	public void setSymbol(String symbol) {
+		this.symbol = symbol;
 	}
 }
