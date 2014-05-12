@@ -6,15 +6,14 @@ package com.Compiladores;
 public class Vertex {
 
 	private String name;
-	private int num_of_Vertex;
-	private boolean final_state;
-	private boolean inicial_state;
+	private int numOfVertex;
+	private boolean finalState;
+	private boolean initialState;
 
-	Vertex(String n, boolean f, boolean i, int num){
+	Vertex(String n, boolean f, boolean i){
 		name = n;
-		num_of_Vertex = num;
-		final_state = f;
-		inicial_state = i;
+		finalState = f;
+		initialState = i;
 	}
 
 	public String getName() {
@@ -25,27 +24,27 @@ public class Vertex {
 		this.name = name;
 	}
 
-	public int getNum_of_Vertex() {
-		return num_of_Vertex;
+	public int getNumOfVertex() {
+		return numOfVertex;
 	}
 
-	public void setNum_of_Vertex(int num_of_Vertex) {
-		this.num_of_Vertex = num_of_Vertex;
+	public void setnumOfVertex(int numOfVertex) {
+		this.numOfVertex = numOfVertex;
 	}
 
-	public boolean isFinal_state() {
-		return final_state;
+	public boolean isFinalState() {
+		return finalState;
 	}
 
-	public void setFinal_state(boolean final_state) {
-		this.final_state = final_state;
+	public void setFinalState(boolean finalState) {
+		this.finalState = finalState;
 	}
 
-	public boolean isInicial_state() {
-		return inicial_state;
+	public boolean isInitialState() {
+		return initialState;
 	}
 
-	public void setInicial_state(boolean inicial_state) {
-		this.inicial_state = inicial_state;
+	public void setInitialState(boolean initialS) {
+		this.initialState = initialS;
 	}
 }

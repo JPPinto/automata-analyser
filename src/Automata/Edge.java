@@ -7,21 +7,40 @@ import java.util.Objects;
 /**
  * Created by Jose on 03/04/2014.
  */
+
 public class Edge extends DefaultEdge {
 
-	private String simbol;
-	private int number;
+	private String symbol;
+	private String source;
+	private String destination;
 
-	public Edge(int n, String sim){
-		number = n;
-		simbol = sim;
+	public Edge(String sym, String src, String dst){
+		symbol = sym;
+		source = src;
+		destination = dst;
 	}
 
 	public String getSimbol() {
-		return simbol;
+		return symbol;
 	}
 
 	public void setSimbol(String simbol) {
-		this.simbol = simbol;
+		this.symbol = simbol;
+	}
+
+	public String getSource() {
+		return source;
+	}
+
+	public void setSource(String source) {
+		this.source = source;
+	}
+
+	public String getDestination() {
+		return destination;
+	}
+
+	public void setDestination(String destination) {
+		this.destination = destination;
 	}
 }

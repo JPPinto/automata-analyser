@@ -1,6 +1,9 @@
 digraph{
 ""[shape=none]
-""->a
-a->b[label="2"]
 b[shape=doublecircle]
+c[shape=doublecircle]
+""->A
+A->b[label=2]
+A->c[label=3]
+b->d[label=1]
 }
