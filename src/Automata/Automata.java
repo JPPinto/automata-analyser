@@ -1,4 +1,4 @@
-package com.Compiladores;
+package Automata;
 
 import org.jgraph.JGraph;
 import org.jgraph.graph.*;
@@ -242,7 +242,11 @@ public class Automata extends JFrame {
 	}
 
 	public static void main(String[] args) {
+<<<<<<< HEAD
 		Automata automata = new Automata(new File("./graph1.gv"));
 		System.out.println();
+=======
+
+>>>>>>> 17442f1b6b9984c0e7de4c1a235bd6290213fe39
 	}
 }
