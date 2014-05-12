@@ -1,12 +1,16 @@
+/**
+ * AutoAnalyzer (COMP 2013-2014)
+ *
+ * Eduardo Fernandes (200803951)
+ * João Correia      (201208114)
+ * José Pinto        (201203811)
+ *
+ * Edge class
+ */
+
 package Automata;
 
 import org.jgraph.graph.DefaultEdge;
-
-import java.util.Objects;
-
-/**
- * Created by Jose on 03/04/2014.
- */
 
 public class Edge extends DefaultEdge {
 
@@ -15,18 +19,12 @@ public class Edge extends DefaultEdge {
 	private String source;
 	private String destination;
 
-	public Edge(String sym, String src, String dst){
+    private int number;
+
+    public Edge(String sym, String src, String dst){
 		symbol = sym;
 		source = src;
 		destination = dst;
-	}
-
-	public String getSimbol() {
-		return symbol;
-	}
-
-	public void setSimbol(String simbol) {
-		this.symbol = simbol;
 	}
 
 	public String getSource() {
@@ -44,11 +42,10 @@ public class Edge extends DefaultEdge {
 	public void setDestination(String destination) {
 		this.destination = destination;
 	}
-	private int number;
 
-	public Edge(int n, String sim){
+	public Edge(int n, String sym){
 		number = n;
-		symbol = sim;
+		symbol = sym;
 	}
 
 	public String getSymbol() {

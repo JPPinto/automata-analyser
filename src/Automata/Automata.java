@@ -1,10 +1,18 @@
+/**
+ * AutoAnalyzer (COMP 2013-2014)
+ *
+ * Eduardo Fernandes (200803951)
+ * João Correia      (201208114)
+ * José Pinto        (201203811)
+ *
+ * Automata class
+ */
+
 package Automata;
 
 import org.jgraph.JGraph;
 import org.jgraph.graph.*;
 import org.jgrapht.DirectedGraph;
-import org.jgrapht.ListenableGraph;
-import org.jgrapht.demo.JGraphAdapterDemo;
 import org.jgrapht.ext.JGraphModelAdapter;
 import org.jgrapht.graph.*;
 import org.jgrapht.graph.DefaultEdge;
@@ -17,18 +25,17 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Automata extends JFrame {
 
 	public ListenableDirectedGraph g;
-	public static int edge_count = 0;
-	public static int vertex_count = 0;
+	public static int edgeCount = 0;
+	public static int vertexCount = 0;
 	public static final int MAX_SIZE = 2048;
-	public HashMap<String, Vertex> vertexs;
+	public HashMap<String, Vertex> vertexes;
 	public ArrayList<Edge> edges;
-	//private String[] accepted_alphabeth;
+	//private String[] acceptedAlphabet;
 
 	public static final long serialVersionUID = 3256444702936019250L;
 	public static final Color DEFAULT_BG_COLOR = Color.decode("#FAFBFF");
@@ -39,7 +46,7 @@ public class Automata extends JFrame {
 	public Automata(File file) {
 
 		edges = new ArrayList<Edge>();
-		vertexs = new HashMap<String, Vertex>();
+		vertexes = new HashMap<String, Vertex>();
 
 		g = new ListenableDirectedGraph(org.jgraph.graph.DefaultEdge.class);
 		parseDottyfile(file);
@@ -105,12 +112,12 @@ public class Automata extends JFrame {
 			//	addVertex(sides[0], false, false);
 
 			Vertex tempVertex = new Vertex(sides[0], false, false);
-			if (!vertexs.containsKey(sides[0]))
-				vertexs.put(sides[0],tempVertex);
+			if (!vertexes.containsKey(sides[0]))
+				vertexes.put(sides[0],tempVertex);
 
 			tempVertex = new Vertex(content[0], false, false);
-			if (!vertexs.containsKey(content[0]))
-				vertexs.put(content[0],tempVertex);
+			if (!vertexes.containsKey(content[0]))
+				vertexes.put(content[0],tempVertex);
 
 			//if(!g.containsVertex(content[0]))
 			//	addVertex(content[0], false, false);
@@ -129,8 +136,8 @@ public class Automata extends JFrame {
 			String right_content = content[1].substring(0, content[1].length());
 
 			Vertex tempVertex = new Vertex(right_content, false, true);
-			if (!vertexs.containsKey(right_content))
-				vertexs.put(right_content,tempVertex);
+			if (!vertexes.containsKey(right_content))
+				vertexes.put(right_content,tempVertex);
 
 			return;
 		}
@@ -141,8 +148,8 @@ public class Automata extends JFrame {
 
 			if (shape.equals("shape=doublecircle")) {
 				Vertex tempVertex = new Vertex(content[0], true, false);
-				if (!vertexs.containsKey(content[0]))
-					vertexs.put(content[0],tempVertex);
+				if (!vertexes.containsKey(content[0]))
+					vertexes.put(content[0],tempVertex);
 			}
 
 			return;
@@ -151,13 +158,13 @@ public class Automata extends JFrame {
 
 	public void loadGraph(){
 
-		for (Map.Entry<String, Vertex> entry : vertexs.entrySet()) {
+		for (Map.Entry<String, Vertex> entry : vertexes.entrySet()) {
 			g.addVertex(entry.getValue().getName());
 			//positionVertexAt(entry.getValue().getName(), 130, 40);
 		}
 
 		for (int i = 0; i < edges.size(); i++){
-			g.addEdge(edges.get(i).getSource(), edges.get(i).getDestination(), edges.get(i).getSimbol());
+			g.addEdge(edges.get(i).getSource(), edges.get(i).getDestination(), edges.get(i).getSymbol());
 		}
 
 	}

@@ -30,6 +30,7 @@
           <root url="jar://$MODULE_DIR$/lib/jgraph-5.13.0.0.jar!/" />
           <root url="jar://$MODULE_DIR$/lib/jgrapht-core-0.9.0.jar!/" />
           <root url="jar://$MODULE_DIR$/lib/jgraphx-2.0.0.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/jgrapht-ext-0.9.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

@@ -1,7 +1,16 @@
+/**
+ * AutoAnalyzer (COMP 2013-2014)
+ *
+ * Eduardo Fernandes (200803951)
+ * João Correia      (201208114)
+ * José Pinto        (201203811)
+ *
+ * Vertex class
+ */
+
 package Automata;
 
 public class Vertex {
-
 	private String name;
 	private int numOfVertex;
 	private boolean finalState;
