@@ -1,3 +1,5 @@
+package Automata;
+
 import org.jgrapht.ListenableGraph;
 import org.jgrapht.graph.*;
 

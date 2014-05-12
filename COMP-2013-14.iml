@@ -6,18 +6,15 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
-    <orderEntry type="module-library">
+    <orderEntry type="module-library" exported="">
       <library name="JGraphT">
-        <CLASSES />
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/jgraph-5.13.0.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/jgrapht-core-0.9.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/jgraphx-2.0.0.1.jar!/" />
+        </CLASSES>
         <JAVADOC />
-        <SOURCES>
-          <root url="file://$MODULE_DIR$/JGraphT Source/jgrapht-ext/src/main/java" />
-          <root url="file://$MODULE_DIR$/JGraphT Source/jgrapht-ext/src/test/java" />
-          <root url="file://$MODULE_DIR$/JGraphT Source/jgrapht-core/src/main/java" />
-          <root url="file://$MODULE_DIR$/JGraphT Source/jgrapht-core/src/test/java" />
-          <root url="file://$MODULE_DIR$/JGraphT Source/jgrapht-demo/src/main/java" />
-          <root url="file://$MODULE_DIR$/JGraphT Source/jgrapht-touchgraph/src/main/java" />
-        </SOURCES>
+        <SOURCES />
       </library>
     </orderEntry>
     <orderEntry type="sourceFolder" forTests="false" />

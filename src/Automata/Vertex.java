@@ -1,3 +1,4 @@
+package Automata;
 
 public class Vertex {
 
