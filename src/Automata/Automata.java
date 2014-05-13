@@ -226,9 +226,4 @@ public class Automata extends JPanel {
 		cellAttr.put(cell, attr);
 		jgAdapter.edit(cellAttr, null, null, null);
 	}
-
-	/*public static void main(String[] args) {
-		Automata automata = new Automata(new File("./graph1.gv"));
-		System.out.println();
-	}*/
 }
