@@ -264,5 +264,29 @@ public class Automata extends JPanel {
 		}
 		
 		return new Automata(edges, tempVertexes);
-	} 
+	}
+	
+	public String convertToDotty(){
+		String total="digraph{\n\"\"[shape=none]\n";
+		
+		for (Map.Entry<String, Vertex> entry : vertexes.entrySet()) {
+			if (entry.getValue().isAcceptanceState()) {
+				total+=entry.getValue().getName()+"[shape=doublecircle]\n";
+			}
+		}
+		
+		for (Map.Entry<String, Vertex> entry : vertexes.entrySet()) {
+			if (entry.getValue().isInitialState()) {
+				total+="\"\"->"+entry.getValue().getName()+"\n";
+				break;
+			}
+		}
+
+		for (int i = 0; i < edges.size(); i++) {
+			total+=edges.get(i).getSource()+"->"+edges.get(i).getDestination()+"[label="+edges.get(i).getSymbol()+"]\n";
+		}
+		total+="}";
+
+		return total;
+	}
 }
