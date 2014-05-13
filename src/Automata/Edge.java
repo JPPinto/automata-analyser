@@ -5,7 +5,7 @@
  * João Correia      (201208114)
  * José Pinto        (201203811)
  *
- * Edge class
+ * Edge class (State)
  */
 
 package Automata;
