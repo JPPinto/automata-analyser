@@ -59,6 +59,18 @@ public class Automata extends JPanel {
 
 		loadGraph();
 	}
+	
+	public Automata(ArrayList<Edge> e, HashMap<String, Vertex> v) {
+
+		edges = e;
+		vertexes = v;
+
+		g = new ListenableDirectedGraph(org.jgraph.graph.DefaultEdge.class);
+		
+		init();
+
+		loadGraph();
+	}
 
 	public void parseDottyFile(String graph) {
 
@@ -184,7 +196,7 @@ public class Automata extends JPanel {
 	}
 
 	private void adjustDisplaySettings(JGraph jg) {
-		jg.setPreferredSize(new Dimension(420, 326));
+		jg.setPreferredSize(new Dimension(420, 316));
 		jg.setBackground(Constants.guiDefaultBackgroundColor);
 	}
 
@@ -242,4 +254,18 @@ public class Automata extends JPanel {
 
 		return true;
 	}
+	
+	public Automata getComplement(){
+		
+		HashMap<String, Vertex> tempVertexes = vertexes;
+		
+		for (Map.Entry<String, Vertex> entry : vertexes.entrySet()) {
+			if(entry.getValue().isAcceptanceState())
+				entry.getValue().setAcceptanceState(false);
+			else
+				entry.getValue().setAcceptanceState(true);
+		}
+		
+		return new Automata(edges, tempVertexes);
+	} 
 }
