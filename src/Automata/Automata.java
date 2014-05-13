@@ -44,7 +44,7 @@ public class Automata extends JFrame {
 		vertexes = new HashMap<String, Vertex>();
 
 		g = new ListenableDirectedGraph(org.jgraph.graph.DefaultEdge.class);
-		parseDottyfile(file);
+		parseDottyFile(file);
 
 		init();
 		setFocusable(true);
@@ -57,7 +57,7 @@ public class Automata extends JFrame {
 		loadGraph();
 	}
 
-	public void parseDottyfile(File file) {
+	public void parseDottyFile(File file) {
 		String graph = null;
 
         // TODO: Fix file loading (Size limit)
@@ -71,8 +71,9 @@ public class Automata extends JFrame {
 
 		} catch (FileNotFoundException e) {
 			System.out.println("File " + file.getName() + "not found!");
+            return;
 		} catch (IOException e) {
-			e.printStackTrace();
+            System.out.println("Problem loading file: " + file.getName() + " " + e.getMessage());
             return;
 		}
 
@@ -155,7 +156,7 @@ public class Automata extends JFrame {
 		}
 	}
 
-	public void loadGraph(){
+	public void loadGraph() {
 
 		for (Map.Entry<String, Vertex> entry : vertexes.entrySet()) {
 			g.addVertex(entry.getValue().getName());
@@ -203,8 +204,7 @@ public class Automata extends JFrame {
 		positionVertexAt(v4, 380, 70);*/
 	}
 
-	private void adjustDisplaySettings(JGraph jg)
-	{
+	private void adjustDisplaySettings(JGraph jg) {
 		jg.setPreferredSize(Constants.guiDefaultWindowSize);
 		jg.setBackground(Constants.guiDefaultBackgroundColor);
 	}
