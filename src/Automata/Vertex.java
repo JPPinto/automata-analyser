@@ -5,7 +5,7 @@
  * João Correia      (201208114)
  * José Pinto        (201203811)
  *
- * Vertex class
+ * Vertex class (Transition)
  */
 
 package Automata;
@@ -34,7 +34,7 @@ public class Vertex {
 		return numOfVertex;
 	}
 
-	public void setnumOfVertex(int numOfVertex) {
+	public void setNumOfVertex(int numOfVertex) {
 		this.numOfVertex = numOfVertex;
 	}
 
@@ -53,4 +53,24 @@ public class Vertex {
 	public void setInitialState(boolean initialS) {
 		this.initialState = initialS;
 	}
+
+    public boolean equals(Vertex compare){
+        if (!name.equals(compare.getName())){
+            return false;
+        }
+
+        if (numOfVertex != compare.getNumOfVertex()){
+            return false;
+        }
+
+        if (acceptanceState != compare.isAcceptanceState()){
+            return false;
+        }
+
+        if (initialState != compare.isInitialState()) {
+            return false;
+        }
+
+        return true;
+    }
 }
