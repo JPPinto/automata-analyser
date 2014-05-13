@@ -257,12 +257,13 @@ public class Automata extends JPanel {
 	
 	public Automata getComplement(){
 		
-		HashMap<String, Vertex> tempVertexes = vertexes;
+		HashMap<String, Vertex> tempVertexes = new HashMap<String, Vertex>(vertexes); // FIX THIS CRAP
+        ArrayList<Edge> tempEdges = new ArrayList<Edge>(edges);
 		
-		for (Map.Entry<String, Vertex> entry : vertexes.entrySet()) {
+		for (Map.Entry<String, Vertex> entry : tempVertexes.entrySet()) {
             entry.getValue().setAcceptanceState(!entry.getValue().isAcceptanceState());
 		}
 		
-		return new Automata(edges, tempVertexes);
+		return new Automata(tempEdges, tempVertexes);
 	} 
 }
