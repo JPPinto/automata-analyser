@@ -17,6 +17,10 @@ import org.jgrapht.graph.*;
 import org.jgrapht.graph.DefaultEdge;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -160,7 +164,7 @@ public class Automata extends JPanel {
 		adjustDisplaySettings(jgraph);
 		add(jgraph);
 
-		/*String v1 = "v1";
+		String v1 = "v1";
 		String v2 = "v2";
 		String v3 = "v3";
 		String v4 = "v4";
@@ -180,7 +184,7 @@ public class Automata extends JPanel {
 		positionVertexAt(v1, 130, 40);
 		positionVertexAt(v2, 60, 200);
 		positionVertexAt(v3, 310, 230);
-		positionVertexAt(v4, 380, 70);*/
+		positionVertexAt(v4, 380, 70);
 	}
 
 	private void adjustDisplaySettings(JGraph jg) {
@@ -188,7 +192,6 @@ public class Automata extends JPanel {
 		jg.setBackground(Constants.guiDefaultBackgroundColor);
 	}
 
-	@SuppressWarnings("unchecked") // FIXME hb 28-nov-05: See FIXME below
 	private void positionVertexAt(Object vertex, int x, int y) {
 		DefaultGraphCell cell = jgAdapter.getVertexCell(vertex);
 		AttributeMap attr = cell.getAttributes();
@@ -202,6 +205,12 @@ public class Automata extends JPanel {
 						bounds.getHeight());
 
 		GraphConstants.setBounds(attr, newBounds);
+		GraphConstants.setBackground(attr, Color.green);
+		GraphConstants.setLineEnd(attr, GraphConstants.ARROW_TECHNICAL);
+		GraphConstants.setEditable(attr, false);
+		GraphConstants.setBorderColor(attr, Color.ORANGE);
+        Border borderAutomata = BorderFactory.createLineBorder(new Color(247,150,70), 2);
+		GraphConstants.setBorder(attr, borderAutomata);
 
 		// TODO: Clean up generics once JGraph goes generic
 		AttributeMap cellAttr = new AttributeMap();
