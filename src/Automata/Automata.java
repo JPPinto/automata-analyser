@@ -209,7 +209,9 @@ public class Automata extends JPanel {
 		jgAdapter.edit(cellAttr, null, null, null);
 	}
 
-    public boolean equals(Automata otherAutomata){
+    public boolean equivalentTo(Automata otherAutomata){
 
+
+        return true;
     }
 }
