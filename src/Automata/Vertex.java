@@ -13,12 +13,12 @@ package Automata;
 public class Vertex {
 	private String name;
 	private int numOfVertex;
-	private boolean finalState;
+	private boolean acceptanceState;
 	private boolean initialState;
 
 	Vertex(String n, boolean f, boolean i){
 		name = n;
-		finalState = f;
+		acceptanceState = f;
 		initialState = i;
 	}
 
@@ -38,12 +38,12 @@ public class Vertex {
 		this.numOfVertex = numOfVertex;
 	}
 
-	public boolean isFinalState() {
-		return finalState;
+	public boolean isAcceptanceState() {
+		return acceptanceState;
 	}
 
-	public void setFinalState(boolean finalState) {
-		this.finalState = finalState;
+	public void setAcceptanceState(boolean acceptanceState) {
+		this.acceptanceState = acceptanceState;
 	}
 
 	public boolean isInitialState() {
