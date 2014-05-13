@@ -16,6 +16,8 @@ public class Constants {
     /* Gui constants */
     public static final String guiName = "AutoAnalyzer";
     public static final Color guiDefaultBackgroundColor = Color.decode("#FAFBFF");
+    public static final Color guiDefaultStateColor = Color.ORANGE;
+    public static final Color guiDefaultStateBorderColor = new Color(247,150,70);
     public static final Dimension guiDefaultWindowSize = new Dimension(530, 480);
 
     /* File constants */
