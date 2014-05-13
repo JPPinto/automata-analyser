@@ -54,4 +54,22 @@ public class Edge extends DefaultEdge {
 	public void setSymbol(String symbol) {
 		this.symbol = symbol;
 	}
+
+    public boolean equals(Edge compare){
+        if (symbol != compare.getSymbol()){
+            return false;
+        }
+
+        if (source != compare.getSource()){
+            return false;
+        }
+
+        if (destination != compare.getDestination()){
+            return false;
+        }
+
+        // TODO: Is number needed to be the same?
+
+        return true;
+    }
 }
