@@ -188,7 +188,7 @@ public class Automata extends JPanel {
 	}
 
 	private void adjustDisplaySettings(JGraph jg) {
-		jg.setPreferredSize(new Dimension(420, 316));
+		jg.setPreferredSize(Constants.guiDefaultWindowSize);
 		jg.setBackground(Constants.guiDefaultBackgroundColor);
 	}
 
@@ -230,8 +230,7 @@ public class Automata extends JPanel {
 			GraphConstants.setBackground(attr, Color.green);
 		}
 		if (x.isAcceptanceState()) {
-			Border vertexBorder = BorderFactory.createLineBorder(new Color(75,
-					172, 198), 4); // Blue color from icon
+			Border vertexBorder = BorderFactory.createLineBorder(Constants.guiAccepetanceStateBorderColor, 4); // Blue color from icon
 			GraphConstants.setBorder(attr, vertexBorder);
 		}
 
