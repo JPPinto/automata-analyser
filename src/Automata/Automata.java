@@ -41,7 +41,7 @@ public class Automata extends JPanel {
 	public static int vertexCount = 0;
 	public HashMap<String, Vertex> vertexes;
 	public ArrayList<Edge> edges;
-	//private String[] acceptedAlphabet;
+	// private String[] acceptedAlphabet;
 
 	public static final long serialVersionUID = 3256444702936019250L;
 
@@ -56,9 +56,6 @@ public class Automata extends JPanel {
 		parseDottyFile(graph);
 
 		init();
-		setFocusable(true);
-		setFocusTraversalKeysEnabled(false);
-		setVisible(true);
 
 		loadGraph();
 	}
@@ -68,8 +65,8 @@ public class Automata extends JPanel {
 		String[] lines = graph.split("\r\n");
 
 		for (int i = 0; i < lines.length; i++) {
-            parseLine(lines[i]);
-        }
+			parseLine(lines[i]);
+		}
 
 	}
 
@@ -78,40 +75,33 @@ public class Automata extends JPanel {
 		return false;
 	}
 
-	public Edge getInitialEdge() {
+	public Vertex getInitialEdge() {
 
-		for (Edge e : edges) {
-			if (e.getSource().equals(""))
-				return e;
-		}
+		for (Map.Entry<String, Vertex> entry : vertexes.entrySet())
+			if (entry.getValue().isInitialState())
+				return entry.getValue();
 
 		return null;
 	}
 
 	public void parseLine(String s) {
 
-		if (Pattern.compile("[a-zA-Z][a-zA-Z0-9]*->[a-zA-Z][a-zA-Z0-9]*\\[.*\\]").matcher(s).matches()) {
+		if (Pattern
+				.compile("[a-zA-Z][a-zA-Z0-9]*->[a-zA-Z][a-zA-Z0-9]*\\[.*\\]")
+				.matcher(s).matches()) {
 			String[] content = s.split("->");
-			String[] label_sides = content[1].substring(0, content[1].length() - 1).split("=");
+			String[] label_sides = content[1].substring(0,
+					content[1].length() - 1).split("=");
 
 			String[] sides = content[1].split("\\[");
 
-			//if(!g.containsVertex(sides[0]))
-			//	addVertex(sides[0], false, false);
-
 			Vertex tempVertex = new Vertex(sides[0], false, false);
 			if (!vertexes.containsKey(sides[0]))
-				vertexes.put(sides[0],tempVertex);
+				vertexes.put(sides[0], tempVertex);
 
 			tempVertex = new Vertex(content[0], false, false);
 			if (!vertexes.containsKey(content[0]))
-				vertexes.put(content[0],tempVertex);
-
-			//if(!g.containsVertex(content[0]))
-			//	addVertex(content[0], false, false);
-
-			//if(!g.containsEdge(new Edge(label_sides[1], content[0], sides[0])))
-			//	addEdge(content[0], sides[0], label_sides[1]);
+				vertexes.put(content[0], tempVertex);
 
 			Edge tempEdge = new Edge(label_sides[1], content[0], sides[0]);
 			edges.add(tempEdge);
@@ -119,13 +109,19 @@ public class Automata extends JPanel {
 			return;
 		}
 
-		if (Pattern.compile("\\\"\\\"->[a-zA-Z][a-zA-Z0-9]*").matcher(s).matches()) {
+		if (Pattern.compile("\\\"\\\"->[a-zA-Z][a-zA-Z0-9]*").matcher(s)
+				.matches()) {
 			String[] content = s.split("->");
 			String right_content = content[1].substring(0, content[1].length());
 
 			Vertex tempVertex = new Vertex(right_content, false, true);
 			if (!vertexes.containsKey(right_content))
-				vertexes.put(right_content,tempVertex);
+				vertexes.put(right_content, tempVertex);
+			else {
+				vertexes.remove(right_content);
+				tempVertex = new Vertex(right_content, true, true);	
+				vertexes.put(right_content, tempVertex);
+			}
 
 			return;
 		}
@@ -137,7 +133,7 @@ public class Automata extends JPanel {
 			if (shape.equals(Constants.dottyAcceptanceState)) {
 				Vertex tempVertex = new Vertex(content[0], true, false);
 				if (!vertexes.containsKey(content[0]))
-					vertexes.put(content[0],tempVertex);
+					vertexes.put(content[0], tempVertex);
 			}
 
 			return;
@@ -147,12 +143,16 @@ public class Automata extends JPanel {
 	public void loadGraph() {
 
 		for (Map.Entry<String, Vertex> entry : vertexes.entrySet()) {
-			g.addVertex(entry.getValue().getName());
-			//positionVertexAt(entry.getValue().getName(), 130, 40);
+			Vertex tempVertex = entry.getValue();
+			
+			g.addVertex(tempVertex.getName());
+
+			editVertex(tempVertex);
 		}
 
-		for (int i = 0; i < edges.size(); i++){
-			g.addEdge(edges.get(i).getSource(), edges.get(i).getDestination(), edges.get(i).getSymbol());
+		for (int i = 0; i < edges.size(); i++) {
+			g.addEdge(edges.get(i).getSource(), edges.get(i).getDestination(),
+					edges.get(i).getSymbol());
 		}
 
 	}
@@ -165,41 +165,26 @@ public class Automata extends JPanel {
 		jgAdapter = new JGraphModelAdapter<String, DefaultEdge>(this.g);
 
 		JGraph jgraph = new JGraph(jgAdapter);
-		
-		JGraphFacade facade = new JGraphFacade(jgraph); // Pass the facade the JGraph instance
-		JGraphLayout layout = new JGraphSimpleLayout(JGraphSimpleLayout.TYPE_CIRCLE); // Create an instance of the circle layout
+
+		JGraphFacade facade = new JGraphFacade(jgraph); // Pass the facade the
+														// JGraph instance
+		JGraphLayout layout = new JGraphSimpleLayout(
+				JGraphSimpleLayout.TYPE_CIRCLE); // Create an instance of the
+													// circle layout
 		layout.run(facade); // Run the layout on the facade.
-		Map nested = facade.createNestedMap(true, true); // Obtain a map of the resulting attribute changes from the facade
-		jgraph.getGraphLayoutCache().edit(nested); // Apply the results to the actual graph
+		Map nested = facade.createNestedMap(true, true); // Obtain a map of the
+															// resulting
+															// attribute changes
+															// from the facade
+		// jgraph.getGraphLayoutCache().edit(nested); // Apply the results to
+		// the actual graph
 
-		//adjustDisplaySettings(jgraph);
+		adjustDisplaySettings(jgraph);
 		add(jgraph);
-
-		/*String v1 = "v1";
-		String v2 = "v2";
-		String v3 = "v3";
-		String v4 = "v4";
-
-		// add some sample data (graph manipulated via JGraphT)
-		g.addVertex(v1);
-		g.addVertex(v2);
-		g.addVertex(v3);
-		g.addVertex(v4);
-
-		g.addEdge(v1, v2);
-		g.addEdge(v2, v3);
-		g.addEdge(v3, v1);
-		g.addEdge(v4, v3);
-
-		// position vertices nicely within JGraph component
-		positionVertexAt(v1, 130, 40);
-		positionVertexAt(v2, 60, 200);
-		positionVertexAt(v3, 310, 230);
-		positionVertexAt(v4, 380, 70);*/
 	}
 
 	private void adjustDisplaySettings(JGraph jg) {
-		jg.setPreferredSize(Constants.guiDefaultWindowSize);
+		jg.setPreferredSize(new Dimension(420, 326));
 		jg.setBackground(Constants.guiDefaultBackgroundColor);
 	}
 
@@ -208,20 +193,19 @@ public class Automata extends JPanel {
 		AttributeMap attr = cell.getAttributes();
 		Rectangle2D bounds = GraphConstants.getBounds(attr);
 
-		Rectangle2D newBounds =
-				new Rectangle2D.Double(
-						x,
-						y,
-						bounds.getWidth(),
-						bounds.getHeight());
-		
-		GraphConstants.setBounds(attr, newBounds);
-		//GraphConstants.setBackground(attr, Color.green);
+		/*
+		 * Rectangle2D newBounds = new Rectangle2D.Double( x, y,
+		 * bounds.getWidth(), bounds.getHeight());
+		 */
+
+		// GraphConstants.setBounds(attr, newBounds);
+		GraphConstants.setBackground(attr, Color.green.darker());
 		GraphConstants.setEditable(attr, false);
-		//GraphConstants.setBorderColor(attr, Color.ORANGE);
-        //Border borderAutomata = BorderFactory.createLineBorder(new Color(247,150,70), 2);
-		//GraphConstants.setBorder(attr, borderAutomata);
-		GraphConstants.setOpaque(attr, false);
+		// GraphConstants.setBorderColor(attr, Color.ORANGE);
+		// Border borderAutomata = BorderFactory.createLineBorder(new
+		// Color(247,150,70), 2);
+		// GraphConstants.setBorder(attr, borderAutomata);
+		// GraphConstants.setOpaque(attr, false);
 
 		// TODO: Clean up generics once JGraph goes generic
 		AttributeMap cellAttr = new AttributeMap();
@@ -229,9 +213,28 @@ public class Automata extends JPanel {
 		jgAdapter.edit(cellAttr, null, null, null);
 	}
 
-    public boolean equivalentTo(Automata otherAutomata){
+	private void editVertex(Vertex x) {
+		DefaultGraphCell cell = jgAdapter.getVertexCell(x.getName());
+		AttributeMap attr = cell.getAttributes();
 
+		if (((Vertex)x).isInitialState()){
+			GraphConstants.setBackground(attr, Color.green);
+		}
+		if (((Vertex)x).isAcceptanceState()) {
+			Border vertexBorder = BorderFactory.createLineBorder(new Color(75,
+					172, 198), 4); // Blue color from icon
+			GraphConstants.setBorder(attr, vertexBorder);
+		}
 
-        return true;
-    }
+		GraphConstants.setEditable(attr, false);
+
+		AttributeMap cellAttr = new AttributeMap();
+		cellAttr.put(cell, attr);
+		jgAdapter.edit(cellAttr, null, null, null);
+	}
+
+	public boolean equivalentTo(Automata otherAutomata) {
+
+		return true;
+	}
 }
