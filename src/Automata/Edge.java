@@ -13,7 +13,6 @@ package Automata;
 import org.jgraph.graph.DefaultEdge;
 
 public class Edge extends DefaultEdge {
-
 	private String symbol;
 
 	private String source;
