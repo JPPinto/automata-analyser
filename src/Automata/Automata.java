@@ -260,10 +260,7 @@ public class Automata extends JPanel {
 		HashMap<String, Vertex> tempVertexes = vertexes;
 		
 		for (Map.Entry<String, Vertex> entry : vertexes.entrySet()) {
-			if(entry.getValue().isAcceptanceState())
-				entry.getValue().setAcceptanceState(false);
-			else
-				entry.getValue().setAcceptanceState(true);
+            entry.getValue().setAcceptanceState(!entry.getValue().isAcceptanceState());
 		}
 		
 		return new Automata(edges, tempVertexes);
