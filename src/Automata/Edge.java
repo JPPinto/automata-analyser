@@ -18,8 +18,6 @@ public class Edge extends DefaultEdge {
 	private String source;
 	private String destination;
 
-    private int number;
-
     public Edge(String sym, String src, String dst){
 		symbol = sym;
 		source = src;
@@ -40,11 +38,6 @@ public class Edge extends DefaultEdge {
 
 	public void setDestination(String destination) {
 		this.destination = destination;
-	}
-
-	public Edge(int n, String sym){
-		number = n;
-		symbol = sym;
 	}
 
 	public String getSymbol() {
@@ -71,5 +64,9 @@ public class Edge extends DefaultEdge {
         // TODO: Is number needed to be the same?
 
         return true;
+    }
+
+    public Edge getCopy(){
+        return new Edge(symbol, source, destination);
     }
 }
