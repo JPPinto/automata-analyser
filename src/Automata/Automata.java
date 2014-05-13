@@ -208,4 +208,8 @@ public class Automata extends JPanel {
 		cellAttr.put(cell, attr);
 		jgAdapter.edit(cellAttr, null, null, null);
 	}
+
+    public boolean equals(Automata otherAutomata){
+
+    }
 }
