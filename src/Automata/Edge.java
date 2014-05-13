@@ -61,8 +61,6 @@ public class Edge extends DefaultEdge {
             return false;
         }
 
-        // TODO: Is number needed to be the same?
-
         return true;
     }
 
