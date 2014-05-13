@@ -199,7 +199,7 @@ public class Automata extends JPanel {
 		 */
 
 		// GraphConstants.setBounds(attr, newBounds);
-		GraphConstants.setBackground(attr, Color.green.darker());
+		GraphConstants.setBackground(attr, Color.green.darker()); 
 		GraphConstants.setEditable(attr, false);
 		GraphConstants.setBorderColor(attr, Constants.guiDefaultStateColor);
         Border borderAutomata = BorderFactory.createLineBorder(Constants.guiDefaultStateBorderColor, 2);
