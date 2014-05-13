@@ -9,7 +9,7 @@ options{  JDK_VERSION = "1.6";  FORCE_LA_CHECK=true;
 * (o estado inicial é representado por "");
 * 	4ª Por fim, deve acabar com "}";
 *	5ª Todos as ligações entre os nós (arestas), devem ser compostas por um label, mesmo que este represente o vazio.
-*/PARSER_BEGIN(EG1)import javax.swing.*;import javax.swing.filechooser.FileNameExtensionFilter;import java.awt.*;import javax.swing.*;import java.awt.event.KeyEvent;import java.awt.event.ActionEvent;import java.awt.event.ActionListener;import java.io.*;public class EG1{  private static FileInputStream in = null;  private static EG1 parser = null;  public static void main(String args []) throws ParseException  {    //SET LOOK AND FEEL    setLookAndFeel();    
+*/PARSER_BEGIN(EG1)import javax.swing.*;import javax.swing.filechooser.FileNameExtensionFilter;import java.awt.*;import javax.swing.*;import java.awt.event.KeyEvent;import java.awt.event.ActionEvent;import java.awt.event.ActionListener;import java.io.*;import javax.swing.border.Border;import Automata.Automata;public class EG1{  private static FileInputStream in = null;  private static EG1 parser = null;  private static JPanel leftMidRightPanel = new JPanel(new GridLayout(1,3));  public static void main(String args []) throws ParseException  {    //SET LOOK AND FEEL    setLookAndFeel();    
 	//JFRAME    final JFrame frame = new JFrame("Autoanalyze - The Automata Analyzer");
     frame.setIconImage(Toolkit.getDefaultToolkit().getImage("digraph.png"));    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -24,15 +24,9 @@ options{  JDK_VERSION = "1.6";  FORCE_LA_CHECK=true;
     redirectConsoleTo(text);
     JScrollPane scroll=new JScrollPane(text);
 	//Add Separators
-	GridLayout topDown = new GridLayout(2,1);
-	JPanel topDownPanel = new JPanel(topDown);
-	GridLayout leftMidRight = new GridLayout(1,3);
-	JPanel leftMidRightPanel = new JPanel(leftMidRight);
+	JPanel topDownPanel = new JPanel(new GridLayout(2,1));
 	topDownPanel.add(leftMidRightPanel);
 	topDownPanel.add(scroll);
-	leftMidRightPanel.add(new JLabel("1"));
-	leftMidRightPanel.add(new JLabel("2"));
-	leftMidRightPanel.add(new JLabel("3"));
 	frame.add(topDownPanel);
 
 	//Add JMENU BAR
@@ -54,7 +48,7 @@ options{  JDK_VERSION = "1.6";  FORCE_LA_CHECK=true;
     menu1.add(complement);
         chooseFileButtom.addActionListener(new ActionListener()    {      @ Override public void actionPerformed(ActionEvent event)      {        System.out.println("Reading data...");        //JFILECHOOSER
         JFileChooser chooser = new JFileChooser();        FileNameExtensionFilter filter = new FileNameExtensionFilter("Dotty File", "gv");        chooser.setFileFilter(filter);        int returnval = chooser.showOpenDialog(frame);        if (returnval == JFileChooser.APPROVE_OPTION)        {          System.out.println("You chose to open this file: " + chooser.getSelectedFile().getName());        }
-        try{          in = new FileInputStream(chooser.getSelectedFile());          showFile(chooser.getSelectedFile());          parser = new EG1(in);          parser.ExprS();          in.close();        }catch (FileNotFoundException e){          e.printStackTrace();        }catch (ParseException e){          e.printStackTrace();        }catch (IOException e){          e.printStackTrace();        }catch (NullPointerException e){}      }    }    );    menuBar.add(menu);
+        try{          in = new FileInputStream(chooser.getSelectedFile());          String fileContent = showFile(chooser.getSelectedFile());          System.out.println(fileContent);          Automata automata = new Automata(fileContent);          Border blackline = BorderFactory.createLineBorder(new Color(247,150,70), 10);          automata.setBorder(blackline);          leftMidRightPanel.add(automata);          leftMidRightPanel.revalidate();          parser = new EG1(in);          parser.ExprS();          in.close();        }catch (FileNotFoundException e){          e.printStackTrace();        }catch (ParseException e){          e.printStackTrace();        }catch (IOException e){          e.printStackTrace();        }catch (NullPointerException e){}      }    }    );    menuBar.add(menu);
     menuBar.add(menu1);    frame.setJMenuBar(menuBar);    //Display the window.
     frame.pack();
     frame.setLocationRelativeTo(null);    frame.setVisible(true);  }
@@ -65,4 +59,4 @@ options{  JDK_VERSION = "1.6";  FORCE_LA_CHECK=true;
     catch (ClassNotFoundException e){}
     catch (InstantiationException e){}
     catch (IllegalAccessException e){}
-  }  public static void showFile(File file)  {    StringBuilder builder = new StringBuilder();    int ch;    try    {      FileInputStream in = new FileInputStream(file);      while ((ch = in.read()) != - 1)      {        builder.append((char) ch);      }      in.close();      System.out.println(builder.toString());    }    catch (IOException e)    {      e.printStackTrace();    }  }  public static void redirectConsoleTo(final JTextArea textarea)  {    PrintStream out = new PrintStream(new ByteArrayOutputStream()    {      public synchronized void flush() throws IOException      {        textarea.setText(toString());      }    }    , true);    System.setErr(out);    System.setOut(out);  }}PARSER_END(EG1)SKIP :{  " "| "\r"| "\t"| "\n"}TOKEN : /* OPERATORS */{  //< NODE: ["a"-"z","A"-"Z","0"-"9"] >|  < EDGE : "->" >| < TYPE : "digraph" >| < OPEN : "{" >| < CLOSE : "}" >| < OPEN1 : "[" >| < CLOSE1 : "]" >| < LABEL : "label=" >| < SHAPE : "[shape=none]" >| < INITIAL : "\"\"" >| < FINAL : "[shape=doublecircle]" >| < OP : "*" | "+" >| < DIGIT : ([ "0"-"9" ]) >| < VAR : ([ "a"-"z" ]|["A"-"Z"]) >| < LABELVALUE: ~["[","]"]>| < EPSILON: "?!" >/*| < TERM :    (      [ "A"-"Z" ]    | [ "0"-"9" ]    )+ >*/}void ExprS() :{}{ try  {    (< TYPE > < OPEN > {Graph();} < CLOSE >)    {      System.out.println("MATCH");    }  }  catch (ParseException e)  {    System.out.println("NOT MATCH");  }}void Graph():{}{	(< INITIAL > < SHAPE > (< VAR > < FINAL >)+ < INITIAL > < EDGE > < VAR >{Vev();})}void Vev():{}{	((< VAR >< EDGE >< VAR >{Label();})+)}void Label():{}{	(< OPEN1 >< LABEL >((< LABELVALUE >)+ | < VAR > | < DIGIT >)< CLOSE1 >)}
+  }  public static String showFile(File file)  {    StringBuilder builder = new StringBuilder();    int ch;    try    {      FileInputStream in = new FileInputStream(file);      while ((ch = in.read()) != - 1)      {        builder.append((char) ch);      }      in.close();    }    catch (IOException e)    {      e.printStackTrace();    }    return builder.toString();  }  public static void redirectConsoleTo(final JTextArea textarea)  {    PrintStream out = new PrintStream(new ByteArrayOutputStream()    {      public synchronized void flush() throws IOException      {        textarea.setText(toString());      }    }    , true);    System.setErr(out);    System.setOut(out);  }}PARSER_END(EG1)SKIP :{  " "| "\r"| "\t"| "\n"}TOKEN : /* OPERATORS */{  //< NODE: ["a"-"z","A"-"Z","0"-"9"] >|  < EDGE : "->" >| < TYPE : "digraph" >| < OPEN : "{" >| < CLOSE : "}" >| < OPEN1 : "[" >| < CLOSE1 : "]" >| < LABEL : "label=" >| < SHAPE : "[shape=none]" >| < INITIAL : "\"\"" >| < FINAL : "[shape=doublecircle]" >| < OP : "*" | "+" >| < DIGIT : ([ "0"-"9" ]) >| < VAR : ([ "a"-"z" ]|["A"-"Z"]) >| < LABELVALUE: ~["[","]"]>| < EPSILON: "?!" >/*| < TERM :    (      [ "A"-"Z" ]    | [ "0"-"9" ]    )+ >*/}void ExprS() :{}{ try  {    (< TYPE > < OPEN > {Graph();} < CLOSE >)    {      System.out.println("MATCH");    }  }  catch (ParseException e)  {    System.out.println("NOT MATCH");  }}void Graph():{}{	(< INITIAL > < SHAPE > (< VAR > < FINAL >)+ < INITIAL > < EDGE > < VAR >{Vev();})}void Vev():{}{	((< VAR >< EDGE >< VAR >{Label();})+)}void Label():{}{	(< OPEN1 >< LABEL >((< LABELVALUE >)+ | < VAR > | < DIGIT >)< CLOSE1 >)}

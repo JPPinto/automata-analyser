@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.regex.Pattern;
 
-public class Automata extends JFrame {
+public class Automata extends JPanel {
 
 	public ListenableDirectedGraph g;
 	public static int edgeCount = 0;
@@ -38,27 +38,24 @@ public class Automata extends JFrame {
 
 	public JGraphModelAdapter<String, DefaultEdge> jgAdapter;
 
-	public Automata(File file) {
+	public Automata(String graph) {
 
 		edges = new ArrayList<Edge>();
 		vertexes = new HashMap<String, Vertex>();
 
 		g = new ListenableDirectedGraph(org.jgraph.graph.DefaultEdge.class);
-		parseDottyFile(file);
+		parseDottyFile(graph);
 
 		init();
 		setFocusable(true);
 		setFocusTraversalKeysEnabled(false);
-		setTitle(Constants.guiName);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		pack();
 		setVisible(true);
 
 		loadGraph();
 	}
 
-	public void parseDottyFile(File file) {
-		String graph = null;
+	public void parseDottyFile(String graph) {
+		/*String graph = null;
 
         // TODO: Fix file loading (Size limit)
 		try {
@@ -75,7 +72,7 @@ public class Automata extends JFrame {
 		} catch (IOException e) {
             System.out.println("Problem loading file: " + file.getName() + " " + e.getMessage());
             return;
-		}
+		}*/
 
 		String[] lines = graph.split("\r\n");
 
@@ -179,7 +176,7 @@ public class Automata extends JFrame {
 		JGraph jgraph = new JGraph(jgAdapter);
 
 		adjustDisplaySettings(jgraph);
-		getContentPane().add(jgraph);
+		add(jgraph);
 
 		/*String v1 = "v1";
 		String v2 = "v2";
@@ -230,8 +227,8 @@ public class Automata extends JFrame {
 		jgAdapter.edit(cellAttr, null, null, null);
 	}
 
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		Automata automata = new Automata(new File("./graph1.gv"));
 		System.out.println();
-	}
+	}*/
 }
