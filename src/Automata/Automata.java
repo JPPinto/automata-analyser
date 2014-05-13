@@ -201,17 +201,16 @@ public class Automata extends JPanel {
 		// GraphConstants.setBounds(attr, newBounds);
 		GraphConstants.setBackground(attr, Color.green.darker());
 		GraphConstants.setEditable(attr, false);
-<<<<<<< HEAD
 		GraphConstants.setBorderColor(attr, Constants.guiDefaultStateColor);
         Border borderAutomata = BorderFactory.createLineBorder(Constants.guiDefaultStateBorderColor, 2);
 		GraphConstants.setBorder(attr, borderAutomata);
-=======
+
 		// GraphConstants.setBorderColor(attr, Color.ORANGE);
 		// Border borderAutomata = BorderFactory.createLineBorder(new
 		// Color(247,150,70), 2);
 		// GraphConstants.setBorder(attr, borderAutomata);
 		// GraphConstants.setOpaque(attr, false);
->>>>>>> c11f29572c6cfada903c523ef194325d75604f3c
+
 
 		// TODO: Clean up generics once JGraph goes generic
 		AttributeMap cellAttr = new AttributeMap();

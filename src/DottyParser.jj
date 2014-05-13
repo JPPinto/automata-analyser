@@ -27,7 +27,7 @@ options{  JDK_VERSION = "1.6";  FORCE_LA_CHECK=true;
 	JPanel topDownPanel = new JPanel(new GridLayout(2,1));
 	topDownPanel.add(leftMidRightPanel);
 	topDownPanel.add(scroll);    leftMidRightPanel.add(createEmptyPanel());    leftMidRightPanel.add(createEmptyPanel());    leftMidRightPanel.add(createEmptyPanel());
-	frame.add(topDownPanel);
+	frame.add(topDownPanel);
 
 	//Add JMENU BAR
     JMenuBar menuBar = new JMenuBar();    JMenu menu = new JMenu("File");
