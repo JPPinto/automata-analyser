@@ -55,24 +55,6 @@ public class Automata extends JPanel {
 	}
 
 	public void parseDottyFile(String graph) {
-		/*String graph = null;
-
-        // TODO: Fix file loading (Size limit)
-		try {
-			FileReader fr = new FileReader(file);
-
-			char[] content = new char[Constants.maxFileSize];
-			fr.read(content);
-
-			graph = new String(content);
-
-		} catch (FileNotFoundException e) {
-			System.out.println("File " + file.getName() + "not found!");
-            return;
-		} catch (IOException e) {
-            System.out.println("Problem loading file: " + file.getName() + " " + e.getMessage());
-            return;
-		}*/
 
 		String[] lines = graph.split("\r\n");
 
