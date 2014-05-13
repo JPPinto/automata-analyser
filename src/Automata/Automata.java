@@ -12,9 +12,14 @@ package Automata;
 
 import org.jgraph.JGraph;
 import org.jgraph.graph.*;
+import org.jgraph.graph.DefaultGraphModel.GraphModelEdit;
 import org.jgrapht.ext.JGraphModelAdapter;
 import org.jgrapht.graph.*;
 import org.jgrapht.graph.DefaultEdge;
+
+import com.jgraph.layout.JGraphFacade;
+import com.jgraph.layout.JGraphLayout;
+import com.jgraph.layout.graph.JGraphSimpleLayout;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -160,11 +165,17 @@ public class Automata extends JPanel {
 		jgAdapter = new JGraphModelAdapter<String, DefaultEdge>(this.g);
 
 		JGraph jgraph = new JGraph(jgAdapter);
+		
+		JGraphFacade facade = new JGraphFacade(jgraph); // Pass the facade the JGraph instance
+		JGraphLayout layout = new JGraphSimpleLayout(JGraphSimpleLayout.TYPE_CIRCLE); // Create an instance of the circle layout
+		layout.run(facade); // Run the layout on the facade.
+		Map nested = facade.createNestedMap(true, true); // Obtain a map of the resulting attribute changes from the facade
+		jgraph.getGraphLayoutCache().edit(nested); // Apply the results to the actual graph
 
-		adjustDisplaySettings(jgraph);
+		//adjustDisplaySettings(jgraph);
 		add(jgraph);
 
-		String v1 = "v1";
+		/*String v1 = "v1";
 		String v2 = "v2";
 		String v3 = "v3";
 		String v4 = "v4";
@@ -184,7 +195,7 @@ public class Automata extends JPanel {
 		positionVertexAt(v1, 130, 40);
 		positionVertexAt(v2, 60, 200);
 		positionVertexAt(v3, 310, 230);
-		positionVertexAt(v4, 380, 70);
+		positionVertexAt(v4, 380, 70);*/
 	}
 
 	private void adjustDisplaySettings(JGraph jg) {
@@ -203,14 +214,20 @@ public class Automata extends JPanel {
 						y,
 						bounds.getWidth(),
 						bounds.getHeight());
-
+		
 		GraphConstants.setBounds(attr, newBounds);
-		GraphConstants.setBackground(attr, Color.green);
-		GraphConstants.setLineEnd(attr, GraphConstants.ARROW_TECHNICAL);
+		//GraphConstants.setBackground(attr, Color.green);
 		GraphConstants.setEditable(attr, false);
+<<<<<<< HEAD
 		GraphConstants.setBorderColor(attr, Constants.guiDefaultStateColor);
         Border borderAutomata = BorderFactory.createLineBorder(Constants.guiDefaultStateBorderColor, 2);
 		GraphConstants.setBorder(attr, borderAutomata);
+=======
+		//GraphConstants.setBorderColor(attr, Color.ORANGE);
+        //Border borderAutomata = BorderFactory.createLineBorder(new Color(247,150,70), 2);
+		//GraphConstants.setBorder(attr, borderAutomata);
+		GraphConstants.setOpaque(attr, false);
+>>>>>>> c11f29572c6cfada903c523ef194325d75604f3c
 
 		// TODO: Clean up generics once JGraph goes generic
 		AttributeMap cellAttr = new AttributeMap();
