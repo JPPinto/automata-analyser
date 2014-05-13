@@ -12,7 +12,6 @@ package Automata;
 
 public class Vertex {
 	private String name;
-	private int numOfVertex;
 	private boolean acceptanceState;
 	private boolean initialState;
 
@@ -28,14 +27,6 @@ public class Vertex {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public int getNumOfVertex() {
-		return numOfVertex;
-	}
-
-	public void setNumOfVertex(int numOfVertex) {
-		this.numOfVertex = numOfVertex;
 	}
 
 	public boolean isAcceptanceState() {
@@ -59,10 +50,6 @@ public class Vertex {
             return false;
         }
 
-        if (numOfVertex != compare.getNumOfVertex()){
-            return false;
-        }
-
         if (acceptanceState != compare.isAcceptanceState()){
             return false;
         }
@@ -72,5 +59,9 @@ public class Vertex {
         }
 
         return true;
+    }
+
+    public Vertex getCopy(){
+        return new Vertex(name, acceptanceState, initialState);
     }
 }

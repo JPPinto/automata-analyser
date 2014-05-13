@@ -41,7 +41,7 @@ public class Automata extends JPanel {
 	public static int vertexCount = 0;
 	public HashMap<String, Vertex> vertexes;
 	public ArrayList<Edge> edges;
-	// private String[] acceptedAlphabet;
+	//private String[] acceptedAlphabet;
 
 	public static final long serialVersionUID = 3256444702936019250L;
 
@@ -59,14 +59,14 @@ public class Automata extends JPanel {
 
 		loadGraph();
 	}
-	
+
 	public Automata(ArrayList<Edge> e, HashMap<String, Vertex> v) {
 
 		edges = e;
 		vertexes = v;
 
 		g = new ListenableDirectedGraph(org.jgraph.graph.DefaultEdge.class);
-		
+
 		init();
 
 		loadGraph();
@@ -131,7 +131,7 @@ public class Automata extends JPanel {
 				vertexes.put(right_content, tempVertex);
 			else {
 				vertexes.remove(right_content);
-				tempVertex = new Vertex(right_content, true, true);	
+				tempVertex = new Vertex(right_content, true, true);
 				vertexes.put(right_content, tempVertex);
 			}
 
@@ -156,7 +156,7 @@ public class Automata extends JPanel {
 
 		for (Map.Entry<String, Vertex> entry : vertexes.entrySet()) {
 			Vertex tempVertex = entry.getValue();
-			
+
 			g.addVertex(tempVertex.getName());
 
 			editVertex(tempVertex);
@@ -178,25 +178,17 @@ public class Automata extends JPanel {
 
 		JGraph jgraph = new JGraph(jgAdapter);
 
-		JGraphFacade facade = new JGraphFacade(jgraph); // Pass the facade the
-														// JGraph instance
-		JGraphLayout layout = new JGraphSimpleLayout(
-				JGraphSimpleLayout.TYPE_CIRCLE); // Create an instance of the
-													// circle layout
+		JGraphFacade facade = new JGraphFacade(jgraph); // Pass the facade the JGraph instance
+		JGraphLayout layout = new JGraphSimpleLayout(JGraphSimpleLayout.TYPE_CIRCLE); // Create an instance of the circle layout
 		layout.run(facade); // Run the layout on the facade.
-		Map nested = facade.createNestedMap(true, true); // Obtain a map of the
-															// resulting
-															// attribute changes
-															// from the facade
-		// jgraph.getGraphLayoutCache().edit(nested); // Apply the results to
-		// the actual graph
-
-		adjustDisplaySettings(jgraph);
+		Map nested = facade.createNestedMap(true, true); // Obtain a map of the resulting attribute changes from the facade
+		// jgraph.getGraphLayoutCache().edit(nested);
+		adjustDisplaySettings(jgraph); // Apply the results to the actual graph
 		add(jgraph);
 	}
 
 	private void adjustDisplaySettings(JGraph jg) {
-		jg.setPreferredSize(new Dimension(420, 316));
+		jg.setPreferredSize(Constants.guiDefaultWindowSize);
 		jg.setBackground(Constants.guiDefaultBackgroundColor);
 	}
 
@@ -211,10 +203,10 @@ public class Automata extends JPanel {
 		 */
 
 		// GraphConstants.setBounds(attr, newBounds);
-		GraphConstants.setBackground(attr, Color.green.darker()); 
+		GraphConstants.setBackground(attr, Color.green.darker());
 		GraphConstants.setEditable(attr, false);
 		GraphConstants.setBorderColor(attr, Constants.guiDefaultStateColor);
-        Border borderAutomata = BorderFactory.createLineBorder(Constants.guiDefaultStateBorderColor, 2);
+		Border borderAutomata = BorderFactory.createLineBorder(Constants.guiDefaultStateBorderColor, 2);
 		GraphConstants.setBorder(attr, borderAutomata);
 
 		// GraphConstants.setBorderColor(attr, Color.ORANGE);
@@ -234,12 +226,11 @@ public class Automata extends JPanel {
 		DefaultGraphCell cell = jgAdapter.getVertexCell(x.getName());
 		AttributeMap attr = cell.getAttributes();
 
-		if (((Vertex)x).isInitialState()){
+		if ( x.isInitialState()) {
 			GraphConstants.setBackground(attr, Color.green);
 		}
-		if (((Vertex)x).isAcceptanceState()) {
-			Border vertexBorder = BorderFactory.createLineBorder(new Color(75,
-					172, 198), 4); // Blue color from icon
+		if (x.isAcceptanceState()) {
+			Border vertexBorder = BorderFactory.createLineBorder(Constants.guiAccepetanceStateBorderColor, 4); // Blue color from icon
 			GraphConstants.setBorder(attr, vertexBorder);
 		}
 
@@ -254,16 +245,19 @@ public class Automata extends JPanel {
 
 		return true;
 	}
-	
-	public Automata getComplement(){
-		
-		HashMap<String, Vertex> tempVertexes = vertexes;
-		
-		for (Map.Entry<String, Vertex> entry : vertexes.entrySet()) {
-            entry.getValue().setAcceptanceState(!entry.getValue().isAcceptanceState());
+
+
+
+	public Automata getComplement() {
+
+		HashMap<String, Vertex> tempVertexes = new HashMap<>(vertexes); // FIX THIS CRAP
+		ArrayList<Edge> tempEdges = new ArrayList<>(edges);
+
+		for (Map.Entry<String, Vertex> entry : tempVertexes.entrySet()) {
+			entry.getValue().setAcceptanceState(!entry.getValue().isAcceptanceState());
 		}
-		
-		return new Automata(edges, tempVertexes);
+
+		return new Automata(tempEdges, tempVertexes);
 	}
 	
 	public String convertToDotty(){
