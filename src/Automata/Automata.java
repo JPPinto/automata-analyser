@@ -397,6 +397,27 @@ public class Automata extends JPanel {
         Automata original = getCopy();
         ArrayList<String> alphabet = original.getAutomatonAlphabet();
 
+        Vertex startState = getStartState();
+
+    }
+
+    public Vertex getStartState(){
+        int numberOfHits = 0;
+        Vertex startState = null;
+
+        for (Map.Entry<String, Vertex> entry : vertexes.entrySet()) {
+
+            if (entry.getValue().isInitialState()) {
+                numberOfHits++;
+                startState = entry.getValue();
+            }
+        }
+
+        if (numberOfHits != 1) {
+            return null;
+        }
+
+        return startState;
     }
 
     public ArrayList<String> getAutomatonAlphabet(){
