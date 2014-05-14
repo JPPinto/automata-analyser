@@ -60,10 +60,6 @@ public class Automata extends JPanel {
 		vertexes = v;
 
 		g = new ListenableDirectedGraph(org.jgraph.graph.DefaultEdge.class);
-
-		init();
-
-		loadGraph();
 	}
 
 	public void parseDottyFile(String graph) {
@@ -158,7 +154,6 @@ public class Automata extends JPanel {
 
 		for (int i = 0; i < edges.size(); i++) {
 			g.addEdge(edges.get(i).getSource(), edges.get(i).getDestination(), edges.get(i).getSymbol());
-			System.out.println(edges.get(i).getSymbol());
 		}
 
 	}
@@ -176,7 +171,8 @@ public class Automata extends JPanel {
 		JGraphLayout layout = new JGraphSimpleLayout(JGraphSimpleLayout.TYPE_CIRCLE); // Create an instance of the circle layout
 		layout.run(facade); // Run the layout on the facade.
 		Map nested = facade.createNestedMap(true, true); // Obtain a map of the resulting attribute changes from the facade
-		// jgraph.getGraphLayoutCache().edit(nested);
+		jgraph.getGraphLayoutCache().edit(nested);
+		
 		adjustDisplaySettings(jgraph); // Apply the results to the actual graph
 		add(jgraph);
 	}
