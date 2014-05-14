@@ -417,26 +417,51 @@ public class Automata extends JPanel {
 		return edges;
 	}
 
-    public void convertAutomatonToNFA() throws Exception{
+    public Automata convertAutomatonToNFA() throws Exception {
+        /* Get the automata alphabet */
         ArrayList<String> alphabet = getAutomatonAlphabet();
 
+        /* Sanity checks */
         Vertex startState = getStartState();
 
         if (startState == null) {
             throw new Exception("No start state or more than one start state");
         }
 
-        // Check all possible ways starting with start state
+        Automata finalDfa = new Automata();
 
+        ArrayList<ArrayList<Vertex>> vertexesTemp= new ArrayList<>();
+        ArrayList<HashMap<String, ArrayList<Vertex>>> transitionTableLines = new ArrayList<>();
+
+        /* Do subset construction for non derived states here */
+        for (Map.Entry<String, Vertex> entry : vertexes.entrySet()) {
+            /* For this state create a table line with all the symbols plus
+             * all the possible destination vertexes for each symbol on the alphabet
+             */
+            ArrayList<Vertex> states = new ArrayList<>();
+            vertexesTemp.add(states);
+            transitionTableLines.add(getAllPossibleTransitionsFromState(entry.getValue(), alphabet));
+            states.add(entry.getValue());
+        }
+
+        /* Search for orphan states */
+
+
+        return finalDfa;
+    }
+
+    public HashMap<String, ArrayList<Vertex>> getAllPossibleTransitionsFromState(Vertex state, ArrayList<String> alphabet) {
         // Symbol + Destination Vertex combo
         HashMap<String, ArrayList<Vertex>> destinationVertexesGroup = new HashMap<>();
 
+        // Get all possible destinations for each alphabet entry
         for (int i=0; i < alphabet.size(); i++) {
             String searchSymbol = alphabet.get(i);
-            ArrayList<Vertex> possibleDestinations = getAllPossibleStatesFromTransition(startState, searchSymbol);
-
+            ArrayList<Vertex> possibleDestinations = getAllPossibleStatesFromTransition(state, searchSymbol);
             destinationVertexesGroup.put(searchSymbol, possibleDestinations);
         }
+
+        return destinationVertexesGroup;
     }
 
     public ArrayList<Vertex> getAllPossibleStatesFromTransition(Vertex state, String symbol){
