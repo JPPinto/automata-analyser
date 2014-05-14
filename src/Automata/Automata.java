@@ -427,16 +427,21 @@ public class Automata extends JPanel {
             throw new Exception("No start state or more than one start state");
         }
 
-        ArrayList<HashMap<String, ArrayList<Vertex>>> intermediateVertexList = new ArrayList<>();
+        ArrayList<ArrayList<Vertex>> vertexesTemp= new ArrayList<>();
+        ArrayList<HashMap<String, ArrayList<Vertex>>> transitionTableLines = new ArrayList<>();
 
         /* Do subset construction for non derived states here */
         for (Map.Entry<String, Vertex> entry : vertexes.entrySet()) {
             /* For this state create a table line with all the symbols plus
              * all the possible destination vertexes for each symbol on the alphabet
              */
-            intermediateVertexList.add(getAllPossibleTransitionsFromState(entry.getValue(), alphabet));
+            ArrayList<Vertex> states = new ArrayList<>();
+            vertexesTemp.add(states);
+            transitionTableLines.add(getAllPossibleTransitionsFromState(entry.getValue(), alphabet));
+            states.add(entry.getValue());
         }
 
+        /* Search for orphan states */
     }
 
     public HashMap<String, ArrayList<Vertex>> getAllPossibleTransitionsFromState(Vertex state, ArrayList<String> alphabet) {
