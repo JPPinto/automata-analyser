@@ -404,16 +404,16 @@ public class Automata extends JPanel {
 
         // Check all possible ways starting with start state
         for (int i=0; i < alphabet.size(); i++) {
-            ArrayList<String> possibleDestinations = getAllPossibleStatesFromTransition(startState, alphabet.get(i));
+            ArrayList<Vertex> possibleDestinations = getAllPossibleStatesFromTransition(startState, alphabet.get(i));
         }
     }
 
-    public ArrayList<String> getAllPossibleStatesFromTransition(Vertex state, String symbol){
-        ArrayList<String> possibleDestinations = new ArrayList<>();
+    public ArrayList<Vertex> getAllPossibleStatesFromTransition(Vertex state, String symbol){
+        ArrayList<Vertex> possibleDestinations = new ArrayList<>();
 
         for (int i = 0; i < edges.size(); i++) {
             if (state.getName().equals(edges.get(i).getSource()) && edges.get(i).getSymbol().equals(symbol)) {
-                possibleDestinations.add(edges.get(i).getDestination());
+                possibleDestinations.add(vertexes.get(edges.get(i).getDestination()));
             }
         }
 
