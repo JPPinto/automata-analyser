@@ -246,19 +246,36 @@ public class Automata extends JPanel {
 		return true;
 	}
 
+    public Automata getCopy(){
+        HashMap<String, Vertex> tempVertexes = new HashMap<>(vertexes);
+        ArrayList<Edge> tempEdges = new ArrayList<>(edges);
 
+        for (Map.Entry<String, Vertex> entry : vertexes.entrySet()) {
+            tempVertexes.put(entry.getKey(),entry.getValue().getCopy());
+        }
+
+        for (int i = 0; i < edges.size(); i++) {
+            tempEdges.add(i, edges.get(i).getCopy());
+        }
+
+        Automata automata = new Automata(tempEdges, tempVertexes);
+
+        return automata;
+    }
 
 	public Automata getComplement() {
+        Automata automata = getCopy();
 
-		HashMap<String, Vertex> tempVertexes = new HashMap<>(vertexes); // FIX THIS CRAP
-		ArrayList<Edge> tempEdges = new ArrayList<>(edges);
-
-		for (Map.Entry<String, Vertex> entry : tempVertexes.entrySet()) {
+		for (Map.Entry<String, Vertex> entry : automata.getVertexes().entrySet()) {
 			entry.getValue().setAcceptanceState(!entry.getValue().isAcceptanceState());
 		}
 
-		return new Automata(tempEdges, tempVertexes);
+		return automata;
 	}
+
+    public HashMap<String, Vertex> getVertexes(){
+        return vertexes;
+    }
 	
 	public Automata getCartesianProduct(Automata a) {
 
