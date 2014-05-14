@@ -352,10 +352,11 @@ public class Automata extends JPanel {
         return total;
     }
 	
-	public Automata getCartesianProduct(Automata a) {      
+	public Automata getCartesianProduct(Automata a) {  
         Automata newAutomata =new Automata();
         Vertex vertex=null;
         
+        //TODO So funciona para grafos com a mesma linguagem
 		for (Map.Entry<String, Vertex> entry : this.getVertexes().entrySet()) {
 			for(Map.Entry<String, Vertex> entry2 : a.getVertexes().entrySet()){
 				if(entry.getValue().isAcceptanceState() && entry2.getValue().isAcceptanceState()){
@@ -381,13 +382,13 @@ public class Automata extends JPanel {
 		ArrayList<Edge> edges =new ArrayList<Edge>();
 		
         for (int i = 0; i < this.edges.size(); i++) {
-        	if(this.edges.get(i).getSource().equals(node1)){
-        		edges.add(new Edge(this.edges.get(i).getSymbol(), node1+", "+node2, this.edges.get(i).getDestination()+", "+a2.edges.get(i).getDestination()));
-        		System.out.println("1---- "+node1+", "+node2);
-        	}
-        	if(a2.edges.get(i).getSource().equals(node2)){
-        		edges.add(new Edge(a2.edges.get(i).getSymbol(), node1+", "+node2, this.edges.get(i).getDestination()+", "+a2.edges.get(i).getDestination()));
-        		System.out.println("2---- "+node1+", "+node2);
+        	for (int j = 0; j < a2.edges.size(); j++) {
+	        	if(this.edges.get(i).getSource().equals(node1) && a2.edges.get(j).getSource().equals(node2) /*&& node1.equals(node2)*/){
+	        		if(this.edges.get(i).getSymbol().equals(a2.edges.get(j).getSymbol())){
+		        		edges.add(new Edge(this.edges.get(i).getSymbol(), node1+", "+node2, this.edges.get(i).getDestination()+", "+a2.edges.get(j).getDestination()));
+		        		//System.out.println("1---- "+node1+", "+node2);
+	        		}
+	        	}
         	}
         }
 		
