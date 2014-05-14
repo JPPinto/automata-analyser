@@ -1,4 +1,4 @@
-﻿/**
+/**
  * AutoAnalyzer (COMP 2013-2014)
  *
  * Eduardo Fernandes (200803951)

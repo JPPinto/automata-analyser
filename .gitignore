@@ -7,6 +7,6 @@
 sf.eclipse.javacc.prefs
 .settings/sf.eclipse.javacc.prefs
 .settings/sf.eclipse.javacc.prefs
-/out
+/out/*
 misc.xml
 workspace.xml
