@@ -393,12 +393,31 @@ public class Automata extends JPanel {
 		return edges;
 	}
 
-    public void convertAutomatonToNFA(){
-        Automata original = getCopy();
-        ArrayList<String> alphabet = original.getAutomatonAlphabet();
+    public void convertAutomatonToNFA() throws Exception{
+        ArrayList<String> alphabet = getAutomatonAlphabet();
 
         Vertex startState = getStartState();
 
+        if (startState == null) {
+            throw new Exception("No start state or more than one start state");
+        }
+
+        // Check all possible ways starting with start state
+        for (int i=0; i < alphabet.size(); i++) {
+            ArrayList<String> possibleDestinations = getAllPossibleStatesFromTransition(startState, alphabet.get(i));
+        }
+    }
+
+    public ArrayList<String> getAllPossibleStatesFromTransition(Vertex state, String symbol){
+        ArrayList<String> possibleDestinations = new ArrayList<>();
+
+        for (int i = 0; i < edges.size(); i++) {
+            if (state.getName().equals(edges.get(i).getSource()) && edges.get(i).getSymbol().equals(symbol)) {
+                possibleDestinations.add(edges.get(i).getDestination());
+            }
+        }
+
+        return possibleDestinations;
     }
 
     public Vertex getStartState(){
