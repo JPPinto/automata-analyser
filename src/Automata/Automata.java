@@ -392,4 +392,32 @@ public class Automata extends JPanel {
 
 		return edges;
 	}
+
+    public void convertAutomatonToNFA(){
+        Automata original = getCopy();
+        ArrayList<String> alphabet = original.getAutomatonAlphabet();
+
+    }
+
+    public ArrayList<String> getAutomatonAlphabet(){
+        ArrayList<String> alphabet = new ArrayList<>();
+        boolean addToAlphabet;
+
+        for (int i = 0; i < edges.size(); i++) {
+            addToAlphabet = true;
+
+            for(int j = 0; 0 < alphabet.size(); j++) {
+                if (edges.get(i).getSymbol().equals(alphabet.get(j))){
+                    addToAlphabet = false;
+                    break;
+                }
+            }
+
+            if (addToAlphabet) {
+                alphabet.add(edges.get(i).getSymbol());
+            }
+        }
+
+        return alphabet;
+    }
 }
