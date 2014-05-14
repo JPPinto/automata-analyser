@@ -436,8 +436,6 @@ public class Automata extends JPanel {
 			}
         }
 
-        Automata finalDfa = new Automata();
-
         /* Composed states */
         ArrayList<ArrayList<Vertex>> vertexesTemp= new ArrayList<>();
         /* Transitions for above states */
@@ -461,28 +459,42 @@ public class Automata extends JPanel {
         }
 
         /* Search for new (derived) states */
-        for (int i = 0; i < transitionTableLines.size(); i++) {
-            HashMap<String, ArrayList<Vertex>> transtitionTableLine = transitionTableLines.get(i);
+        boolean derivedStatesSearchWorking = true;
 
-            /* Check every destination state for new states */
-            for (Map.Entry<String, ArrayList<Vertex>> entry : transtitionTableLine.entrySet()) {
-                ArrayList<Vertex> currentStatus = entry.getValue();
+        while (derivedStatesSearchWorking) {
+            for (int i = 0; i < transitionTableLines.size(); i++) {
+                HashMap<String, ArrayList<Vertex>> transtitionTableLine = transitionTableLines.get(i);
 
-                boolean doesItExist = false;
-                /* Check if the state already exists */
-                for (int j = 0; j < vertexesTemp.size(); j++){
-                    if (vertexesTemp.get(j) == currentStatus) {
-                        doesItExist = true;
-                        break;
+                /* Check every destination state for new states */
+                for (Map.Entry<String, ArrayList<Vertex>> entry : transtitionTableLine.entrySet()) {
+                    ArrayList<Vertex> currentStatus = entry.getValue();
+
+                    boolean doesItExist = false;
+                    /* Check if the state already exists */
+                    for (int j = 0; j < vertexesTemp.size(); j++){
+                        if (vertexesTemp.get(j) == currentStatus) {
+                            doesItExist = true;
+                            break;
+                        }
+                    }
+
+                    if (!doesItExist){
+                        vertexesTemp.add(currentStatus);
                     }
                 }
+            }
 
-                if (!doesItExist){
-                    vertexesTemp.add(currentStatus);
-                }
+            /* Fill new status transition table */
+            int linesToFill = vertexesTemp.size() - transitionTableLines.size();
+
+            /* Check if there are new states  if not we're done */
+            if (linesToFill == 0) {
+                derivedStatesSearchWorking = false;
             }
         }
 
+        /* Simplify states and create final automata */
+        Automata finalDfa = new Automata();
         return finalDfa;
     }
 
