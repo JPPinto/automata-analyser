@@ -412,4 +412,72 @@ public class Automata extends JPanel {
 
 		return edges;
 	}
+
+    public void convertAutomatonToNFA() throws Exception{
+        ArrayList<String> alphabet = getAutomatonAlphabet();
+
+        Vertex startState = getStartState();
+
+        if (startState == null) {
+            throw new Exception("No start state or more than one start state");
+        }
+
+        // Check all possible ways starting with start state
+        for (int i=0; i < alphabet.size(); i++) {
+            ArrayList<Vertex> possibleDestinations = getAllPossibleStatesFromTransition(startState, alphabet.get(i));
+        }
+    }
+
+    public ArrayList<Vertex> getAllPossibleStatesFromTransition(Vertex state, String symbol){
+        ArrayList<Vertex> possibleDestinations = new ArrayList<>();
+
+        for (int i = 0; i < edges.size(); i++) {
+            if (state.getName().equals(edges.get(i).getSource()) && edges.get(i).getSymbol().equals(symbol)) {
+                possibleDestinations.add(vertexes.get(edges.get(i).getDestination()));
+            }
+        }
+
+        return possibleDestinations;
+    }
+
+    public Vertex getStartState(){
+        int numberOfHits = 0;
+        Vertex startState = null;
+
+        for (Map.Entry<String, Vertex> entry : vertexes.entrySet()) {
+
+            if (entry.getValue().isInitialState()) {
+                numberOfHits++;
+                startState = entry.getValue();
+            }
+        }
+
+        if (numberOfHits != 1) {
+            return null;
+        }
+
+        return startState;
+    }
+
+    public ArrayList<String> getAutomatonAlphabet(){
+        ArrayList<String> alphabet = new ArrayList<>();
+        boolean addToAlphabet;
+
+        for (int i = 0; i < edges.size(); i++) {
+            addToAlphabet = true;
+
+            for(int j = 0; 0 < alphabet.size(); j++) {
+                if (edges.get(i).getSymbol().equals(alphabet.get(j))){
+                    addToAlphabet = false;
+                    break;
+                }
+            }
+
+            if (addToAlphabet) {
+                alphabet.add(edges.get(i).getSymbol());
+            }
+        }
+
+        return alphabet;
+    }
 }
