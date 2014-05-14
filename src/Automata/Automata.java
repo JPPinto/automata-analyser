@@ -299,32 +299,52 @@ public class Automata extends JPanel {
 		return true;
 	}
 
-	public boolean acceptsSequence(String sequence, Edge initialEdge) {
+	public boolean acceptsSequence(String sequence, Vertex currentVertex) {
 
 		boolean accepted = false;
 		Edge tempEdge;
+		String exceptFirstChar = "";
+		String firstChar = "";
+		Vertex nextVertex = null;
 
 		for (int i = 0; i < edges.size(); i++) {
 			tempEdge = edges.get(i);
-			String firstChar = sequence.substring(0, 1);
-			String exceptFirstChar = sequence.substring(1, sequence.length());
-
-			if (tempEdge.getSource().equals(initialEdge.getDestination()) && tempEdge.getSymbol().equals(firstChar)) {
-				if (sequence.length() == 1)
+			firstChar = sequence.substring(0, 1);
+			
+			if (tempEdge.getSource().equals(currentVertex.getName()) && tempEdge.getSymbol().equals(firstChar)) {
+				nextVertex = vertexes.get(tempEdge.getDestination());
+				if (sequence.length() == 1){
+					if(!nextVertex.isAcceptanceState())
+						return false;
 					return true;
-				accepted = acceptsSequence(exceptFirstChar, tempEdge);
-				break;
+				}
+				exceptFirstChar = sequence.substring(1, sequence.length());
+				accepted = acceptsSequence(exceptFirstChar, nextVertex);
+				
+				if(accepted) break;
 			}
 		}
 		return accepted;
 	}
 
+	
+	
 	public Edge getInitialEdge() {
-
+		
+		Vertex tempVertex = null;
+		
+		for (Map.Entry<String, Vertex> entry : vertexes.entrySet()) {
+			if (entry.getValue().isInitialState()) {
+				tempVertex = entry.getValue();
+				break;
+			}
+		}
+		
 		for (int i = 0; i < edges.size(); i++) {
-			if (edges.get(i).getSource() == "")
+			if (edges.get(i).getSource().equals(tempVertex.getName()))
 				return edges.get(i);
 		}
+		
 		return null;
 	}
 
