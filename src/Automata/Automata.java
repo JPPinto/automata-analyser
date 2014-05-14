@@ -157,8 +157,8 @@ public class Automata extends JPanel {
 		}
 
 		for (int i = 0; i < edges.size(); i++) {
-			g.addEdge(edges.get(i).getSource(), edges.get(i).getDestination(),
-					edges.get(i).getSymbol());
+			g.addEdge(edges.get(i).getSource(), edges.get(i).getDestination(), edges.get(i).getSymbol());
+			System.out.println(edges.get(i).getSymbol());
 		}
 
 	}
@@ -259,15 +259,18 @@ public class Automata extends JPanel {
 
 	public Automata getComplement() {
         Automata automata = getCopy();
-        automata.complementAutomata();
-		return automata;
-	}
-
-    private void complementAutomata(){
-        for (Map.Entry<String, Vertex> entry : vertexes.entrySet()) {
+        for (Map.Entry<String, Vertex> entry : automata.getVertexes().entrySet()) {
             entry.getValue().setAcceptanceState(!entry.getValue().isAcceptanceState());
         }
-    }
+        automata.refresh();
+		return automata;
+	}
+	
+	private void refresh(){
+        removeAll();
+        init();
+        loadGraph();
+	}
 
     public HashMap<String, Vertex> getVertexes(){
         return vertexes;
