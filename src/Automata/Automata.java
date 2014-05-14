@@ -12,7 +12,6 @@ package Automata;
 
 import org.jgraph.JGraph;
 import org.jgraph.graph.*;
-import org.jgraph.graph.DefaultGraphModel.GraphModelEdit;
 import org.jgrapht.ext.JGraphModelAdapter;
 import org.jgrapht.graph.*;
 import org.jgrapht.graph.DefaultEdge;
@@ -25,12 +24,7 @@ import javax.swing.*;
 import javax.swing.border.Border;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.geom.Rectangle2D;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -265,13 +259,15 @@ public class Automata extends JPanel {
 
 	public Automata getComplement() {
         Automata automata = getCopy();
-
-		for (Map.Entry<String, Vertex> entry : automata.getVertexes().entrySet()) {
-			entry.getValue().setAcceptanceState(!entry.getValue().isAcceptanceState());
-		}
-
+        automata.complementAutomata();
 		return automata;
 	}
+
+    private void complementAutomata(){
+        for (Map.Entry<String, Vertex> entry : vertexes.entrySet()) {
+            entry.getValue().setAcceptanceState(!entry.getValue().isAcceptanceState());
+        }
+    }
 
     public HashMap<String, Vertex> getVertexes(){
         return vertexes;
