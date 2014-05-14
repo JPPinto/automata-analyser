@@ -278,15 +278,13 @@ public class Automata extends JPanel {
     }
 	
 	public Automata getCartesianProduct(Automata a) {
+        Automata newAutomata = getCopy();
 
-		HashMap<String, Vertex> tempVertexes = new HashMap<>(vertexes); // FIX THIS CRAP
-		ArrayList<Edge> tempEdges = new ArrayList<>(edges);
-
-		for (Map.Entry<String, Vertex> entry : tempVertexes.entrySet()) {
+		for (Map.Entry<String, Vertex> entry : newAutomata.getVertexes().entrySet()) {
 			entry.getValue().setAcceptanceState(!entry.getValue().isAcceptanceState());
 		}
 
-		return new Automata(tempEdges, tempVertexes);
+		return newAutomata;
 	}
 	
 	public String convertToDotty(){
