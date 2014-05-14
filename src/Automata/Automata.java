@@ -266,7 +266,7 @@ public class Automata extends JPanel {
 		ArrayList<Edge> tempEdges = new ArrayList<>(edges);
 
 		for (Map.Entry<String, Vertex> entry : tempVertexes.entrySet()) {
-			entry.getValue().setAcceptanceState(!entry.getValue().isAcceptanceState());
+			//entry.getValue()
 		}
 
 		return new Automata(tempEdges, tempVertexes);
