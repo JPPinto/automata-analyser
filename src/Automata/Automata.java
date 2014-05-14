@@ -14,6 +14,7 @@ import com.jgraph.layout.JGraphFacade;
 import com.jgraph.layout.JGraphLayout;
 import com.jgraph.layout.graph.JGraphSimpleLayout;
 
+import com.sun.applet2.AppletParameters;
 import org.jgraph.JGraph;
 import org.jgraph.graph.AttributeMap;
 import org.jgraph.graph.DefaultGraphCell;
@@ -420,6 +421,8 @@ public class Automata extends JPanel {
 	}
 
     public Automata convertAutomatonToNFA(){
+        // TODO faltam os estados de aceitacao e finais
+
         /* Get the automata alphabet */
         ArrayList<String> alphabet = getAutomatonAlphabet();
 
@@ -498,7 +501,21 @@ public class Automata extends JPanel {
         }
 
         /* Simplify states and create final automata */
-        Automata finalDfa = new Automata();
+        HashMap<String, Vertex> vertexesN = new HashMap<>();
+        ArrayList<Edge> edgesN = new ArrayList<>();
+
+        /* Create new states */
+        for (Map.Entry<String, Vertex> entry : vertexes.entrySet()) {
+            Vertex temp =  new Vertex("NewState" + Integer.toString(vertexesN.size()), false, false);
+            vertexesN.put(temp.getName(), temp);
+        }
+
+        // TODO: Dead state management
+
+        /* Transitions for above states */
+        //ArrayList<HashMap<String, ArrayList<Vertex>>> transitionTableLines = new ArrayList<>();
+        Automata finalDfa = new Automata(edgesN, vertexesN);
+        finalDfa.init();
         return finalDfa;
     }
 
