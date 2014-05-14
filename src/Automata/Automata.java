@@ -301,6 +301,9 @@ public class Automata extends JPanel {
 
 	public boolean acceptsSequence(String sequence, Vertex currentVertex) {
 
+		if(sequence.equals("") && currentVertex.isAcceptanceState())
+			return true;
+		
 		boolean accepted = false;
 		Edge tempEdge;
 		String exceptFirstChar = "";
