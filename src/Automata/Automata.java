@@ -155,15 +155,7 @@ public class Automata extends JPanel {
         for (Map.Entry<String, Vertex> entry : vertexes.entrySet()) {
             Vertex tempVertex = entry.getValue();
 
-            // TODO : CHECK THIS
-//<<<<<<< HEAD
-//            g.addVertex(tempVertex.getName());
-//=======
-		for (int i = 0; i < edges.size(); i++) {
-			g.addEdge(edges.get(i).getSource(), edges.get(i).getDestination(), edges.get(i).getSymbol());
-		}
-//>>>>>>> 629af26c923455d6a2ad068633baec94f8b0a865
-
+           g.addVertex(tempVertex.getName());
             editVertex(tempVertex);
         }
 
