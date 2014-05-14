@@ -52,8 +52,6 @@ public class Automata extends JPanel {
         isAutomataDFA = isDFA();
 
         init();
-
-        loadGraph();
     }
 
     public Automata(ArrayList<Edge> e, HashMap<String, Vertex> v) {
@@ -100,8 +98,7 @@ public class Automata extends JPanel {
                 .compile("[a-zA-Z][a-zA-Z0-9]*->[a-zA-Z][a-zA-Z0-9]*\\[.*\\]")
                 .matcher(s).matches()) {
             String[] content = s.split("->");
-            String[] label_sides = content[1].substring(0,
-                    content[1].length() - 1).split("=");
+            String[] label_sides = content[1].substring(0, content[1].length() - 1).split("=");
 
             String[] sides = content[1].split("\\[");
 
@@ -155,13 +152,12 @@ public class Automata extends JPanel {
         for (Map.Entry<String, Vertex> entry : vertexes.entrySet()) {
             Vertex tempVertex = entry.getValue();
 
-           g.addVertex(tempVertex.getName());
+            g.addVertex(tempVertex.getName());
             editVertex(tempVertex);
         }
 
         for (int i = 0; i < edges.size(); i++) {
-            g.addEdge(edges.get(i).getSource(), edges.get(i).getDestination(), edges.get(i).getSymbol());
-            System.out.println(edges.get(i).getSymbol());
+        	g.addEdge(edges.get(i).getSource(), edges.get(i).getDestination(), edges.get(i).getSymbol());
         }
 
     }
@@ -174,15 +170,18 @@ public class Automata extends JPanel {
         jgAdapter = new JGraphModelAdapter<String, DefaultEdge>(this.g);
 
         JGraph jgraph = new JGraph(jgAdapter);
+		adjustDisplaySettings(jgraph); // Apply the results to the actual graph
 
+		loadGraph();
+		
 		JGraphFacade facade = new JGraphFacade(jgraph); // Pass the facade the JGraph instance
 		JGraphLayout layout = new JGraphSimpleLayout(JGraphSimpleLayout.TYPE_CIRCLE); // Create an instance of the circle layout
 		layout.run(facade); // Run the layout on the facade.
 		Map nested = facade.createNestedMap(true, true); // Obtain a map of the resulting attribute changes from the facade
 		jgraph.getGraphLayoutCache().edit(nested);
 		
-		adjustDisplaySettings(jgraph); // Apply the results to the actual graph
-		add(jgraph);
+		
+		add(jgraph, BorderLayout.CENTER);
 	}
 
     private void adjustDisplaySettings(JGraph jg) {
@@ -273,7 +272,6 @@ public class Automata extends JPanel {
     private void refresh() {
         removeAll();
         init();
-        loadGraph();
     }
 
     public HashMap<String, Vertex> getVertexes() {
@@ -369,12 +367,30 @@ public class Automata extends JPanel {
 				}else{
 					vertex = new Vertex(entry.getValue().getName()+", "+entry2.getValue().getName(),false,false);
 				}
-				newAutomata.getVertexes().put(vertex.getName(), vertex);
+				newAutomata.vertexes.put(vertex.getName(), vertex);
+				newAutomata.edges.addAll(getCartesianProductEdges(a, entry.getValue().getName(), entry2.getValue().getName()));
 			}
 		}
 		
 		newAutomata.refresh();
 
 		return newAutomata;
+	}
+	
+	public ArrayList<Edge> getCartesianProductEdges(Automata a2, String node1, String node2){
+		ArrayList<Edge> edges =new ArrayList<Edge>();
+		
+        for (int i = 0; i < this.edges.size(); i++) {
+        	if(this.edges.get(i).getSource().equals(node1)){
+        		edges.add(new Edge(this.edges.get(i).getSymbol(), node1+", "+node2, this.edges.get(i).getDestination()+", "+a2.edges.get(i).getDestination()));
+        		System.out.println("1---- "+node1+", "+node2);
+        	}
+        	if(a2.edges.get(i).getSource().equals(node2)){
+        		edges.add(new Edge(a2.edges.get(i).getSymbol(), node1+", "+node2, this.edges.get(i).getDestination()+", "+a2.edges.get(i).getDestination()));
+        		System.out.println("2---- "+node1+", "+node2);
+        	}
+        }
+		
+		return edges;
 	}
 }
