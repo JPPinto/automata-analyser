@@ -260,24 +260,34 @@ public class Automata extends JPanel {
 		return new Automata(tempEdges, tempVertexes);
 	}
 	
+	public Automata getCartesianProduct(Automata a) {
+
+		HashMap<String, Vertex> tempVertexes = new HashMap<>(vertexes); // FIX THIS CRAP
+		ArrayList<Edge> tempEdges = new ArrayList<>(edges);
+
+		for (Map.Entry<String, Vertex> entry : tempVertexes.entrySet()) {
+			entry.getValue().setAcceptanceState(!entry.getValue().isAcceptanceState());
+		}
+
+		return new Automata(tempEdges, tempVertexes);
+	}
+	
 	public String convertToDotty(){
-		String total="digraph{\n\"\"[shape=none]\n";
+		String total="digraph{\n\"\"[shape=none]\r\n";
+		String temp="";
 		
 		for (Map.Entry<String, Vertex> entry : vertexes.entrySet()) {
 			if (entry.getValue().isAcceptanceState()) {
-				total+=entry.getValue().getName()+"[shape=doublecircle]\n";
+				total+=entry.getValue().getName()+"[shape=doublecircle]\r\n";
 			}
-		}
-		
-		for (Map.Entry<String, Vertex> entry : vertexes.entrySet()) {
 			if (entry.getValue().isInitialState()) {
-				total+="\"\"->"+entry.getValue().getName()+"\n";
-				break;
+				temp=entry.getValue().getName();
 			}
 		}
+		total+="\"\"->"+temp+"\r\n";
 
 		for (int i = 0; i < edges.size(); i++) {
-			total+=edges.get(i).getSource()+"->"+edges.get(i).getDestination()+"[label="+edges.get(i).getSymbol()+"]\n";
+			total+=edges.get(i).getSource()+"->"+edges.get(i).getDestination()+"[label="+edges.get(i).getSymbol()+"]\r\n";
 		}
 		total+="}";
 
