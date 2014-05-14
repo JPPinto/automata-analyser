@@ -57,16 +57,18 @@ public class Automata extends JPanel {
     }
 
     public Automata(ArrayList<Edge> e, HashMap<String, Vertex> v) {
+		edges = e;
+		vertexes = v;
 
-        edges = e;
-        vertexes = v;
+		g = new ListenableDirectedGraph(org.jgraph.graph.DefaultEdge.class);
+	}
 
-        g = new ListenableDirectedGraph(org.jgraph.graph.DefaultEdge.class);
-
-        init();
-
-        loadGraph();
-    }
+	public Automata() {
+        vertexes = new HashMap<>();
+        edges = new ArrayList<>();
+        
+		g = new ListenableDirectedGraph(org.jgraph.graph.DefaultEdge.class);
+	}
 
     public void parseDottyFile(String graph) {
 
@@ -153,7 +155,14 @@ public class Automata extends JPanel {
         for (Map.Entry<String, Vertex> entry : vertexes.entrySet()) {
             Vertex tempVertex = entry.getValue();
 
-            g.addVertex(tempVertex.getName());
+            // TODO : CHECK THIS
+//<<<<<<< HEAD
+//            g.addVertex(tempVertex.getName());
+//=======
+		for (int i = 0; i < edges.size(); i++) {
+			g.addEdge(edges.get(i).getSource(), edges.get(i).getDestination(), edges.get(i).getSymbol());
+		}
+//>>>>>>> 629af26c923455d6a2ad068633baec94f8b0a865
 
             editVertex(tempVertex);
         }
@@ -174,14 +183,15 @@ public class Automata extends JPanel {
 
         JGraph jgraph = new JGraph(jgAdapter);
 
-        JGraphFacade facade = new JGraphFacade(jgraph); // Pass the facade the JGraph instance
-        JGraphLayout layout = new JGraphSimpleLayout(JGraphSimpleLayout.TYPE_CIRCLE); // Create an instance of the circle layout
-        layout.run(facade); // Run the layout on the facade.
-        Map nested = facade.createNestedMap(true, true); // Obtain a map of the resulting attribute changes from the facade
-        // jgraph.getGraphLayoutCache().edit(nested);
-        adjustDisplaySettings(jgraph); // Apply the results to the actual graph
-        add(jgraph);
-    }
+		JGraphFacade facade = new JGraphFacade(jgraph); // Pass the facade the JGraph instance
+		JGraphLayout layout = new JGraphSimpleLayout(JGraphSimpleLayout.TYPE_CIRCLE); // Create an instance of the circle layout
+		layout.run(facade); // Run the layout on the facade.
+		Map nested = facade.createNestedMap(true, true); // Obtain a map of the resulting attribute changes from the facade
+		jgraph.getGraphLayoutCache().edit(nested);
+		
+		adjustDisplaySettings(jgraph); // Apply the results to the actual graph
+		add(jgraph);
+	}
 
     private void adjustDisplaySettings(JGraph jg) {
         jg.setPreferredSize(Constants.guiDefaultWindowSize);
@@ -278,18 +288,6 @@ public class Automata extends JPanel {
         return vertexes;
     }
 
-    public Automata getCartesianProduct(Automata a) {
-        Automata newAutomata = getCopy();
-
-        for (Map.Entry<String, Vertex> entry : newAutomata.getVertexes().entrySet()) {
-            for (Map.Entry<String, Vertex> entry2 : a.getVertexes().entrySet()) {
-
-            }
-        }
-
-        return newAutomata;
-    }
-
     public boolean isDFA() {
 
         Edge tempEdge;
@@ -363,4 +361,28 @@ public class Automata extends JPanel {
 
         return total;
     }
+	
+	public Automata getCartesianProduct(Automata a) {      
+        Automata newAutomata =new Automata();
+        Vertex vertex=null;
+        
+		for (Map.Entry<String, Vertex> entry : this.getVertexes().entrySet()) {
+			for(Map.Entry<String, Vertex> entry2 : a.getVertexes().entrySet()){
+				if(entry.getValue().isAcceptanceState() && entry2.getValue().isAcceptanceState()){
+					vertex = new Vertex(entry.getValue().getName()+", "+entry2.getValue().getName(),true,false);
+				}else if(entry.getValue().isInitialState() && entry2.getValue().isInitialState()){
+					vertex = new Vertex(entry.getValue().getName()+", "+entry2.getValue().getName(),false,true);
+				}else if(entry.getValue().isInitialState() && entry.getValue().isAcceptanceState() && entry2.getValue().isInitialState() && entry2.getValue().isAcceptanceState()){
+					vertex = new Vertex(entry.getValue().getName()+", "+entry2.getValue().getName(),true,true);
+				}else{
+					vertex = new Vertex(entry.getValue().getName()+", "+entry2.getValue().getName(),false,false);
+				}
+				newAutomata.getVertexes().put(vertex.getName(), vertex);
+			}
+		}
+		
+		newAutomata.refresh();
+
+		return newAutomata;
+	}
 }
