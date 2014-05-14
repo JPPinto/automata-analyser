@@ -174,18 +174,19 @@ public class Automata extends JPanel {
 
 		loadGraph();
 
+		//Put circle layout
 		JGraphFacade facade = new JGraphFacade(jgraph); // Pass the facade the JGraph instance
 		JGraphLayout layout = new JGraphSimpleLayout(JGraphSimpleLayout.TYPE_CIRCLE); // Create an instance of the circle layout
 		layout.run(facade); // Run the layout on the facade.
 		Map nested = facade.createNestedMap(true, true); // Obtain a map of the resulting attribute changes from the facade
 		jgraph.getGraphLayoutCache().edit(nested);
 
-
-		add(jgraph, BorderLayout.CENTER);
+		add(jgraph);
 	}
 
 	private void adjustDisplaySettings(JGraph jg) {
 		jg.setPreferredSize(Constants.guiDefaultWindowSize);
+		//jg.setSize(Constants.guiDefaultWindowSize);
 		jg.setBackground(Constants.guiDefaultBackgroundColor);
 	}
 
