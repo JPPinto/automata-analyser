@@ -62,6 +62,13 @@ public class Automata extends JPanel {
 		g = new ListenableDirectedGraph(org.jgraph.graph.DefaultEdge.class);
 	}
 
+	public Automata() {
+        vertexes = new HashMap<>();
+        edges = new ArrayList<>();
+        
+		g = new ListenableDirectedGraph(org.jgraph.graph.DefaultEdge.class);
+	}
+
 	public void parseDottyFile(String graph) {
 
 		String[] lines = graph.split("\r\n");
@@ -272,14 +279,26 @@ public class Automata extends JPanel {
         return vertexes;
     }
 	
-	public Automata getCartesianProduct(Automata a) {
-        Automata newAutomata = getCopy();
-
-		for (Map.Entry<String, Vertex> entry : newAutomata.getVertexes().entrySet()) {
+	public Automata getCartesianProduct(Automata a) {      
+        Automata newAutomata =new Automata();
+        Vertex vertex=null;
+        
+		for (Map.Entry<String, Vertex> entry : this.getVertexes().entrySet()) {
 			for(Map.Entry<String, Vertex> entry2 : a.getVertexes().entrySet()){
-				
+				if(entry.getValue().isAcceptanceState() && entry2.getValue().isAcceptanceState()){
+					vertex = new Vertex(entry.getValue().getName()+", "+entry2.getValue().getName(),true,false);
+				}else if(entry.getValue().isInitialState() && entry2.getValue().isInitialState()){
+					vertex = new Vertex(entry.getValue().getName()+", "+entry2.getValue().getName(),false,true);
+				}else if(entry.getValue().isInitialState() && entry.getValue().isAcceptanceState() && entry2.getValue().isInitialState() && entry2.getValue().isAcceptanceState()){
+					vertex = new Vertex(entry.getValue().getName()+", "+entry2.getValue().getName(),true,true);
+				}else{
+					vertex = new Vertex(entry.getValue().getName()+", "+entry2.getValue().getName(),false,false);
+				}
+				newAutomata.getVertexes().put(vertex.getName(), vertex);
 			}
 		}
+		
+		newAutomata.refresh();
 
 		return newAutomata;
 	}
