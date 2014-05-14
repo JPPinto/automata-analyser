@@ -425,17 +425,25 @@ public class Automata extends JPanel {
             throw new Exception("No start state or more than one start state");
         }
 
-        // Check all possible ways starting with start state
+        for (Map.Entry<String, Vertex> entry : vertexes.entrySet()) {
+            // (Symbol + Destination Vertex) list
+            HashMap<String, ArrayList<Vertex>> destinationVertexesGroup = getAllPossibleTransitionsFromState(entry.getValue(), alphabet);
+        }
 
+    }
+
+    public HashMap<String, ArrayList<Vertex>> getAllPossibleTransitionsFromState(Vertex state, ArrayList<String> alphabet) {
         // Symbol + Destination Vertex combo
         HashMap<String, ArrayList<Vertex>> destinationVertexesGroup = new HashMap<>();
 
+        // Get all possible destinations for each alphabet entry
         for (int i=0; i < alphabet.size(); i++) {
             String searchSymbol = alphabet.get(i);
-            ArrayList<Vertex> possibleDestinations = getAllPossibleStatesFromTransition(startState, searchSymbol);
-
+            ArrayList<Vertex> possibleDestinations = getAllPossibleStatesFromTransition(state, searchSymbol);
             destinationVertexesGroup.put(searchSymbol, possibleDestinations);
         }
+
+        return destinationVertexesGroup;
     }
 
     public ArrayList<Vertex> getAllPossibleStatesFromTransition(Vertex state, String symbol){
