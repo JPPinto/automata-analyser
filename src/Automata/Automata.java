@@ -416,7 +416,7 @@ public class Automata extends JPanel {
 		return edges;
 	}
 
-    public void convertAutomatonToNFA() throws Exception {
+    public Automata convertAutomatonToNFA() throws Exception {
         /* Get the automata alphabet */
         ArrayList<String> alphabet = getAutomatonAlphabet();
 
@@ -426,6 +426,8 @@ public class Automata extends JPanel {
         if (startState == null) {
             throw new Exception("No start state or more than one start state");
         }
+
+        Automata finalDfa = new Automata();
 
         ArrayList<ArrayList<Vertex>> vertexesTemp= new ArrayList<>();
         ArrayList<HashMap<String, ArrayList<Vertex>>> transitionTableLines = new ArrayList<>();
@@ -442,6 +444,9 @@ public class Automata extends JPanel {
         }
 
         /* Search for orphan states */
+
+
+        return finalDfa;
     }
 
     public HashMap<String, ArrayList<Vertex>> getAllPossibleTransitionsFromState(Vertex state, ArrayList<String> alphabet) {
