@@ -509,7 +509,7 @@ public class Automata extends JPanel {
         for (int i = 0; i < edges.size(); i++) {
             addToAlphabet = true;
 
-            for(int j = 0; 0 < alphabet.size(); j++) {
+            for(int j = 0; j < alphabet.size(); j++) {
                 if (edges.get(i).getSymbol().equals(alphabet.get(j))){
                     addToAlphabet = false;
                     break;
