@@ -281,7 +281,9 @@ public class Automata extends JPanel {
         Automata newAutomata = getCopy();
 
 		for (Map.Entry<String, Vertex> entry : newAutomata.getVertexes().entrySet()) {
-			entry.getValue().setAcceptanceState(!entry.getValue().isAcceptanceState());
+			for(Map.Entry<String, Vertex> entry2 : a.getVertexes().entrySet()){
+				
+			}
 		}
 
 		return newAutomata;
