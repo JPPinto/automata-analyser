@@ -403,8 +403,15 @@ public class Automata extends JPanel {
         }
 
         // Check all possible ways starting with start state
+
+        // Symbol + Destination Vertex combo
+        HashMap<String, ArrayList<Vertex>> destinationVertexesGroup = new HashMap<>();
+
         for (int i=0; i < alphabet.size(); i++) {
-            ArrayList<Vertex> possibleDestinations = getAllPossibleStatesFromTransition(startState, alphabet.get(i));
+            String searchSymbol = alphabet.get(i);
+            ArrayList<Vertex> possibleDestinations = getAllPossibleStatesFromTransition(startState, searchSymbol);
+
+            destinationVertexesGroup.put(searchSymbol, possibleDestinations);
         }
     }
 
