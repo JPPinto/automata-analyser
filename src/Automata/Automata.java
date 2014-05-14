@@ -416,18 +416,25 @@ public class Automata extends JPanel {
 		return edges;
 	}
 
-    public void convertAutomatonToNFA() throws Exception{
+    public void convertAutomatonToNFA() throws Exception {
+        /* Get the automata alphabet */
         ArrayList<String> alphabet = getAutomatonAlphabet();
 
+        /* Sanity checks */
         Vertex startState = getStartState();
 
         if (startState == null) {
             throw new Exception("No start state or more than one start state");
         }
 
+        ArrayList<HashMap<String, ArrayList<Vertex>>> intermediateVertexList = new ArrayList<>();
+
+        /* Do subset construction for non derived states here */
         for (Map.Entry<String, Vertex> entry : vertexes.entrySet()) {
-            // (Symbol + Destination Vertex) list
-            HashMap<String, ArrayList<Vertex>> destinationVertexesGroup = getAllPossibleTransitionsFromState(entry.getValue(), alphabet);
+            /* For this state create a table line with all the symbols plus
+             * all the possible destination vertexes for each symbol on the alphabet
+             */
+            intermediateVertexList.add(getAllPossibleTransitionsFromState(entry.getValue(), alphabet));
         }
 
     }
