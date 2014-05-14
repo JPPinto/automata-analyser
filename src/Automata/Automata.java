@@ -487,6 +487,10 @@ public class Automata extends JPanel {
             /* Fill new status transition table */
             int linesToFill = vertexesTemp.size() - transitionTableLines.size();
 
+            for (int i = transitionTableLines.size(); i < vertexesTemp.size();i++){
+                transitionTableLines.add(getAllPossibleTransitionsFromStates(vertexesTemp.get(i), alphabet));
+            }
+
             /* Check if there are new states  if not we're done */
             if (linesToFill == 0) {
                 derivedStatesSearchWorking = false;
@@ -507,6 +511,26 @@ public class Automata extends JPanel {
             String searchSymbol = alphabet.get(i);
             ArrayList<Vertex> possibleDestinations = getAllPossibleStatesFromTransition(state, searchSymbol);
             destinationVertexesGroup.put(searchSymbol, possibleDestinations);
+        }
+
+        return destinationVertexesGroup;
+    }
+
+    public HashMap<String, ArrayList<Vertex>> getAllPossibleTransitionsFromStates(ArrayList<Vertex> states, ArrayList<String> alphabet) {
+        // Symbol + Destination Vertex combo
+        HashMap<String, ArrayList<Vertex>> destinationVertexesGroup = new HashMap<>();
+
+        // Get all states in the list
+        for (int j=0; j < states.size(); j++) {
+
+            // Get all possible destinations for each alphabet entry
+            for (int i=0; i < alphabet.size(); i++) {
+                String searchSymbol = alphabet.get(i);
+
+                ArrayList<Vertex> possibleDestinations = getAllPossibleStatesFromTransition(states.get(j), searchSymbol);
+                destinationVertexesGroup.put(searchSymbol, possibleDestinations);
+            }
+
         }
 
         return destinationVertexesGroup;
