@@ -459,11 +459,29 @@ public class Automata extends JPanel {
             //throw new Exception("Invalid intenal state on NFA to DFA converter");
             return null;
         }
-        
-        /* Search for orphan states */
 
+        /* Search for new (derived) states */
+        for (int i = 0; i < transitionTableLines.size(); i++) {
+            HashMap<String, ArrayList<Vertex>> transtitionTableLine = transitionTableLines.get(i);
 
-        //for (int i = 0; i < transitionTableLines)
+            /* Check every destination state for new states */
+            for (Map.Entry<String, ArrayList<Vertex>> entry : transtitionTableLine.entrySet()) {
+                ArrayList<Vertex> currentStatus = entry.getValue();
+
+                boolean doesItExist = false;
+                /* Check if the state already exists */
+                for (int j = 0; j < vertexesTemp.size(); j++){
+                    if (vertexesTemp.get(j) == currentStatus) {
+                        doesItExist = true;
+                        break;
+                    }
+                }
+
+                if (!doesItExist){
+                    vertexesTemp.add(currentStatus);
+                }
+            }
+        }
 
         return finalDfa;
     }
