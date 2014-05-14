@@ -10,3 +10,4 @@ sf.eclipse.javacc.prefs
 /out/*
 misc.xml
 workspace.xml
+.idea/workspace.xml
