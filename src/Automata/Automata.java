@@ -250,7 +250,15 @@ public class Automata extends JPanel {
         HashMap<String, Vertex> tempVertexes = new HashMap<>(vertexes);
         ArrayList<Edge> tempEdges = new ArrayList<>(edges);
 
-        Automata automata = null;
+        for (Map.Entry<String, Vertex> entry : vertexes.entrySet()) {
+            tempVertexes.put(entry.getKey(),entry.getValue().getCopy());
+        }
+
+        for (int i = 0; i < edges.size(); i++) {
+            tempEdges.add(i, edges.get(i).getCopy());
+        }
+
+        Automata automata = new Automata(tempEdges, tempVertexes);
 
         return automata;
     }
