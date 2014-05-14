@@ -13,6 +13,7 @@ package Automata;
 import com.jgraph.layout.JGraphFacade;
 import com.jgraph.layout.JGraphLayout;
 import com.jgraph.layout.graph.JGraphSimpleLayout;
+
 import org.jgraph.JGraph;
 import org.jgraph.graph.AttributeMap;
 import org.jgraph.graph.DefaultGraphCell;
@@ -23,6 +24,7 @@ import org.jgrapht.graph.ListenableDirectedGraph;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
@@ -417,7 +419,7 @@ public class Automata extends JPanel {
 		return edges;
 	}
 
-    public Automata convertAutomatonToNFA() throws Exception {
+    public Automata convertAutomatonToNFA(){
         /* Get the automata alphabet */
         ArrayList<String> alphabet = getAutomatonAlphabet();
 
@@ -425,7 +427,12 @@ public class Automata extends JPanel {
         Vertex startState = getStartState();
 
         if (startState == null) {
-            throw new Exception("No start state or more than one start state");
+            try {
+				throw new Exception("No start state or more than one start state");
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         }
 
         Automata finalDfa = new Automata();
