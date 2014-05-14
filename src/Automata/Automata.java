@@ -432,12 +432,15 @@ public class Automata extends JPanel {
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+                return null;
 			}
         }
 
         Automata finalDfa = new Automata();
 
+        /* Composed states */
         ArrayList<ArrayList<Vertex>> vertexesTemp= new ArrayList<>();
+        /* Transitions for above states */
         ArrayList<HashMap<String, ArrayList<Vertex>>> transitionTableLines = new ArrayList<>();
 
         /* Do subset construction for non derived states here */
@@ -451,8 +454,16 @@ public class Automata extends JPanel {
             states.add(entry.getValue());
         }
 
+        /* Sanity check */
+        if (vertexesTemp.size() != transitionTableLines.size()) {
+            //throw new Exception("Invalid intenal state on NFA to DFA converter");
+            return null;
+        }
+        
         /* Search for orphan states */
 
+
+        //for (int i = 0; i < transitionTableLines)
 
         return finalDfa;
     }
@@ -502,13 +513,18 @@ public class Automata extends JPanel {
         return startState;
     }
 
+    /*
+    * Returns an ArrayList of strings with all the unique symbols of the automaton
+    */
     public ArrayList<String> getAutomatonAlphabet(){
         ArrayList<String> alphabet = new ArrayList<>();
         boolean addToAlphabet;
 
+        /* Check all edges (transitions) */
         for (int i = 0; i < edges.size(); i++) {
             addToAlphabet = true;
 
+            /* Check if symbol already exists on the alphabet */
             for(int j = 0; j < alphabet.size(); j++) {
                 if (edges.get(i).getSymbol().equals(alphabet.get(j))){
                     addToAlphabet = false;
@@ -516,6 +532,7 @@ public class Automata extends JPanel {
                 }
             }
 
+            /* Add it if it doesn't already exist */
             if (addToAlphabet) {
                 alphabet.add(edges.get(i).getSymbol());
             }
