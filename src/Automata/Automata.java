@@ -248,7 +248,7 @@ public class Automata extends JPanel {
 
     public Automata getCopy(){
         HashMap<String, Vertex> tempVertexes = new HashMap<>(vertexes);
-        ArrayList<Edge> tempEdges = new ArrayList<>(edges);
+        ArrayList<Edge> tempEdges = new ArrayList<>();
 
         for (Map.Entry<String, Vertex> entry : vertexes.entrySet()) {
             tempVertexes.put(entry.getKey(),entry.getValue().getCopy());
