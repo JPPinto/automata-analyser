@@ -81,11 +81,6 @@ public class Automata extends JPanel {
 
 	}
 
-	public boolean isSequenceAccpeted(String[] sequence) {
-
-		return false;
-	}
-
 	public Vertex getInitialVertex() {
 
 		for (Map.Entry<String, Vertex> entry : vertexes.entrySet())
