@@ -10,7 +10,7 @@
 
 package Automata;
 
-public class Vertex implements Comparable<Vertex> {
+public class Vertex  {
 	private String name;
 	private boolean acceptanceState;
 	private boolean initialState;
@@ -45,7 +45,18 @@ public class Vertex implements Comparable<Vertex> {
 		this.initialState = initialS;
 	}
 
-    public boolean equals(Vertex compare){
+    @Override
+    public boolean equals(Object inputO){
+        if (this == inputO){
+            return true;
+        }
+
+        if (!(inputO instanceof Vertex)){
+            return false;
+        }
+
+        Vertex compare = (Vertex) inputO;
+
         if (!name.equals(compare.getName())){
             return false;
         }
@@ -65,12 +76,4 @@ public class Vertex implements Comparable<Vertex> {
         return new Vertex(name, acceptanceState, initialState);
     }
 
-    @Override
-    public int compareTo(Vertex o) {
-        if (equals(o)) {
-            return 0;
-        }
-
-        return -1;
-    }
 }
