@@ -74,6 +74,11 @@ public class Edge extends DefaultEdge {
         return true;
     }
 
+    @Override
+    public String toString(){
+        return "From: " + source + " to: " + destination + " trigger: " + symbol;
+    }
+
     public Edge getCopy(){
         return new Edge(symbol, source, destination);
     }
