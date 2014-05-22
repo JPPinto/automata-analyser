@@ -10,7 +10,7 @@
 
 package Automata;
 
-public class Vertex {
+public class Vertex implements Comparable<Vertex> {
 	private String name;
 	private boolean acceptanceState;
 	private boolean initialState;
@@ -63,5 +63,14 @@ public class Vertex {
 
     public Vertex getCopy(){
         return new Vertex(name, acceptanceState, initialState);
+    }
+
+    @Override
+    public int compareTo(Vertex o) {
+        if (equals(o)) {
+            return 0;
+        }
+
+        return -1;
     }
 }

@@ -12,7 +12,7 @@ package Automata;
 
 import org.jgraph.graph.DefaultEdge;
 
-public class Edge extends DefaultEdge {
+public class Edge extends DefaultEdge implements Comparable<Edge> {
 	private String symbol;
 	private String source;
 	private String destination;
@@ -65,5 +65,14 @@ public class Edge extends DefaultEdge {
 
     public Edge getCopy(){
         return new Edge(symbol, source, destination);
+    }
+
+
+    @Override
+    public int compareTo(Edge o) {
+        if(equals(o)) {
+            return 0;
+        }
+        return -1;
     }
 }
