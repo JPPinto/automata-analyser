@@ -183,8 +183,9 @@ public class Automata extends JPanel {
 
 	private void adjustDisplaySettings(JGraph jg) {
 		jg.setPreferredSize(Constants.guiDefaultWindowSize);
-		//jg.setSize(Constants.guiDefaultWindowSize);
+		jg.setSize(Constants.guiDefaultWindowSize);
 		jg.setBackground(Constants.guiDefaultBackgroundColor);
+        //jg.setLayout(new GridLayout(0,1,0,3));;
 	}
 
 	private void positionVertexAt(Object vertex, int x, int y) {
