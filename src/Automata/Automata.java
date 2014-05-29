@@ -14,12 +14,8 @@ import com.jgraph.layout.JGraphFacade;
 import com.jgraph.layout.JGraphLayout;
 import com.jgraph.layout.graph.JGraphSimpleLayout;
 
-<<<<<<< HEAD
-import com.sun.applet2.AppletParameters;
 import dk.brics.automaton.Automaton;
 import dk.brics.automaton.State;
-=======
->>>>>>> 397c6d942f536f8802bb9cf53581475ac47dc600
 import org.jgraph.JGraph;
 import org.jgraph.graph.AttributeMap;
 import org.jgraph.graph.DefaultGraphCell;
