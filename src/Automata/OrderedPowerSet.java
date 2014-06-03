@@ -25,6 +25,7 @@ public class OrderedPowerSet<E> {
             throw new IndexOutOfBoundsException(
                     "Can only generate permutations for a count between 1 to " + N);
         }
+
         if (map.containsKey(elementCount)) {
             return map.get(elementCount);
         }

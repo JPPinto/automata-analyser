@@ -1,8 +1,6 @@
 package Automata;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Set;
+import java.util.*;
 
 public class AutomatonConverter {
 
@@ -21,19 +19,30 @@ public class AutomatonConverter {
         /* Alphabet get */
         ArrayList<String> alphabet = copy.getAutomatonAlphabet();
         // Name + Vertex
-        HashMap<String, Vertex> states = copy.getVertexes();
+        HashMap<String, Vertex> originalStates = copy.getVertexes();
+        ArrayList<Edge> originalEdges = copy.getEdges();
 
         /* Generate All possible state combinations */
+        ArrayList<AdvancedState> stateCombinations = generateStateCombinations(originalStates);
 
-        /* Get starting vertex */
-        Vertex startState = copy.getStartState();
+        /* Go trough all new states */
+        for (int sc = 0; sc < stateCombinations.size(); sc++){
 
-        for (int i=0; i < alphabet.size(); i++){
-            //
+            /* Check all possible transitions */
+            for (int i = 0; i < alphabet.size(); i++){
+
+                /* From the original edges */
+                for (int j = 0; j < originalEdges.size(); j++){
+
+                    if (originalEdges.get(j).getSymbol().equals(alphabet.get(i))){
+//TODO I was here before the keyboard layout fucked itself up
+                    }
+
+                }
+
+            }
+
         }
-
-
-
 
 
 
@@ -50,39 +59,28 @@ public class AutomatonConverter {
     static private ArrayList<AdvancedState> generateStateCombinations(HashMap<String, Vertex> originalStates){
         ArrayList<AdvancedState> result = new ArrayList<>();
 
+        /* Get vertexes power set */
         OrderedPowerSet<Vertex> powerSet = new OrderedPowerSet<Vertex>(new ArrayList<Vertex>(originalStates.values()));
+        List<LinkedHashSet<Vertex>> permutations = powerSet.getPermutationsList(originalStates.size());
+
+        /* Convert power set into advanced states */
+        for (int i=0; i < permutations.size(); i++) {
+            AdvancedState insert = new AdvancedState();
+
+            LinkedHashSet<Vertex> line = permutations.get(i);
+            Iterator it = line.iterator();
+
+            while (it.hasNext()){
+                Vertex temp = (Vertex) it.next();
+
+                insert.addState(temp);
+            }
+
+            result.add(insert);
+        }
 
         return result;
     }
 
-    public static String[] getAllLists(String[] elements, int lengthOfList)
-    {
-        //initialize our returned list with the number of elements calculated above
-        String[] allLists = new String[(int)Math.pow(elements.length, lengthOfList)];
 
-        //lists of length 1 are just the original elements
-        if(lengthOfList == 1){
-            return elements;
-        }
-        else
-        {
-            //the recursion--get all lists of length 3, length 2, all the way up to 1
-            String[] allSublists = getAllLists(elements, lengthOfList - 1);
-
-            //append the sublists to each element
-            int arrayIndex = 0;
-
-            for(int i = 0; i < elements.length; i++)
-            {
-                for(int j = 0; j < allSublists.length; j++)
-                {
-                    //add the newly appended combination to the list
-                    allLists[arrayIndex] = elements[i] + allSublists[j];
-                    arrayIndex++;
-                }
-            }
-
-            return allLists;
-        }
-    }
 }

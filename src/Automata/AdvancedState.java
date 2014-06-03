@@ -11,6 +11,12 @@ public class AdvancedState {
 
     AdvancedState(){
         names = new TreeSet<>();
+        acceptanceState = false;
+        initialState = false;
+    }
+
+    public void addState(Vertex in){
+
     }
 
     public Set<String> getNames(){

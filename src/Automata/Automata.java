@@ -666,4 +666,8 @@ public class Automata extends JPanel {
 
         }
     }
+
+    public ArrayList<Edge> getEdges(){
+        return edges;
+    }
 }
