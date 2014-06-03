@@ -67,7 +67,26 @@ public class AutomatonConverter {
 
         // Table is done
 
-        // Set initial states (TODO)
+        // Set initial state
+        for (Vertex vertex : originalStates.values()){
+
+            if (vertex.isAcceptanceState()) {
+                /* Check new advanced states */
+                for (AdvancedState state : stateCombinations) {
+                    /* Check if state is the same */
+                    if (state.getNames().size() == 1){
+                        for (Iterator<String> it = state.getNames().iterator(); it.hasNext(); ) {
+                            String f = it.next();
+                            if (f.equals(vertex.getName())){
+                                state.setAcceptanceState(true);
+                            }
+                        }
+                    }
+                }
+                /* There should only be one starter state */
+                break;
+            }
+        }
 
         // Convert to simple edge / vertex
         ArrayList<Edge> resultEdges = new ArrayList<Edge>();
