@@ -61,12 +61,15 @@ public class AutomatonConverter {
                         break;
                     }
                 }
+
+                advancedTranstitions.add(newTransition);
             }
 
         }
 
         // Table is done
 
+        // Convert to simple edge / vertex
 
         ArrayList<Edge> resultEdges = new ArrayList<Edge>();
         HashMap<String, Vertex> resultVertexes = new HashMap<String, Vertex>();
