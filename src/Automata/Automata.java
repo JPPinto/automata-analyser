@@ -164,9 +164,10 @@ public class Automata extends JPanel {
 	 */
 	public void init() {
 		// create a visualization using JGraph, via an adapter
-		jgAdapter = new JGraphModelAdapter<String, DefaultEdge>(this.g);
+		jgAdapter = new JGraphModelAdapter<String, DefaultEdge>(g);
 
 		JGraph jgraph = new JGraph(jgAdapter);
+		this.setPreferredSize(Constants.guiDefaultWindowSize);
 		adjustDisplaySettings(jgraph); // Apply the results to the actual graph
 
 		loadGraph();
@@ -178,11 +179,18 @@ public class Automata extends JPanel {
 		Map nested = facade.createNestedMap(true, true); // Obtain a map of the resulting attribute changes from the facade
 		jgraph.getGraphLayoutCache().edit(nested);
 
-		add(jgraph);
+		setPreferredSize(Constants.guiDefaultWindowSize);
+		JScrollPane scroll = new JScrollPane(jgraph);
+		scroll.setPreferredSize(Constants.guiDefaultWindowSize);
+		add(scroll);
+		setVisible(true);
+		//add(jgraph);
 	}
 
 	private void adjustDisplaySettings(JGraph jg) {
-		jg.setPreferredSize(Constants.guiDefaultWindowSize);
+		jg.setMinimumSize(Constants.guiDefaultWindowSize);
+		jg.setMaximumSize(Constants.guiDefaultWindowSize);
+		//jg.setPreferredSize(Constants.guiDefaultWindowSize);
 		//jg.setSize(Constants.guiDefaultWindowSize);
 		jg.setBackground(Constants.guiDefaultBackgroundColor);
 	}
