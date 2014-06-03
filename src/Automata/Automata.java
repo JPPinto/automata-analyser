@@ -629,14 +629,14 @@ public class Automata extends JPanel {
 		return false;
 	}
 
-	public static void main(String[] args){
+	public static void main(String[] args) {
 
 		Automata temp_automata = new Automata();
 
 		temp_automata.compareRE("(101*)*");
 	}
 
-    public void cleanUpDeadStates(){
+    public void cleanUpDeadStates() {
         for (Map.Entry<String, Vertex> entry : vertexes.entrySet()) {
             /* Don't remove the start state ever, since it might be the only state and it is the start state */
             if (entry != getStartState()) {
