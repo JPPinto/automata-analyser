@@ -635,4 +635,28 @@ public class Automata extends JPanel {
 
 		temp_automata.compareRE("(101*)*");
 	}
+
+    public void cleanUpDeadStates(){
+        for (Map.Entry<String, Vertex> entry : vertexes.entrySet()) {
+            /* Don't remove the start state ever, since it might be the only state and it is the start state */
+            if (entry != getStartState()) {
+
+                boolean deleteState = true;
+
+                for (int i = 0; i < edges.size(); i++) {
+                /* If the current state is a destination or a source state keep it */
+                    if (edges.get(i).getDestination().equals(entry.getKey()) || edges.get(i).getSource().equals(entry.getKey())){
+                        deleteState = false;
+                        break;
+                    }
+                }
+
+                /* No reference found this state, remove it */
+                if (deleteState){
+                    vertexes.remove(entry);
+                }
+            }
+
+        }
+    }
 }
