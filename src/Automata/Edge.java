@@ -47,7 +47,18 @@ public class Edge extends DefaultEdge {
 		this.symbol = symbol;
 	}
 
-    public boolean equals(Edge compare){
+    @Override
+    public boolean equals(Object inputO){
+        if (this == inputO) {
+            return true;
+        }
+
+        if (!(inputO instanceof Edge)){
+            return false;
+        }
+
+        Edge compare = (Edge) inputO;
+
         if (symbol != compare.getSymbol()){
             return false;
         }
@@ -63,7 +74,13 @@ public class Edge extends DefaultEdge {
         return true;
     }
 
+    @Override
+    public String toString(){
+        return "From: " + source + " to: " + destination + " trigger: " + symbol;
+    }
+
     public Edge getCopy(){
         return new Edge(symbol, source, destination);
     }
+
 }

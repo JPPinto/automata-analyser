@@ -14,6 +14,8 @@ import com.jgraph.layout.JGraphFacade;
 import com.jgraph.layout.JGraphLayout;
 import com.jgraph.layout.graph.JGraphSimpleLayout;
 
+//import dk.brics.automaton.Automaton;
+//import dk.brics.automaton.State;
 import org.jgraph.JGraph;
 import org.jgraph.graph.AttributeMap;
 import org.jgraph.graph.DefaultGraphCell;
@@ -27,9 +29,7 @@ import javax.swing.border.Border;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class Automata extends JPanel {
@@ -218,8 +218,6 @@ public class Automata extends JPanel {
 		// GraphConstants.setBorder(attr, borderAutomata);
 		// GraphConstants.setOpaque(attr, false);
 
-
-		// TODO: Clean up generics once JGraph goes generic
 		AttributeMap cellAttr = new AttributeMap();
 		cellAttr.put(cell, attr);
 		jgAdapter.edit(cellAttr, null, null, null);
@@ -423,6 +421,7 @@ public class Automata extends JPanel {
 	}
 
     public Automata convertAutomatonToNFA(){
+        // CODE ALL TO BE REMOVED
         // TODO faltam os estados de aceitacao e finais
 
         /* Get the automata alphabet */
@@ -613,4 +612,34 @@ public class Automata extends JPanel {
 
         return alphabet;
     }
+
+	/*public Automata toAutomata(Automaton automaton){
+
+		ArrayList<Edge> tempEdges = new ArrayList<>();
+		HashMap<String, Vertex> tempVertexes= new HashMap<>();
+
+		Set<State> automatonStates = automaton.getStates();
+
+		//TODO ADD all vertexes and create all the edges
+
+		//return new Automata(e,v);
+		return null;
+	}*/
+
+	public boolean compareRE(String re){
+
+		/*dk.brics.automaton.RegExp regular_Ex = new dk.brics.automaton.RegExp(re);
+
+		Automaton temp_automaton = new Automaton();
+		temp_automaton = regular_Ex.toAutomaton();*/
+
+		return false;
+	}
+
+	public static void main(String[] args){
+
+		Automata temp_automata = new Automata();
+
+		temp_automata.compareRE("(101*)*");
+	}
 }
