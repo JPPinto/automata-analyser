@@ -18,4 +18,8 @@ public class AdvancedTransition {
         destinationState = destination;
     }
 
+    Edge convertToEdge(){
+        return new Edge(transitionSymbol, sourceState.createSimpleName(), destinationState.createSimpleName());
+    }
+
 }

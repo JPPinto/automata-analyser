@@ -25,28 +25,26 @@ public class AutomatonConverter {
         /* Generate All possible state combinations */
         ArrayList<AdvancedState> stateCombinations = generateStateCombinations(originalStates);
 
-        ArrayList<AdvancedTransition> advancedTranstitions = new ArrayList<>();
+        ArrayList<AdvancedTransition> advancedTransitions = new ArrayList<>();
 
         /* Go trough all new states */
-        for (int sc = 0; sc < stateCombinations.size(); sc++){
-            AdvancedState currentState = stateCombinations.get(sc);
+        for (AdvancedState currentState : stateCombinations){
             Set<String> oldStates = currentState.getNames();
 
             /* Check all possible transitions */
-            for (int i = 0; i < alphabet.size(); i++){
-                String currentTransition = alphabet.get(i);
+            for (String currentTransition : alphabet){
                 Set advancedStateDestinations = new TreeSet<String>();
 
                 /* Iterate composite state */
                 for (String oldStateName : oldStates){
 
                     /* From the original edges */
-                    for (int j = 0; j < originalEdges.size(); j++){
+                    for (Edge edge : originalEdges){
 
                         /* Add transition here */
-                        if (originalEdges.get(j).getSymbol().equals(currentTransition) && originalEdges.get(j).getSource().equals(oldStateName)){
+                        if (edge.getSymbol().equals(currentTransition) && edge.getSource().equals(oldStateName)){
                             // State matches, save destinations
-                            advancedStateDestinations.add(originalEdges.get(j).getDestination());
+                            advancedStateDestinations.add(edge.getDestination());
                         }
 
                     }
@@ -62,17 +60,27 @@ public class AutomatonConverter {
                     }
                 }
 
-                advancedTranstitions.add(newTransition);
+                advancedTransitions.add(newTransition);
             }
 
         }
 
         // Table is done
 
-        // Convert to simple edge / vertex
+        // Set initial states (TODO)
 
+        // Convert to simple edge / vertex
         ArrayList<Edge> resultEdges = new ArrayList<Edge>();
         HashMap<String, Vertex> resultVertexes = new HashMap<String, Vertex>();
+
+        for (AdvancedState state : stateCombinations) {
+            Vertex newVertex = state.convertToVertex();
+            resultVertexes.put(newVertex.getName(), newVertex);
+        }
+
+        for (AdvancedTransition transition : advancedTransitions){
+            resultEdges.add(transition.convertToEdge());
+        }
 
         Automata result = new Automata(resultEdges, resultVertexes);
 
@@ -89,16 +97,11 @@ public class AutomatonConverter {
         List<LinkedHashSet<Vertex>> permutations = powerSet.getPermutationsList(originalStates.size());
 
         /* Convert power set into advanced states */
-        for (int i=0; i < permutations.size(); i++) {
+        for (LinkedHashSet<Vertex> line : permutations) {
             AdvancedState insert = new AdvancedState();
 
-            LinkedHashSet<Vertex> line = permutations.get(i);
-            Iterator it = line.iterator();
-
-            while (it.hasNext()){
-                Vertex temp = (Vertex) it.next();
-
-                insert.addState(temp);
+            for (Vertex vertex : line){
+                insert.addState(vertex);
             }
 
             result.add(insert);
