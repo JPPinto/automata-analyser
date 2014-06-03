@@ -27,18 +27,29 @@ public class AutomatonConverter {
 
         /* Go trough all new states */
         for (int sc = 0; sc < stateCombinations.size(); sc++){
+            AdvancedState currentState = stateCombinations.get(sc);
+            Set<String> oldStates = currentState.getNames();
 
             /* Check all possible transitions */
             for (int i = 0; i < alphabet.size(); i++){
+                String currentTransition = alphabet.get(i);
 
-                /* From the original edges */
-                for (int j = 0; j < originalEdges.size(); j++){
+                /* Iterate composite state */
+                for (String oldStateName : oldStates){
 
-                    if (originalEdges.get(j).getSymbol().equals(alphabet.get(i))){
-//TODO I was here before the keyboard layout fucked itself up
+                    /* From the original edges */
+                    for (int j = 0; j < originalEdges.size(); j++){
+
+                        /* Add transition here */
+                        if (originalEdges.get(j).getSymbol().equals(currentTransition) && originalEdges.get(j).getSource().equals(oldStateName)){
+                            // State matches
+                            
+                        }
+
                     }
-
                 }
+
+
 
             }
 
