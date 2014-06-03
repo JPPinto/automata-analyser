@@ -414,6 +414,7 @@ public class Automata extends JPanel {
 	}
 
     public Automata convertAutomatonToNFA(){
+        // CODE ALL TO BE REMOVED
         // TODO faltam os estados de aceitacao e finais
 
         /* Get the automata alphabet */
