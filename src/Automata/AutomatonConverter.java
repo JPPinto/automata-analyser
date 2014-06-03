@@ -25,6 +25,8 @@ public class AutomatonConverter {
         /* Generate All possible state combinations */
         ArrayList<AdvancedState> stateCombinations = generateStateCombinations(originalStates);
 
+        ArrayList<AdvancedTransition> advancedTranstitions = new ArrayList<>();
+
         /* Go trough all new states */
         for (int sc = 0; sc < stateCombinations.size(); sc++){
             AdvancedState currentState = stateCombinations.get(sc);
@@ -33,6 +35,7 @@ public class AutomatonConverter {
             /* Check all possible transitions */
             for (int i = 0; i < alphabet.size(); i++){
                 String currentTransition = alphabet.get(i);
+                Set advancedStateDestinations = new TreeSet<String>();
 
                 /* Iterate composite state */
                 for (String oldStateName : oldStates){
@@ -42,19 +45,27 @@ public class AutomatonConverter {
 
                         /* Add transition here */
                         if (originalEdges.get(j).getSymbol().equals(currentTransition) && originalEdges.get(j).getSource().equals(oldStateName)){
-                            // State matches
-                            
+                            // State matches, save destinations
+                            advancedStateDestinations.add(originalEdges.get(j).getDestination());
                         }
 
                     }
                 }
 
+                // advancedStateDestinations now contains the destination advancedState name
+                AdvancedTransition newTransition = new AdvancedTransition(currentTransition, currentState);
 
-
+                for (int scc = 0; scc < stateCombinations.size(); scc++){
+                    if (stateCombinations.get(scc).getNames().equals(advancedStateDestinations)){
+                        newTransition.setDestination(stateCombinations.get(scc));
+                        break;
+                    }
+                }
             }
 
         }
 
+        // Table is done
 
 
         ArrayList<Edge> resultEdges = new ArrayList<Edge>();
