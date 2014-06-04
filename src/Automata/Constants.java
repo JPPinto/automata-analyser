@@ -25,7 +25,7 @@ public class Constants {
     
     public static int width = Toolkit.getDefaultToolkit().getScreenSize().width;
     public static int height = Toolkit.getDefaultToolkit().getScreenSize().height;
-    public static final Dimension guiDefaultWindowSize = new Dimension(430*1366/width, 330*768/height);
+    public static final Dimension guiDefaultWindowSize = new Dimension(430*1366/width, 318*768/height);
 
     /* File constants */
     public static final int maxFileSize = 4096;
