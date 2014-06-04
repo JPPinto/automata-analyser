@@ -177,6 +177,7 @@ public class Automata extends JPanel {
 		JGraphLayout layout = new JGraphSimpleLayout(JGraphSimpleLayout.TYPE_CIRCLE); // Create an instance of the circle layout
 		layout.run(facade); // Run the layout on the facade.
 		Map nested = facade.createNestedMap(true, true); // Obtain a map of the resulting attribute changes from the facade
+		//GraphConstants.setLabelAlongEdge(nested, true);
 		jgraph.getGraphLayoutCache().edit(nested);
 
 		setPreferredSize(Constants.guiDefaultWindowSize);
