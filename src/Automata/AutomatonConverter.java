@@ -4,7 +4,7 @@ import java.util.*;
 
 public class AutomatonConverter {
 
-    static Automata convertNFAtoDFA(Automata originalAutomaton){
+    public static Automata convertNFAtoDFA(Automata originalAutomaton){
         /* Work on an automaton copy, since we are going to modify it */
         Automata copy = originalAutomaton.getCopy();
 
