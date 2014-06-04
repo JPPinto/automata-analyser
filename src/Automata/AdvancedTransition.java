@@ -19,7 +19,16 @@ public class AdvancedTransition {
     }
 
     Edge convertToEdge(){
+        System.out.print("");
         return new Edge(transitionSymbol, sourceState.createSimpleName(), destinationState.createSimpleName());
+    }
+
+    public boolean hasDestination(){
+        if (destinationState != null) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }
