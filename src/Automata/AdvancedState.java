@@ -1,6 +1,5 @@
 package Automata;
 
-import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -11,6 +10,16 @@ public class AdvancedState {
 
     AdvancedState(){
         names = new TreeSet<>();
+        acceptanceState = false;
+        initialState = false;
+    }
+
+    public void addState(Vertex in){
+        if (in.isAcceptanceState()) {
+            acceptanceState = true;
+        }
+
+        names.add(in.getName());
     }
 
     public Set<String> getNames(){
@@ -62,5 +71,16 @@ public class AdvancedState {
         }
 
         return true;
+    }
+
+    String createSimpleName(){
+        String simpleName = "";
+        for (String name : names){
+            simpleName = simpleName + ";" + name;
+        }
+        return simpleName;
+    }
+    Vertex convertToVertex(){
+        return new Vertex(createSimpleName(), acceptanceState, initialState);
     }
 }
