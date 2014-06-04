@@ -117,7 +117,7 @@ public class AutomatonConverter {
         OrderedPowerSet<Vertex> powerSet = new OrderedPowerSet<Vertex>(new ArrayList<Vertex>(originalStates.values()));
         List<LinkedHashSet<Vertex>> permutations = new ArrayList<LinkedHashSet<Vertex>>();
 
-        for (int i = originalStates.size(); i > 0; i--){
+        for (int i = 1; i <=  originalStates.size(); i++){
             permutations.addAll(powerSet.getPermutationsList(i));
         }
 
