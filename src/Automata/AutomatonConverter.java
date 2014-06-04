@@ -107,6 +107,8 @@ public class AutomatonConverter {
 
         result.cleanUpDeadStates();
 
+        result.init();
+
         return result;
     }
 
