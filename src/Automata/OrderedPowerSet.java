@@ -48,11 +48,9 @@ public class OrderedPowerSet<E> {
                 for (int j = i ; j >= 0 ; j--) {
                     subList.remove(j);
                 }
-                OrderedPowerSet<E> subPowerSet = 
-                        new OrderedPowerSet<E>(subList);
+                OrderedPowerSet<E> subPowerSet =  new OrderedPowerSet<E>(subList);
 
-                List<LinkedHashSet<E>> pList = 
-                        subPowerSet.getPermutationsList(elementCount-1);
+                List<LinkedHashSet<E>> pList = subPowerSet.getPermutationsList(elementCount-1);
                 for (LinkedHashSet<E> s : pList) {
                     LinkedHashSet<E> set = new LinkedHashSet<E>();
                     set.add(inputList.get(i));

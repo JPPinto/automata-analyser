@@ -115,7 +115,11 @@ public class AutomatonConverter {
 
         /* Get vertexes power set */
         OrderedPowerSet<Vertex> powerSet = new OrderedPowerSet<Vertex>(new ArrayList<Vertex>(originalStates.values()));
-        List<LinkedHashSet<Vertex>> permutations = powerSet.getPermutationsList(originalStates.size());
+        List<LinkedHashSet<Vertex>> permutations = new ArrayList<LinkedHashSet<Vertex>>();
+
+        for (int i = originalStates.size(); i > 0; i--){
+            permutations.addAll(powerSet.getPermutationsList(i));
+        }
 
         /* Convert power set into advanced states */
         for (LinkedHashSet<Vertex> line : permutations) {
