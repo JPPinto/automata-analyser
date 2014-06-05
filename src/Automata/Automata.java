@@ -386,13 +386,13 @@ public class Automata extends JPanel {
 		for (Map.Entry<String, Vertex> entry : this.getVertexes().entrySet()) {
 			for (Map.Entry<String, Vertex> entry2 : a.getVertexes().entrySet()) {
 				if (entry.getValue().isAcceptanceState() && entry2.getValue().isAcceptanceState()) {
-					vertex = new Vertex(entry.getValue().getName() + ", " + entry2.getValue().getName(), true, false);
+					vertex = new Vertex(entry.getValue().getName() + "_" + entry2.getValue().getName(), true, false);
 				} else if (entry.getValue().isInitialState() && entry2.getValue().isInitialState()) {
-					vertex = new Vertex(entry.getValue().getName() + ", " + entry2.getValue().getName(), false, true);
+					vertex = new Vertex(entry.getValue().getName() + "_" + entry2.getValue().getName(), false, true);
 				} else if (entry.getValue().isInitialState() && entry.getValue().isAcceptanceState() && entry2.getValue().isInitialState() && entry2.getValue().isAcceptanceState()) {
-					vertex = new Vertex(entry.getValue().getName() + ", " + entry2.getValue().getName(), true, true);
+					vertex = new Vertex(entry.getValue().getName() + "_" + entry2.getValue().getName(), true, true);
 				} else {
-					vertex = new Vertex(entry.getValue().getName() + ", " + entry2.getValue().getName(), false, false);
+					vertex = new Vertex(entry.getValue().getName() + "_" + entry2.getValue().getName(), false, false);
 				}
 				newAutomata.vertexes.put(vertex.getName(), vertex);
 				newAutomata.edges.addAll(getCartesianProductEdges(a, entry.getValue().getName(), entry2.getValue().getName()));
@@ -411,7 +411,7 @@ public class Automata extends JPanel {
 			for (int j = 0; j < a2.edges.size(); j++) {
 				if (this.edges.get(i).getSource().equals(node1) && a2.edges.get(j).getSource().equals(node2)) {
 					if (this.edges.get(i).getSymbol().equals(a2.edges.get(j).getSymbol())) {
-						edges.add(new Edge(this.edges.get(i).getSymbol(), node1 + ", " + node2, this.edges.get(i).getDestination() + ", " + a2.edges.get(j).getDestination()));
+						edges.add(new Edge(this.edges.get(i).getSymbol(), node1 + "_" + node2, this.edges.get(i).getDestination() + "_" + a2.edges.get(j).getDestination()));
 						//System.out.println("1---- "+node1+", "+node2);
 					}
 				}
