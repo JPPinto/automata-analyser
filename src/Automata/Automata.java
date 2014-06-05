@@ -513,16 +513,17 @@ public class Automata extends JPanel {
         ArrayList<Edge> transitionsToRemove = new ArrayList<>();
 
         while (stateDeleted) {
-            for (Map.Entry<String, Vertex> entry : vertexes.entrySet()) {
-                stateDeleted = false;
-            /* Don't remove the start state ever, since it might be the only state and it is the start state */
-                if (entry != getStartState()) {
+            stateDeleted = false;
 
+            for (Map.Entry<String, Vertex> entry : vertexes.entrySet()) {
+
+                /* Don't remove the start state ever, since it might be the only state and it is the start state */
+                if (!entry.getValue().isInitialState()) {
                     boolean deleteState = true;
 
-                    for (int i = 0; i < edges.size(); i++) {
-                /* If the current state is a destination or a source state keep it */
-                        if (edges.get(i).getDestination().equals(entry.getKey()) || edges.get(i).getSource().equals(entry.getKey())) {
+                    for (Edge edge : edges) {
+                    /* If the current state is a destination or a source state keep it */
+                        if (edge.getDestination().equals(entry.getValue().getName())) {
                             deleteState = false;
                             break;
                         }
@@ -538,27 +539,26 @@ public class Automata extends JPanel {
                             }
                         }
 
-
-                        stateKeysToRemove.add(entry.getKey());
+                        stateKeysToRemove.add(entry.getValue().getName());
 
                     /* Run again */
                         stateDeleted = true;
                     }
                 }
-
             }
             /* Clean states here since we can't iterate and remove at the same time */
             for (String key : stateKeysToRemove) {
-                System.out.println("Removing dead state: " + key.toString());
+                System.out.println("Removing non accessible state: " + key.toString());
                 vertexes.remove(key);
             }
+            stateKeysToRemove.clear();
 
             for (Edge edge : transitionsToRemove) {
                 System.out.println("Removing orphan transition: " + edge.toString());
                 edges.remove(edge);
             }
+            transitionsToRemove.clear();
         }
-
     }
 
     public ArrayList<Edge> getEdges() {

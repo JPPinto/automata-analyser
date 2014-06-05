@@ -4,12 +4,12 @@ import java.util.*;
 
 public class AutomatonConverter {
 
-    public static Automata convertNFAtoDFA(Automata originalAutomaton){
+    public static Automata convertNFAtoDFA(Automata originalAutomaton) {
         /* Work on an automaton copy, since we are going to modify it */
         Automata copy = originalAutomaton.getCopy();
 
         /* If the input automaton is already an DFA no need to do anything to it */
-        if (copy.isDFA()){
+        if (copy.isDFA()) {
             return copy;
         }
 
@@ -28,21 +28,21 @@ public class AutomatonConverter {
         ArrayList<AdvancedTransition> advancedTransitions = new ArrayList<>();
 
         /* Go trough all new states */
-        for (AdvancedState currentState : stateCombinations){
+        for (AdvancedState currentState : stateCombinations) {
             Set<String> oldStates = currentState.getNames();
 
             /* Check all possible transitions */
-            for (String currentTransition : alphabet){
+            for (String currentTransition : alphabet) {
                 Set advancedStateDestinations = new TreeSet<String>();
 
                 /* Iterate composite state */
-                for (String oldStateName : oldStates){
+                for (String oldStateName : oldStates) {
 
                     /* From the original edges */
-                    for (Edge edge : originalEdges){
+                    for (Edge edge : originalEdges) {
 
                         /* Add transition here */
-                        if (edge.getSymbol().equals(currentTransition) && edge.getSource().equals(oldStateName)){
+                        if (edge.getSymbol().equals(currentTransition) && edge.getSource().equals(oldStateName)) {
                             // State matches, save destinations
                             advancedStateDestinations.add(edge.getDestination());
                         }
@@ -53,8 +53,8 @@ public class AutomatonConverter {
                 // advancedStateDestinations now contains the destination advancedState name
                 AdvancedTransition newTransition = new AdvancedTransition(currentTransition, currentState);
 
-                for (int scc = 0; scc < stateCombinations.size(); scc++){
-                    if (stateCombinations.get(scc).getNames().equals(advancedStateDestinations)){
+                for (int scc = 0; scc < stateCombinations.size(); scc++) {
+                    if (stateCombinations.get(scc).getNames().equals(advancedStateDestinations)) {
                         newTransition.setDestination(stateCombinations.get(scc));
                         break;
                     }
@@ -67,27 +67,6 @@ public class AutomatonConverter {
 
         // Table is done
 
-        // Set initial state
-        for (Vertex vertex : originalStates.values()){
-
-            if (vertex.isAcceptanceState()) {
-                /* Check new advanced states */
-                for (AdvancedState state : stateCombinations) {
-                    /* Check if state is the same */
-                    if (state.getNames().size() == 1){
-                        for (Iterator<String> it = state.getNames().iterator(); it.hasNext(); ) {
-                            String f = it.next();
-                            if (f.equals(vertex.getName())){
-                                state.setAcceptanceState(true);
-                            }
-                        }
-                    }
-                }
-                /* There should only be one starter state */
-                break;
-            }
-        }
-
         // Convert to simple edge / vertex
         ArrayList<Edge> resultEdges = new ArrayList<Edge>();
         HashMap<String, Vertex> resultVertexes = new HashMap<String, Vertex>();
@@ -97,10 +76,18 @@ public class AutomatonConverter {
             resultVertexes.put(newVertex.getName(), newVertex);
         }
 
-        for (AdvancedTransition transition : advancedTransitions){
-            if (transition.hasDestination()){
+        for (AdvancedTransition transition : advancedTransitions) {
+            if (transition.hasDestination()) {
                 resultEdges.add(transition.convertToEdge());
             }
+        }
+
+        // Set initial state
+        for (Map.Entry<String, Vertex> entry : resultVertexes.entrySet()) {
+            /* Check if state is the same */
+                if (entry.getValue().getName().equals(originalAutomaton.getStartState().getName())) {
+                    entry.getValue().setInitialState(true);
+                }
         }
 
         Automata result = new Automata(resultEdges, resultVertexes);
@@ -112,14 +99,14 @@ public class AutomatonConverter {
         return result;
     }
 
-    static private ArrayList<AdvancedState> generateStateCombinations(HashMap<String, Vertex> originalStates){
+    static private ArrayList<AdvancedState> generateStateCombinations(HashMap<String, Vertex> originalStates) {
         ArrayList<AdvancedState> result = new ArrayList<>();
 
         /* Get vertexes power set */
         OrderedPowerSet<Vertex> powerSet = new OrderedPowerSet<Vertex>(new ArrayList<Vertex>(originalStates.values()));
         List<LinkedHashSet<Vertex>> permutations = new ArrayList<LinkedHashSet<Vertex>>();
 
-        for (int i = 1; i <=  originalStates.size(); i++){
+        for (int i = 1; i <= originalStates.size(); i++) {
             permutations.addAll(powerSet.getPermutationsList(i));
         }
 
@@ -127,7 +114,7 @@ public class AutomatonConverter {
         for (LinkedHashSet<Vertex> line : permutations) {
             AdvancedState insert = new AdvancedState();
 
-            for (Vertex vertex : line){
+            for (Vertex vertex : line) {
                 insert.addState(vertex);
             }
 
