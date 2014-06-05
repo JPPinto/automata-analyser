@@ -480,19 +480,6 @@ public class Automata extends JPanel {
         return alphabet;
     }
 
-	/*public Automata toAutomata(Automaton automaton){
-
-		ArrayList<Edge> tempEdges = new ArrayList<>();
-		HashMap<String, Vertex> tempVertexes= new HashMap<>();
-
-		Set<State> automatonStates = automaton.getStates();
-
-		//TODO ADD all vertexes and create all the edges
-
-		//return new Automata(e,v);
-		return null;
-	}*/
-
 	public boolean compareRE(String re){
 
 		/*dk.brics.automaton.RegExp regular_Ex = new dk.brics.automaton.RegExp(re);
