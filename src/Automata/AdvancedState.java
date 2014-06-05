@@ -76,7 +76,7 @@ public class AdvancedState {
     String createSimpleName(){
         String simpleName = "";
         for (String name : names){
-            simpleName = simpleName + name + ";";
+            simpleName = simpleName + name + "_";
         }
         return simpleName;
     }
