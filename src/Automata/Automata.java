@@ -511,7 +511,10 @@ public class Automata extends JPanel {
 	}
 
     public void cleanUpDeadStates() {
+        boolean stateDeleted = true;
+        while (stateDeleted) {
         for (Map.Entry<String, Vertex> entry : vertexes.entrySet()) {
+            stateDeleted = false;
             /* Don't remove the start state ever, since it might be the only state and it is the start state */
             if (entry != getStartState()) {
 
@@ -527,10 +530,19 @@ public class Automata extends JPanel {
 
                 /* No reference found this state, remove it */
                 if (deleteState){
+
+                    for (Edge edge : edges){
+                        if(edge.getSource().equals(entry.getValue().getName())){
+                            edges.remove(edge);
+                        }
+                    }
+
                     vertexes.remove(entry);
+                    stateDeleted = true;
                 }
             }
 
+        }
         }
     }
 
