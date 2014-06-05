@@ -409,7 +409,7 @@ public class Automata extends JPanel {
 
 		for (int i = 0; i < this.edges.size(); i++) {
 			for (int j = 0; j < a2.edges.size(); j++) {
-				if (this.edges.get(i).getSource().equals(node1) && a2.edges.get(j).getSource().equals(node2) /*&& node1.equals(node2)*/) {
+				if (this.edges.get(i).getSource().equals(node1) && a2.edges.get(j).getSource().equals(node2)) {
 					if (this.edges.get(i).getSymbol().equals(a2.edges.get(j).getSymbol())) {
 						edges.add(new Edge(this.edges.get(i).getSymbol(), node1 + ", " + node2, this.edges.get(i).getDestination() + ", " + a2.edges.get(j).getDestination()));
 						//System.out.println("1---- "+node1+", "+node2);
