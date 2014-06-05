@@ -8,6 +8,8 @@ public class AutomatonConverter {
         /* Work on an automaton copy, since we are going to modify it */
         Automata copy = originalAutomaton.getCopy();
 
+        //copy.cleanUpDeadStates();
+
         /* If the input automaton is already an DFA no need to do anything to it */
         if (copy.isDFA()){
             return copy;
@@ -137,7 +139,13 @@ public class AutomatonConverter {
         return result;
     }
 
-    public static Automata intersection(Automata automaton1, Automata automation2){
+    public static Automata intersection(Automata automaton1, Automata automaton2){
+        /* Work on an automaton copy, since we are going to modify it */
+        Automata automaton1Copy = automaton1.getCopy();
+        Automata automaton2Copy = automaton2.getCopy();
+
+        automaton1Copy.cleanUpDeadStates();
+        automaton2Copy.cleanUpDeadStates();
 
         // Convert to simple edge / vertex
         ArrayList<Edge> resultEdges = new ArrayList<Edge>();
