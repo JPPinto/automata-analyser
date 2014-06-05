@@ -137,5 +137,14 @@ public class AutomatonConverter {
         return result;
     }
 
+    public static Automata intersection(Automata automaton1, Automata automation2){
 
+        // Convert to simple edge / vertex
+        ArrayList<Edge> resultEdges = new ArrayList<Edge>();
+        HashMap<String, Vertex> resultVertexes = new HashMap<String, Vertex>();
+
+        Automata result = new Automata(resultEdges, resultVertexes);
+
+        return result;
+    }
 }
