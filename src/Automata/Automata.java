@@ -13,9 +13,6 @@ package Automata;
 import com.jgraph.layout.JGraphFacade;
 import com.jgraph.layout.JGraphLayout;
 import com.jgraph.layout.graph.JGraphSimpleLayout;
-
-//import dk.brics.automaton.Automaton;
-//import dk.brics.automaton.State;
 import org.jgraph.JGraph;
 import org.jgraph.graph.AttributeMap;
 import org.jgraph.graph.DefaultGraphCell;
@@ -26,402 +23,409 @@ import org.jgrapht.graph.ListenableDirectedGraph;
 
 import javax.swing.*;
 import javax.swing.border.Border;
-
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
+
+//import dk.brics.automaton.Automaton;
+//import dk.brics.automaton.State;
 
 public class Automata extends JPanel {
 
-	public ListenableDirectedGraph g;
-	public HashMap<String, Vertex> vertexes;
-	public ArrayList<Edge> edges;
-	public boolean isAutomataDFA;
+    public static final long serialVersionUID = 3256444702936019250L;
+    public ListenableDirectedGraph g;
+    public HashMap<String, Vertex> vertexes;
+    public ArrayList<Edge> edges;
+    public boolean isAutomataDFA;
+    public JGraphModelAdapter<String, DefaultEdge> jgAdapter;
 
-	public static final long serialVersionUID = 3256444702936019250L;
+    public Automata(String graph) {
 
-	public JGraphModelAdapter<String, DefaultEdge> jgAdapter;
+        edges = new ArrayList<Edge>();
+        vertexes = new HashMap<String, Vertex>();
 
-	public Automata(String graph) {
+        g = new ListenableDirectedGraph(org.jgraph.graph.DefaultEdge.class);
+        parseDottyFile(graph);
 
-		edges = new ArrayList<Edge>();
-		vertexes = new HashMap<String, Vertex>();
+        isAutomataDFA = isDFA();
 
-		g = new ListenableDirectedGraph(org.jgraph.graph.DefaultEdge.class);
-		parseDottyFile(graph);
+        init();
+    }
 
-		isAutomataDFA = isDFA();
+    public Automata(ArrayList<Edge> e, HashMap<String, Vertex> v) {
+        edges = e;
+        vertexes = v;
 
-		init();
-	}
+        g = new ListenableDirectedGraph(org.jgraph.graph.DefaultEdge.class);
+    }
 
-	public Automata(ArrayList<Edge> e, HashMap<String, Vertex> v) {
-		edges = e;
-		vertexes = v;
+    public Automata() {
+        vertexes = new HashMap<>();
+        edges = new ArrayList<>();
 
-		g = new ListenableDirectedGraph(org.jgraph.graph.DefaultEdge.class);
-	}
+        g = new ListenableDirectedGraph(org.jgraph.graph.DefaultEdge.class);
+    }
 
-	public Automata() {
-		vertexes = new HashMap<>();
-		edges = new ArrayList<>();
+    public static void main(String[] args) {
 
-		g = new ListenableDirectedGraph(org.jgraph.graph.DefaultEdge.class);
-	}
+        Automata temp_automata = new Automata();
 
-	public void parseDottyFile(String graph) {
+        temp_automata.compareRE("(101*)*");
+    }
 
-		String[] lines = graph.split("\r\n");
+    public void parseDottyFile(String graph) {
 
-		for (int i = 0; i < lines.length; i++) {
-			parseLine(lines[i]);
-		}
+        String[] lines = graph.split("\r\n");
 
-	}
+        for (int i = 0; i < lines.length; i++) {
+            parseLine(lines[i]);
+        }
 
-	public Vertex getInitialVertex() {
+    }
 
-		for (Map.Entry<String, Vertex> entry : vertexes.entrySet())
-			if (entry.getValue().isInitialState())
-				return entry.getValue();
+    public Vertex getInitialVertex() {
 
-		return null;
-	}
+        for (Map.Entry<String, Vertex> entry : vertexes.entrySet())
+            if (entry.getValue().isInitialState())
+                return entry.getValue();
 
-	public void parseLine(String s) {
+        return null;
+    }
 
-		if (Pattern
-				.compile("[a-zA-Z][a-zA-Z0-9]*->[a-zA-Z][a-zA-Z0-9]*\\[.*\\]")
-				.matcher(s).matches()) {
-			String[] content = s.split("->");
-			String[] label_sides = content[1].substring(0, content[1].length() - 1).split("=");
+    public void parseLine(String s) {
 
-			String[] sides = content[1].split("\\[");
+        if (Pattern
+                .compile("[a-zA-Z][a-zA-Z0-9]*->[a-zA-Z][a-zA-Z0-9]*\\[.*\\]")
+                .matcher(s).matches()) {
+            String[] content = s.split("->");
+            String[] label_sides = content[1].substring(0, content[1].length() - 1).split("=");
 
-			Vertex tempVertex = new Vertex(sides[0], false, false);
-			if (!vertexes.containsKey(sides[0]))
-				vertexes.put(sides[0], tempVertex);
+            String[] sides = content[1].split("\\[");
 
-			tempVertex = new Vertex(content[0], false, false);
-			if (!vertexes.containsKey(content[0]))
-				vertexes.put(content[0], tempVertex);
+            Vertex tempVertex = new Vertex(sides[0], false, false);
+            if (!vertexes.containsKey(sides[0]))
+                vertexes.put(sides[0], tempVertex);
 
-			Edge tempEdge = new Edge(label_sides[1], content[0], sides[0]);
-			edges.add(tempEdge);
+            tempVertex = new Vertex(content[0], false, false);
+            if (!vertexes.containsKey(content[0]))
+                vertexes.put(content[0], tempVertex);
 
-			return;
-		}
+            Edge tempEdge = new Edge(label_sides[1], content[0], sides[0]);
+            edges.add(tempEdge);
 
-		if (Pattern.compile("\\\"\\\"->[a-zA-Z][a-zA-Z0-9]*").matcher(s)
-				.matches()) {
-			String[] content = s.split("->");
-			String right_content = content[1].substring(0, content[1].length());
+            return;
+        }
 
-			Vertex tempVertex = new Vertex(right_content, false, true);
-			if (!vertexes.containsKey(right_content))
-				vertexes.put(right_content, tempVertex);
-			else {
-				vertexes.remove(right_content);
-				tempVertex = new Vertex(right_content, true, true);
-				vertexes.put(right_content, tempVertex);
-			}
+        if (Pattern.compile("\\\"\\\"->[a-zA-Z][a-zA-Z0-9]*").matcher(s)
+                .matches()) {
+            String[] content = s.split("->");
+            String right_content = content[1].substring(0, content[1].length());
 
-			return;
-		}
+            Vertex tempVertex = new Vertex(right_content, false, true);
+            if (!vertexes.containsKey(right_content))
+                vertexes.put(right_content, tempVertex);
+            else {
+                vertexes.remove(right_content);
+                tempVertex = new Vertex(right_content, true, true);
+                vertexes.put(right_content, tempVertex);
+            }
 
-		if (Pattern.compile(".*\\[.*\\]").matcher(s).matches()) {
-			String[] content = s.split("\\[");
-			String shape = content[1].substring(0, content[1].length() - 1);
+            return;
+        }
 
-			if (shape.equals(Constants.dottyAcceptanceState)) {
-				Vertex tempVertex = new Vertex(content[0], true, false);
-				if (!vertexes.containsKey(content[0]))
-					vertexes.put(content[0], tempVertex);
-			}
+        if (Pattern.compile(".*\\[.*\\]").matcher(s).matches()) {
+            String[] content = s.split("\\[");
+            String shape = content[1].substring(0, content[1].length() - 1);
 
-			return;
-		}
-	}
+            if (shape.equals(Constants.dottyAcceptanceState)) {
+                Vertex tempVertex = new Vertex(content[0], true, false);
+                if (!vertexes.containsKey(content[0]))
+                    vertexes.put(content[0], tempVertex);
+            }
 
-	public void loadGraph() {
+            return;
+        }
+    }
 
-		for (Map.Entry<String, Vertex> entry : vertexes.entrySet()) {
-			Vertex tempVertex = entry.getValue();
+    public void loadGraph() {
 
-			g.addVertex(tempVertex.getName());
-			editVertex(tempVertex);
-		}
+        for (Map.Entry<String, Vertex> entry : vertexes.entrySet()) {
+            Vertex tempVertex = entry.getValue();
 
-		for (int i = 0; i < edges.size(); i++) {
-			g.addEdge(edges.get(i).getSource(), edges.get(i).getDestination(), edges.get(i).getSymbol());
-		}
+            g.addVertex(tempVertex.getName());
+            editVertex(tempVertex);
+        }
 
-	}
+        for (int i = 0; i < edges.size(); i++) {
+            g.addEdge(edges.get(i).getSource(), edges.get(i).getDestination(), edges.get(i).getSymbol());
+        }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public void init() {
-		// create a visualization using JGraph, via an adapter
-		jgAdapter = new JGraphModelAdapter<String, DefaultEdge>(g);
+    }
 
-		JGraph jgraph = new JGraph(jgAdapter);
-		this.setPreferredSize(Constants.guiDefaultWindowSize);
-		adjustDisplaySettings(jgraph); // Apply the results to the actual graph
+    /**
+     * {@inheritDoc}
+     */
+    public void init() {
+        // create a visualization using JGraph, via an adapter
+        jgAdapter = new JGraphModelAdapter<String, DefaultEdge>(g);
 
-		loadGraph();
+        JGraph jgraph = new JGraph(jgAdapter);
+        this.setPreferredSize(Constants.guiDefaultWindowSize);
+        adjustDisplaySettings(jgraph); // Apply the results to the actual graph
 
-		//Put circle layout
-		JGraphFacade facade = new JGraphFacade(jgraph); // Pass the facade the JGraph instance
-		JGraphLayout layout = new JGraphSimpleLayout(JGraphSimpleLayout.TYPE_CIRCLE); // Create an instance of the circle layout
-		layout.run(facade); // Run the layout on the facade.
-		Map nested = facade.createNestedMap(true, true); // Obtain a map of the resulting attribute changes from the facade
-		//GraphConstants.setLabelAlongEdge(nested, true);
-		jgraph.getGraphLayoutCache().edit(nested);
+        loadGraph();
 
-		setPreferredSize(Constants.guiDefaultWindowSize);
-		JScrollPane scroll = new JScrollPane(jgraph);
-		scroll.setPreferredSize(Constants.guiDefaultWindowSize);
-		add(scroll);
-		setVisible(true);
-		//add(jgraph);
-	}
+        //Put circle layout
+        JGraphFacade facade = new JGraphFacade(jgraph); // Pass the facade the JGraph instance
+        JGraphLayout layout = new JGraphSimpleLayout(JGraphSimpleLayout.TYPE_CIRCLE); // Create an instance of the circle layout
+        layout.run(facade); // Run the layout on the facade.
+        Map nested = facade.createNestedMap(true, true); // Obtain a map of the resulting attribute changes from the facade
+        //GraphConstants.setLabelAlongEdge(nested, true);
+        jgraph.getGraphLayoutCache().edit(nested);
 
-	private void adjustDisplaySettings(JGraph jg) {
-		jg.setMinimumSize(Constants.guiDefaultWindowSize);
-		jg.setMaximumSize(Constants.guiDefaultWindowSize);
-		//jg.setPreferredSize(Constants.guiDefaultWindowSize);
-		//jg.setSize(Constants.guiDefaultWindowSize);
-		jg.setBackground(Constants.guiDefaultBackgroundColor);
-	}
+        setPreferredSize(Constants.guiDefaultWindowSize);
+        JScrollPane scroll = new JScrollPane(jgraph);
+        scroll.setPreferredSize(Constants.guiDefaultWindowSize);
+        add(scroll);
+        setVisible(true);
+        //add(jgraph);
+    }
 
-	private void positionVertexAt(Object vertex, int x, int y) {
-		DefaultGraphCell cell = jgAdapter.getVertexCell(vertex);
-		AttributeMap attr = cell.getAttributes();
-		Rectangle2D bounds = GraphConstants.getBounds(attr);
+    private void adjustDisplaySettings(JGraph jg) {
+        jg.setMinimumSize(Constants.guiDefaultWindowSize);
+        jg.setMaximumSize(Constants.guiDefaultWindowSize);
+        //jg.setPreferredSize(Constants.guiDefaultWindowSize);
+        //jg.setSize(Constants.guiDefaultWindowSize);
+        jg.setBackground(Constants.guiDefaultBackgroundColor);
+    }
+
+    private void positionVertexAt(Object vertex, int x, int y) {
+        DefaultGraphCell cell = jgAdapter.getVertexCell(vertex);
+        AttributeMap attr = cell.getAttributes();
+        Rectangle2D bounds = GraphConstants.getBounds(attr);
 
 		/*
-		 * Rectangle2D newBounds = new Rectangle2D.Double( x, y,
+         * Rectangle2D newBounds = new Rectangle2D.Double( x, y,
 		 * bounds.getWidth(), bounds.getHeight());
 		 */
 
-		// GraphConstants.setBounds(attr, newBounds);
-		GraphConstants.setBackground(attr, Color.green.darker());
-		GraphConstants.setEditable(attr, false);
-		GraphConstants.setBorderColor(attr, Constants.guiDefaultStateColor);
-		Border borderAutomata = BorderFactory.createLineBorder(Constants.guiDefaultStateBorderColor, 2);
-		GraphConstants.setBorder(attr, borderAutomata);
+        // GraphConstants.setBounds(attr, newBounds);
+        GraphConstants.setBackground(attr, Color.green.darker());
+        GraphConstants.setEditable(attr, false);
+        GraphConstants.setBorderColor(attr, Constants.guiDefaultStateColor);
+        Border borderAutomata = BorderFactory.createLineBorder(Constants.guiDefaultStateBorderColor, 2);
+        GraphConstants.setBorder(attr, borderAutomata);
 
-		// GraphConstants.setBorderColor(attr, Color.ORANGE);
-		// Border borderAutomata = BorderFactory.createLineBorder(new
-		// Color(247,150,70), 2);
-		// GraphConstants.setBorder(attr, borderAutomata);
-		// GraphConstants.setOpaque(attr, false);
+        // GraphConstants.setBorderColor(attr, Color.ORANGE);
+        // Border borderAutomata = BorderFactory.createLineBorder(new
+        // Color(247,150,70), 2);
+        // GraphConstants.setBorder(attr, borderAutomata);
+        // GraphConstants.setOpaque(attr, false);
 
-		AttributeMap cellAttr = new AttributeMap();
-		cellAttr.put(cell, attr);
-		jgAdapter.edit(cellAttr, null, null, null);
-	}
+        AttributeMap cellAttr = new AttributeMap();
+        cellAttr.put(cell, attr);
+        jgAdapter.edit(cellAttr, null, null, null);
+    }
 
-	private void editVertex(Vertex x) {
-		DefaultGraphCell cell = jgAdapter.getVertexCell(x.getName());
-		AttributeMap attr = cell.getAttributes();
+    private void editVertex(Vertex x) {
+        DefaultGraphCell cell = jgAdapter.getVertexCell(x.getName());
+        AttributeMap attr = cell.getAttributes();
 
-		if (x.isInitialState()) {
-			GraphConstants.setBackground(attr, Color.green);
-		}
-		if (x.isAcceptanceState()) {
-			Border vertexBorder = BorderFactory.createLineBorder(Constants.guiAccepetanceStateBorderColor, 4); // Blue color from icon
-			GraphConstants.setBorder(attr, vertexBorder);
-		}
+        if (x.isInitialState()) {
+            GraphConstants.setBackground(attr, Color.green);
+        }
+        if (x.isAcceptanceState()) {
+            Border vertexBorder = BorderFactory.createLineBorder(Constants.guiAccepetanceStateBorderColor, 4); // Blue color from icon
+            GraphConstants.setBorder(attr, vertexBorder);
+        }
 
-		GraphConstants.setEditable(attr, false);
+        GraphConstants.setEditable(attr, false);
 
-		AttributeMap cellAttr = new AttributeMap();
-		cellAttr.put(cell, attr);
-		jgAdapter.edit(cellAttr, null, null, null);
-	}
+        AttributeMap cellAttr = new AttributeMap();
+        cellAttr.put(cell, attr);
+        jgAdapter.edit(cellAttr, null, null, null);
+    }
 
-	public boolean equivalentTo(Automata otherAutomata) {
+    public boolean equivalentTo(Automata otherAutomata) {
 
-		return true;
-	}
+        return true;
+    }
 
-	public Automata getCopy() {
-		HashMap<String, Vertex> tempVertexes = new HashMap<>(vertexes);
-		ArrayList<Edge> tempEdges = new ArrayList<>();
+    public Automata getCopy() {
+        HashMap<String, Vertex> tempVertexes = new HashMap<>(vertexes);
+        ArrayList<Edge> tempEdges = new ArrayList<>();
 
-		for (Map.Entry<String, Vertex> entry : vertexes.entrySet()) {
-			tempVertexes.put(entry.getKey(), entry.getValue().getCopy());
-		}
+        for (Map.Entry<String, Vertex> entry : vertexes.entrySet()) {
+            tempVertexes.put(entry.getKey(), entry.getValue().getCopy());
+        }
 
-		for (int i = 0; i < edges.size(); i++) {
-			tempEdges.add(i, edges.get(i).getCopy());
-		}
+        for (int i = 0; i < edges.size(); i++) {
+            tempEdges.add(i, edges.get(i).getCopy());
+        }
 
-		Automata automata = new Automata(tempEdges, tempVertexes);
+        Automata automata = new Automata(tempEdges, tempVertexes);
 
-		return automata;
-	}
+        return automata;
+    }
 
-	public Automata getComplement() {
-		Automata automata = getCopy();
-		for (Map.Entry<String, Vertex> entry : automata.getVertexes().entrySet()) {
-			entry.getValue().setAcceptanceState(!entry.getValue().isAcceptanceState());
-		}
-		automata.refresh();
-		return automata;
-	}
+    public Automata getComplement() {
+        Automata automata = getCopy();
+        for (Map.Entry<String, Vertex> entry : automata.getVertexes().entrySet()) {
+            entry.getValue().setAcceptanceState(!entry.getValue().isAcceptanceState());
+        }
+        automata.refresh();
+        return automata;
+    }
 
-	private void refresh() {
-		removeAll();
-		init();
-	}
+    private void refresh() {
+        removeAll();
+        init();
+    }
 
-	public HashMap<String, Vertex> getVertexes() {
-		return vertexes;
-	}
+    public HashMap<String, Vertex> getVertexes() {
+        return vertexes;
+    }
 
-	public boolean isDFA() {
+    public boolean isDFA() {
 
-		Edge tempEdge;
-		for (int j = 0; j < edges.size(); j++) {
+        Edge tempEdge;
+        for (int j = 0; j < edges.size(); j++) {
 
-			tempEdge = edges.get(j);
+            tempEdge = edges.get(j);
 
-			if (tempEdge.getSymbol() == "?!")
-				return false;
+            if (tempEdge.getSymbol() == "?!")
+                return false;
 
-			for (int i = 0; i < edges.size(); i++) {
+            for (int i = 0; i < edges.size(); i++) {
 
-				if (tempEdge.getSymbol().equals(edges.get(i).getSymbol())
-						&& !tempEdge.getDestination().equals(edges.get(i).getDestination())
-						&& tempEdge.getSource().equals(edges.get(i).getSource()))
-					return false;
-			}
-		}
-		return true;
-	}
+                if (tempEdge.getSymbol().equals(edges.get(i).getSymbol())
+                        && !tempEdge.getDestination().equals(edges.get(i).getDestination())
+                        && tempEdge.getSource().equals(edges.get(i).getSource()))
+                    return false;
+            }
+        }
+        return true;
+    }
 
-	public boolean acceptsSequence(String sequence, Vertex currentVertex) {
+    public boolean acceptsSequence(String sequence, Vertex currentVertex) {
 
-		if(sequence.equals("") && currentVertex.isAcceptanceState())
-			return true;
-		
-		boolean accepted = false;
-		Edge tempEdge;
-		String exceptFirstChar = "";
-		String firstChar = "";
-		Vertex nextVertex = null;
+        if (sequence.equals("") && currentVertex.isAcceptanceState())
+            return true;
 
-		for (int i = 0; i < edges.size(); i++) {
-			tempEdge = edges.get(i);
-			firstChar = sequence.substring(0, 1);
-			
-			if (tempEdge.getSource().equals(currentVertex.getName()) && tempEdge.getSymbol().equals(firstChar)) {
-				nextVertex = vertexes.get(tempEdge.getDestination());
-				if (sequence.length() == 1){
-					if(!nextVertex.isAcceptanceState())
-						return false;
-					return true;
-				}
-				exceptFirstChar = sequence.substring(1, sequence.length());
-				accepted = acceptsSequence(exceptFirstChar, nextVertex);
-				
-				if(accepted) break;
-			}
-		}
-		return accepted;
-	}
+        boolean accepted = false;
+        Edge tempEdge;
+        String exceptFirstChar = "";
+        String firstChar = "";
+        Vertex nextVertex = null;
 
-	
-	
-	public Edge getInitialEdge() {
-		
-		Vertex tempVertex = null;
-		
-		for (Map.Entry<String, Vertex> entry : vertexes.entrySet()) {
-			if (entry.getValue().isInitialState()) {
-				tempVertex = entry.getValue();
-				break;
-			}
-		}
-		
-		for (int i = 0; i < edges.size(); i++) {
-			if (edges.get(i).getSource().equals(tempVertex.getName()))
-				return edges.get(i);
-		}
-		
-		return null;
-	}
+        for (int i = 0; i < edges.size(); i++) {
+            tempEdge = edges.get(i);
+            firstChar = sequence.substring(0, 1);
 
-	public String convertToDotty() {
-		String total = "digraph{\n\"\"[shape=none]\r\n";
-		String temp = "";
+            if (tempEdge.getSource().equals(currentVertex.getName()) && tempEdge.getSymbol().equals(firstChar)) {
+                nextVertex = vertexes.get(tempEdge.getDestination());
+                if (sequence.length() == 1) {
+                    if (!nextVertex.isAcceptanceState())
+                        return false;
+                    return true;
+                }
+                exceptFirstChar = sequence.substring(1, sequence.length());
+                accepted = acceptsSequence(exceptFirstChar, nextVertex);
 
-		for (Map.Entry<String, Vertex> entry : vertexes.entrySet()) {
-			if (entry.getValue().isAcceptanceState()) {
-				total += entry.getValue().getName() + "[shape=doublecircle]\r\n";
-			}
-			if (entry.getValue().isInitialState()) {
-				temp = entry.getValue().getName();
-			}
-		}
-		total += "\"\"->" + temp + "\r\n";
+                if (accepted) break;
+            }
+        }
+        return accepted;
+    }
 
-		for (int i = 0; i < edges.size(); i++) {
-			total += edges.get(i).getSource() + "->" + edges.get(i).getDestination() + "[label=" + edges.get(i).getSymbol() + "]\r\n";
-		}
-		total += "}";
+    public Edge getInitialEdge() {
 
-		return total;
-	}
+        Vertex tempVertex = null;
 
-	public Automata getCartesianProduct(Automata a) {
-		Automata newAutomata = new Automata();
-		Vertex vertex = null;
+        for (Map.Entry<String, Vertex> entry : vertexes.entrySet()) {
+            if (entry.getValue().isInitialState()) {
+                tempVertex = entry.getValue();
+                break;
+            }
+        }
 
-		//TODO So funciona para grafos com a mesma linguagem
-		for (Map.Entry<String, Vertex> entry : this.getVertexes().entrySet()) {
-			for (Map.Entry<String, Vertex> entry2 : a.getVertexes().entrySet()) {
-				if (entry.getValue().isAcceptanceState() && entry2.getValue().isAcceptanceState()) {
-					vertex = new Vertex(entry.getValue().getName() + ", " + entry2.getValue().getName(), true, false);
-				} else if (entry.getValue().isInitialState() && entry2.getValue().isInitialState()) {
-					vertex = new Vertex(entry.getValue().getName() + ", " + entry2.getValue().getName(), false, true);
-				} else if (entry.getValue().isInitialState() && entry.getValue().isAcceptanceState() && entry2.getValue().isInitialState() && entry2.getValue().isAcceptanceState()) {
-					vertex = new Vertex(entry.getValue().getName() + ", " + entry2.getValue().getName(), true, true);
-				} else {
-					vertex = new Vertex(entry.getValue().getName() + ", " + entry2.getValue().getName(), false, false);
-				}
-				newAutomata.vertexes.put(vertex.getName(), vertex);
-				newAutomata.edges.addAll(getCartesianProductEdges(a, entry.getValue().getName(), entry2.getValue().getName()));
-			}
-		}
+        for (int i = 0; i < edges.size(); i++) {
+            if (edges.get(i).getSource().equals(tempVertex.getName()))
+                return edges.get(i);
+        }
 
-		newAutomata.refresh();
+        return null;
+    }
 
-		return newAutomata;
-	}
+    public String convertToDotty() {
+        String total = "digraph{\n\"\"[shape=none]\r\n";
+        String temp = "";
 
-	public ArrayList<Edge> getCartesianProductEdges(Automata a2, String node1, String node2) {
-		ArrayList<Edge> edges = new ArrayList<Edge>();
+        for (Map.Entry<String, Vertex> entry : vertexes.entrySet()) {
+            if (entry.getValue().isAcceptanceState()) {
+                total += entry.getValue().getName() + "[shape=doublecircle]\r\n";
+            }
+            if (entry.getValue().isInitialState()) {
+                temp = entry.getValue().getName();
+            }
+        }
+        total += "\"\"->" + temp + "\r\n";
 
-		for (int i = 0; i < this.edges.size(); i++) {
-			for (int j = 0; j < a2.edges.size(); j++) {
-				if (this.edges.get(i).getSource().equals(node1) && a2.edges.get(j).getSource().equals(node2)) {
-					if (this.edges.get(i).getSymbol().equals(a2.edges.get(j).getSymbol())) {
-						edges.add(new Edge(this.edges.get(i).getSymbol(), node1 + ", " + node2, this.edges.get(i).getDestination() + ", " + a2.edges.get(j).getDestination()));
-						//System.out.println("1---- "+node1+", "+node2);
-					}
-				}
-			}
-		}
+        for (int i = 0; i < edges.size(); i++) {
+            total += edges.get(i).getSource() + "->" + edges.get(i).getDestination() + "[label=" + edges.get(i).getSymbol() + "]\r\n";
+        }
+        total += "}";
 
-		return edges;
-	}
+        return total;
+    }
 
-    public ArrayList<Vertex> getAllPossibleStatesFromTransition(Vertex state, String symbol){
+    public Automata getCartesianProduct(Automata a) {
+        Automata newAutomata = new Automata();
+        Vertex vertex = null;
+
+        //TODO So funciona para grafos com a mesma linguagem
+        for (Map.Entry<String, Vertex> entry : this.getVertexes().entrySet()) {
+            for (Map.Entry<String, Vertex> entry2 : a.getVertexes().entrySet()) {
+                if (entry.getValue().isAcceptanceState() && entry2.getValue().isAcceptanceState()) {
+                    vertex = new Vertex(entry.getValue().getName() + ", " + entry2.getValue().getName(), true, false);
+                } else if (entry.getValue().isInitialState() && entry2.getValue().isInitialState()) {
+                    vertex = new Vertex(entry.getValue().getName() + ", " + entry2.getValue().getName(), false, true);
+                } else if (entry.getValue().isInitialState() && entry.getValue().isAcceptanceState() && entry2.getValue().isInitialState() && entry2.getValue().isAcceptanceState()) {
+                    vertex = new Vertex(entry.getValue().getName() + ", " + entry2.getValue().getName(), true, true);
+                } else {
+                    vertex = new Vertex(entry.getValue().getName() + ", " + entry2.getValue().getName(), false, false);
+                }
+                newAutomata.vertexes.put(vertex.getName(), vertex);
+                newAutomata.edges.addAll(getCartesianProductEdges(a, entry.getValue().getName(), entry2.getValue().getName()));
+            }
+        }
+
+        newAutomata.refresh();
+
+        return newAutomata;
+    }
+
+    public ArrayList<Edge> getCartesianProductEdges(Automata a2, String node1, String node2) {
+        ArrayList<Edge> edges = new ArrayList<Edge>();
+
+        for (int i = 0; i < this.edges.size(); i++) {
+            for (int j = 0; j < a2.edges.size(); j++) {
+                if (this.edges.get(i).getSource().equals(node1) && a2.edges.get(j).getSource().equals(node2)) {
+                    if (this.edges.get(i).getSymbol().equals(a2.edges.get(j).getSymbol())) {
+                        edges.add(new Edge(this.edges.get(i).getSymbol(), node1 + ", " + node2, this.edges.get(i).getDestination() + ", " + a2.edges.get(j).getDestination()));
+                        //System.out.println("1---- "+node1+", "+node2);
+                    }
+                }
+            }
+        }
+
+        return edges;
+    }
+
+    public ArrayList<Vertex> getAllPossibleStatesFromTransition(Vertex state, String symbol) {
         ArrayList<Vertex> possibleDestinations = new ArrayList<>();
 
         for (int i = 0; i < edges.size(); i++) {
@@ -433,7 +437,7 @@ public class Automata extends JPanel {
         return possibleDestinations;
     }
 
-    public Vertex getStartState(){
+    public Vertex getStartState() {
         int numberOfHits = 0;
         Vertex startState = null;
 
@@ -452,10 +456,23 @@ public class Automata extends JPanel {
         return startState;
     }
 
+	/*public Automata toAutomata(Automaton automaton){
+
+		ArrayList<Edge> tempEdges = new ArrayList<>();
+		HashMap<String, Vertex> tempVertexes= new HashMap<>();
+
+		Set<State> automatonStates = automaton.getStates();
+
+		//TODO ADD all vertexes and create all the edges
+
+		//return new Automata(e,v);
+		return null;
+	}*/
+
     /*
     * Returns an ArrayList of strings with all the unique symbols of the automaton
     */
-    public ArrayList<String> getAutomatonAlphabet(){
+    public ArrayList<String> getAutomatonAlphabet() {
         ArrayList<String> alphabet = new ArrayList<>();
         boolean addToAlphabet;
 
@@ -464,8 +481,8 @@ public class Automata extends JPanel {
             addToAlphabet = true;
 
             /* Check if symbol already exists on the alphabet */
-            for(int j = 0; j < alphabet.size(); j++) {
-                if (edges.get(i).getSymbol().equals(alphabet.get(j))){
+            for (int j = 0; j < alphabet.size(); j++) {
+                if (edges.get(i).getSymbol().equals(alphabet.get(j))) {
                     addToAlphabet = false;
                     break;
                 }
@@ -480,73 +497,71 @@ public class Automata extends JPanel {
         return alphabet;
     }
 
-	/*public Automata toAutomata(Automaton automaton){
-
-		ArrayList<Edge> tempEdges = new ArrayList<>();
-		HashMap<String, Vertex> tempVertexes= new HashMap<>();
-
-		Set<State> automatonStates = automaton.getStates();
-
-		//TODO ADD all vertexes and create all the edges
-
-		//return new Automata(e,v);
-		return null;
-	}*/
-
-	public boolean compareRE(String re){
+    public boolean compareRE(String re) {
 
 		/*dk.brics.automaton.RegExp regular_Ex = new dk.brics.automaton.RegExp(re);
 
 		Automaton temp_automaton = new Automaton();
 		temp_automaton = regular_Ex.toAutomaton();*/
 
-		return false;
-	}
-
-	public static void main(String[] args) {
-
-		Automata temp_automata = new Automata(); 
-
-		temp_automata.compareRE("(101*)*");
-	}
+        return false;
+    }
 
     public void cleanUpDeadStates() {
         boolean stateDeleted = true;
+        ArrayList<String> stateKeysToRemove = new ArrayList<>();
+        ArrayList<Edge> transitionsToRemove = new ArrayList<>();
+
         while (stateDeleted) {
-        for (Map.Entry<String, Vertex> entry : vertexes.entrySet()) {
-            stateDeleted = false;
+            for (Map.Entry<String, Vertex> entry : vertexes.entrySet()) {
+                stateDeleted = false;
             /* Don't remove the start state ever, since it might be the only state and it is the start state */
-            if (entry != getStartState()) {
+                if (entry != getStartState()) {
 
-                boolean deleteState = true;
+                    boolean deleteState = true;
 
-                for (int i = 0; i < edges.size(); i++) {
+                    for (int i = 0; i < edges.size(); i++) {
                 /* If the current state is a destination or a source state keep it */
-                    if (edges.get(i).getDestination().equals(entry.getKey()) || edges.get(i).getSource().equals(entry.getKey())){
-                        deleteState = false;
-                        break;
-                    }
-                }
-
-                /* No reference found this state, remove it */
-                if (deleteState){
-
-                    for (Edge edge : edges){
-                        if(edge.getSource().equals(entry.getValue().getName())){
-                            edges.remove(edge);
+                        if (edges.get(i).getDestination().equals(entry.getKey()) || edges.get(i).getSource().equals(entry.getKey())) {
+                            deleteState = false;
+                            break;
                         }
                     }
 
-                    vertexes.remove(entry);
-                    stateDeleted = true;
+                /* No reference found this state, remove it */
+                    if (deleteState) {
+
+                    /* Remove edges coming from this vertex */
+                        for (Edge edge : edges) {
+                            if (edge.getSource().equals(entry.getValue().getName())) {
+                                transitionsToRemove.add(edge);
+                            }
+                        }
+
+
+                        stateKeysToRemove.add(entry.getKey());
+
+                    /* Run again */
+                        stateDeleted = true;
+                    }
                 }
+
+            }
+            /* Clean states here since we can't iterate and remove at the same time */
+            for (String key : stateKeysToRemove) {
+                System.out.println("Removing dead state: " + key.toString());
+                vertexes.remove(key);
             }
 
+            for (Edge edge : transitionsToRemove) {
+                System.out.println("Removing orphan transition: " + edge.toString());
+                edges.remove(edge);
+            }
         }
-        }
+
     }
 
-    public ArrayList<Edge> getEdges(){
+    public ArrayList<Edge> getEdges() {
         return edges;
     }
 }
