@@ -1,5 +1,6 @@
 package Automata;
 
+import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -20,6 +21,12 @@ public class AdvancedState {
         }
 
         names.add(in.getName());
+    }
+
+    public String getFirstName(){
+        Iterator iter = names.iterator();
+        String first = (String) iter.next();
+        return first;
     }
 
     public Set<String> getNames(){
@@ -75,8 +82,14 @@ public class AdvancedState {
 
     String createSimpleName(){
         String simpleName = "";
+        boolean firstRun = true;
         for (String name : names){
-            simpleName = simpleName + name + "_";
+            if (firstRun){
+                simpleName = simpleName + name;
+                firstRun = false;
+            } else {
+                simpleName = simpleName + "_" + name;
+            }
         }
         return simpleName;
     }

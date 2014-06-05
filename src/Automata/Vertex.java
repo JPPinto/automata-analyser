@@ -76,4 +76,16 @@ public class Vertex  {
         return new Vertex(name, acceptanceState, initialState);
     }
 
+    @Override
+    public String toString(){
+        String result = name + " ";
+        if (initialState){
+            result += "I";
+        }
+        if (acceptanceState){
+            result += "A";
+        }
+
+        return result;
+    }
 }
