@@ -505,7 +505,7 @@ public class Automata extends JPanel {
 
 	public static void main(String[] args) {
 
-		Automata temp_automata = new Automata();
+		Automata temp_automata = new Automata(); 
 
 		temp_automata.compareRE("(101*)*");
 	}
