@@ -10,7 +10,7 @@ public class AutomatonConverter {
 
         /* If the input automaton is already an DFA no need to do anything to it */
         if (copy.isDFA()){
-            //return copy;
+            return copy;
         }
 
         /* Clean up any dead states */
