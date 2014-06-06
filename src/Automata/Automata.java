@@ -463,6 +463,34 @@ public class Automata extends JPanel {
         for (Map.Entry<String, Vertex> entry : this.getVertexes().entrySet()) {
             for (Map.Entry<String, Vertex> entry2 : a.getVertexes().entrySet()) {
                 if (entry.getValue().isAcceptanceState() && entry2.getValue().isAcceptanceState()) {
+                    vertex = new Vertex(entry.getValue().getName() + "_" + entry2.getValue().getName(), false, false);
+                } else if (entry.getValue().isInitialState() && entry2.getValue().isInitialState()) {
+                    vertex = new Vertex(entry.getValue().getName() + "_" + entry2.getValue().getName(), false, true);
+                } else if (entry.getValue().isInitialState() && entry.getValue().isAcceptanceState() && entry2.getValue().isInitialState() && entry2.getValue().isAcceptanceState()) {
+                    vertex = new Vertex(entry.getValue().getName() + "_" + entry2.getValue().getName(), false, true);
+                } else {
+                    vertex = new Vertex(entry.getValue().getName() + "_" + entry2.getValue().getName(), false, false);
+                }
+                newAutomata.vertexes.put(vertex.getName(), vertex);
+                newAutomata.edges.addAll(getCartesianProductEdges(a, entry.getValue().getName(), entry2.getValue().getName()));
+            }
+        }
+
+        newAutomata.refresh();
+
+        return newAutomata;
+    }
+    
+    public Automata getIntersection(Automata a) {
+        getAutomataSameAlphabet(this, a);
+        getAutomataSameAlphabet(a, this);
+        Automata newAutomata = new Automata();
+        Vertex vertex = null;
+
+        //TODO So funciona para grafos com a mesma linguagem
+        for (Map.Entry<String, Vertex> entry : this.getVertexes().entrySet()) {
+            for (Map.Entry<String, Vertex> entry2 : a.getVertexes().entrySet()) {
+                if (entry.getValue().isAcceptanceState() && entry2.getValue().isAcceptanceState()) {
                     vertex = new Vertex(entry.getValue().getName() + "_" + entry2.getValue().getName(), true, false);
                 } else if (entry.getValue().isInitialState() && entry2.getValue().isInitialState()) {
                     vertex = new Vertex(entry.getValue().getName() + "_" + entry2.getValue().getName(), false, true);
