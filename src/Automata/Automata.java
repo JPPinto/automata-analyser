@@ -149,26 +149,26 @@ public class Automata extends JPanel {
             return;
         }
     }
-    
-    public ArrayList<Edge> putMultipleSymbolsInEdges(){
-    	ArrayList<Edge> edgesTemp = new ArrayList<Edge>();
-    	for(int i = 0;i<edges.size(); i++){
-    		edgesTemp.add(new Edge(edges.get(i).getSymbol(),edges.get(i).getSource(), edges.get(i).getDestination()));
-    	}
-    	int nElem = edgesTemp.size();
-    	
-    	for(int i=0;i<nElem-1;i++) {
-    		for(int j=i+1; j<nElem; j++) {
-	    		if(edgesTemp.get(i).getSource().equals(edgesTemp.get(j).getSource()) && edgesTemp.get(i).getDestination().equals(edgesTemp.get(j).getDestination())){
-	    			edgesTemp.get(i).setSymbol(edgesTemp.get(i).getSymbol()+","+edgesTemp.get(j).getSymbol());
-		    		edgesTemp.remove(j);
-		    		j--;
-		    		nElem--;
-	    		}
-    		}
-    	}
-    	
-    	return edgesTemp;
+
+    public ArrayList<Edge> putMultipleSymbolsInEdges() {
+        ArrayList<Edge> edgesTemp = new ArrayList<Edge>();
+        for (int i = 0; i < edges.size(); i++) {
+            edgesTemp.add(new Edge(edges.get(i).getSymbol(), edges.get(i).getSource(), edges.get(i).getDestination()));
+        }
+        int nElem = edgesTemp.size();
+
+        for (int i = 0; i < nElem - 1; i++) {
+            for (int j = i + 1; j < nElem; j++) {
+                if (edgesTemp.get(i).getSource().equals(edgesTemp.get(j).getSource()) && edgesTemp.get(i).getDestination().equals(edgesTemp.get(j).getDestination())) {
+                    edgesTemp.get(i).setSymbol(edgesTemp.get(i).getSymbol() + "," + edgesTemp.get(j).getSymbol());
+                    edgesTemp.remove(j);
+                    j--;
+                    nElem--;
+                }
+            }
+        }
+
+        return edgesTemp;
     }
 
     public void loadGraph() {
@@ -403,61 +403,61 @@ public class Automata extends JPanel {
 
         return total;
     }
-    
-    public void getAutomataSameAlphabet(Automata a, Automata a2){
-    	boolean equal=false, totalEqual = true;
-    	int count =0;
+
+    public void getAutomataSameAlphabet(Automata a, Automata a2) {
+        boolean equal = false, totalEqual = true;
+        int count = 0;
         for (int i = 0; i < a2.getEdges().size(); i++) {
             for (int j = 0; j < a.getEdges().size(); j++) {
-            	if(a2.getEdges().get(i).getSymbol().equals(a.getEdges().get(j).getSymbol())){
-            		equal=true;
-            		break;
-            	}
+                if (a2.getEdges().get(i).getSymbol().equals(a.getEdges().get(j).getSymbol())) {
+                    equal = true;
+                    break;
+                }
             }
-            if(!equal && count==0){
-            	totalEqual=false;
-            	count++;
-            	a.getVertexes().put("s2", new Vertex("s2", false, false));
-            	fillNewVertexWithEdges(a, a2, i);
-            }else if(!equal && count!=0){
-            	fillNewVertexWithEdges(a, a2, i);
+            if (!equal && count == 0) {
+                totalEqual = false;
+                count++;
+                a.getVertexes().put("s2", new Vertex("s2", false, false));
+                fillNewVertexWithEdges(a, a2, i);
+            } else if (!equal && count != 0) {
+                fillNewVertexWithEdges(a, a2, i);
             }
-            equal=false;
+            equal = false;
         }
-        
-        if(!totalEqual){
-	    	for (int i = 0; i < a.getEdges().size(); i++) {
-	            if(!EdgeExists(a, a.getEdges().get(i).getSymbol())){
-					a.getEdges().add(new Edge(a.getEdges().get(i).getSymbol(), "s2", "s2"));
-	            }
-	    	}
+
+        if (!totalEqual) {
+            for (int i = 0; i < a.getEdges().size(); i++) {
+                if (!EdgeExists(a, a.getEdges().get(i).getSymbol())) {
+                    a.getEdges().add(new Edge(a.getEdges().get(i).getSymbol(), "s2", "s2"));
+                }
+            }
         }
-        
+
     }
-    
-    public boolean EdgeExists(Automata a, String edge){
-    	for (int i = 0; i < a.getEdges().size(); i++) {
-    		if(a.getEdges().get(i).getSymbol().equals(edge) && a.getEdges().get(i).getSource().equals("s2") && a.getEdges().get(i).getDestination().equals("s2")){
-    			return true;
-    		}
-    	}
-    	return false;
+
+    public boolean EdgeExists(Automata a, String edge) {
+        for (int i = 0; i < a.getEdges().size(); i++) {
+            if (a.getEdges().get(i).getSymbol().equals(edge) && a.getEdges().get(i).getSource().equals("s2") && a.getEdges().get(i).getDestination().equals("s2")) {
+                return true;
+            }
+        }
+        return false;
     }
-    
-    public void fillNewVertexWithEdges(Automata a, Automata a2, int i){
-    	for (Map.Entry<String, Vertex> entry : a.getVertexes().entrySet()) {
+
+    public void fillNewVertexWithEdges(Automata a, Automata a2, int i) {
+        for (Map.Entry<String, Vertex> entry : a.getVertexes().entrySet()) {
             Vertex tempVertex = entry.getValue();
-            if(!tempVertex.getName().equals("s2")){
-        		a.getEdges().add(new Edge(a2.getEdges().get(i).getSymbol(), tempVertex.getName(), "s2"));
+            if (!tempVertex.getName().equals("s2")) {
+                a.getEdges().add(new Edge(a2.getEdges().get(i).getSymbol(), tempVertex.getName(), "s2"));
             }
-    	}
+        }
     }
 
     public Automata getCartesianProduct(Automata a) {
-		System.out.println("1� chamada");
-    	getAutomataSameAlphabet(this, a);
-		System.out.println("2� chamada");
-    	getAutomataSameAlphabet(a, this);
+        System.out.println("1??? chamada");
+        getAutomataSameAlphabet(this, a);
+        System.out.println("2??? chamada");
+        getAutomataSameAlphabet(a, this);
         Automata newAutomata = new Automata();
         Vertex vertex = null;
 
@@ -539,21 +539,26 @@ public class Automata extends JPanel {
         boolean addToAlphabet;
 
         /* Check all edges (transitions) */
-        for (int i = 0; i < edges.size(); i++) {
+        for (Edge edge: edges) {
             addToAlphabet = true;
 
-            /* Check if symbol already exists on the alphabet */
-            for (int j = 0; j < alphabet.size(); j++) {
-                if (edges.get(i).getSymbol().equals(alphabet.get(j))) {
-                    addToAlphabet = false;
-                    break;
+            /* If it is an epsilon transition don't add it */
+            if (!edge.getSymbol().equals(Constants.epsilonString)) {
+
+                /* Check if symbol already exists on the alphabet */
+                for (String symbol : alphabet) {
+                    if (edge.getSymbol().equals(symbol)) {
+                        addToAlphabet = false;
+                        break;
+                    }
+                }
+
+                /* Add it if it doesn't already exist */
+                if (addToAlphabet) {
+                    alphabet.add(edge.getSymbol());
                 }
             }
 
-            /* Add it if it doesn't already exist */
-            if (addToAlphabet) {
-                alphabet.add(edges.get(i).getSymbol());
-            }
         }
 
         return alphabet;
