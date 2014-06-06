@@ -23,6 +23,7 @@ import org.jgrapht.graph.ListenableDirectedGraph;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.plaf.synth.SynthTextAreaUI;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
@@ -40,6 +41,7 @@ public class Automata extends JPanel {
     public HashMap<String, Vertex> vertexes;
     public ArrayList<Edge> edges;
     public JGraphModelAdapter<String, DefaultEdge> jgAdapter;
+    private boolean parsing = false;
 
     public Automata(String graph) {
 
@@ -74,11 +76,16 @@ public class Automata extends JPanel {
     }
 
     public void parseDottyFile(String graph) {
-
+        parsing = true;
         String[] lines = graph.split("\r\n");
 
         for (String line : lines) {
             parseLine(line);
+
+            /* Reached the last } */
+            if (!parsing){
+                break;
+            }
         }
 
     }
@@ -93,6 +100,14 @@ public class Automata extends JPanel {
     }
 
     public void parseLine(String s) {
+        if (s.equals("digraph{")){
+            return;
+        }
+
+        if(Pattern.compile("[}]").matcher(s).matches()){
+            parsing = false;
+            return;
+        }
 
         if (Pattern
                 .compile("[a-zA-Z][a-zA-Z0-9]*->[a-zA-Z][a-zA-Z0-9]*\\[.*\\]")
@@ -142,8 +157,10 @@ public class Automata extends JPanel {
                 if (!vertexes.containsKey(content[0]))
                     vertexes.put(content[0], tempVertex);
             }
-
+            return;
         }
+
+        System.out.println("Line rejected: " + s);
     }
 
     public ArrayList<Edge> putMultipleSymbolsInEdges() {
