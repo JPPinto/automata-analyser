@@ -1,7 +1,12 @@
 package Automata;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 public class AutomatonTest {
+
+    @Test
+    public void test() {
+
+    }
 
 }
