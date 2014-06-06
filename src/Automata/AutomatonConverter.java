@@ -11,6 +11,7 @@ public class AutomatonConverter {
 
         /* If the input automaton is already an DFA no need to do anything to it */
         if (copy.isDFA()) {
+            copy.init();
             return copy;
         }
 
@@ -63,6 +64,8 @@ public class AutomatonConverter {
 
                 advancedTransitions.add(newTransition);
             }
+
+            /* Check all possible epsilon transitions */
 
         }
 
