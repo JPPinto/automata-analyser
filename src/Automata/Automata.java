@@ -454,9 +454,7 @@ public class Automata extends JPanel {
     }
 
     public Automata getCartesianProduct(Automata a) {
-        System.out.println("1??? chamada");
         getAutomataSameAlphabet(this, a);
-        System.out.println("2??? chamada");
         getAutomataSameAlphabet(a, this);
         Automata newAutomata = new Automata();
         Vertex vertex = null;
