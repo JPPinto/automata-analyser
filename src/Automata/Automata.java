@@ -318,7 +318,7 @@ public class Automata extends JPanel {
 
             tempEdge = edges.get(j);
 
-            if (tempEdge.getSymbol() == "?!")
+            if (tempEdge.isEpsilonTranstition())
                 return false;
 
             for (int i = 0; i < edges.size(); i++) {
@@ -445,9 +445,9 @@ public class Automata extends JPanel {
     }
 
     public Automata getCartesianProduct(Automata a) {
-		System.out.println("1ª chamada");
+		System.out.println("1ï¿½ chamada");
     	getAutomataSameAlphabet(this, a);
-		System.out.println("2ª chamada");
+		System.out.println("2ï¿½ chamada");
     	getAutomataSameAlphabet(a, this);
         Automata newAutomata = new Automata();
         Vertex vertex = null;

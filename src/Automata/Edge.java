@@ -83,4 +83,7 @@ public class Edge extends DefaultEdge {
         return new Edge(symbol, source, destination);
     }
 
+    public boolean isEpsilonTranstition(){
+        return symbol.equals(Constants.epsilonString);
+    }
 }
