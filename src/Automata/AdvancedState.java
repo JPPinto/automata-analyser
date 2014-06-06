@@ -59,13 +59,14 @@ public class AdvancedState {
             return true;
         }
 
+        // TODO FIX IT
         if (!(inputO instanceof Vertex)){
             return false;
         }
 
         AdvancedState compare = (AdvancedState) inputO;
 
-        if (!names.equals(compare.getNames())){
+        if (!names.containsAll(compare.getNames())){
             return false;
         }
 
@@ -93,7 +94,26 @@ public class AdvancedState {
         }
         return simpleName;
     }
+
     Vertex convertToVertex(){
         return new Vertex(createSimpleName(), acceptanceState, initialState);
+    }
+
+    public static AdvancedState mergeStates(AdvancedState st1, AdvancedState st2){
+        if (st1.equals(st2)) {
+            return st1;
+        }
+
+        AdvancedState out = new AdvancedState();
+
+        for (String name : st1.names){
+            out.addName(name);
+        }
+
+        for (String name : st2.names){
+            out.addName(name);
+        }
+
+        return out;
     }
 }
