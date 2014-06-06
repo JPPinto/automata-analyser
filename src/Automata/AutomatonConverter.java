@@ -5,6 +5,7 @@ import java.util.*;
 public class AutomatonConverter {
 
     public static Automata convertNFAtoDFA(Automata originalAutomaton) {
+        // TODO epsilon transitions
         /* Work on an automaton copy, since we are going to modify it */
         Automata copy = originalAutomaton.getCopy();
 
@@ -125,12 +126,12 @@ public class AutomatonConverter {
     }
 
     public static Automata intersection(Automata automaton1, Automata automaton2){
-        /* Work on an automaton copy, since we are going to modify it */
-        Automata automaton1Copy = automaton1.getCopy();
-        Automata automaton2Copy = automaton2.getCopy();
+        /* Make sure the automatons are already dfas */
+        Automata automaton1Copy = convertNFAtoDFA(automaton1);
+        Automata automaton2Copy = convertNFAtoDFA(automaton2);
 
-        automaton1Copy.cleanUpDeadStates();
-        automaton2Copy.cleanUpDeadStates();
+
+
 
         // Convert to simple edge / vertex
         ArrayList<Edge> resultEdges = new ArrayList<Edge>();
