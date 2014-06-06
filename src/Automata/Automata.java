@@ -417,20 +417,38 @@ public class Automata extends JPanel {
             if(!equal && count==0){
             	count++;
             	a.getVertexes().put("s2", new Vertex("s2", false, false));
-            	for (Map.Entry<String, Vertex> entry : a.getVertexes().entrySet()) {
-                    Vertex tempVertex = entry.getValue();
-            		a.getEdges().add(new Edge(a2.getEdges().get(i).getSymbol(), tempVertex.getName(), "s2"));
-            	}
-            }else if(!equal && count !=0){
-            	
+            	fillNewVertexWithEdges(a, a2, i);
+            }else if(!equal && count!=0){
+            	fillNewVertexWithEdges(a, a2, i);
             }
             equal=false;
         }
+		a.getEdges().add(new Edge("a", "s2", "s2"));
+		a.getEdges().add(new Edge("b", "s2", "s2"));
+		a.getEdges().add(new Edge("c", "s2", "s2"));
+        
+    }
+    
+    public boolean addToNewVertexOwnEdges(Automata a){
+    	return true;
+    }
+    
+    public void fillNewVertexWithEdges(Automata a, Automata a2, int i){
+    	for (Map.Entry<String, Vertex> entry : a.getVertexes().entrySet()) {
+            Vertex tempVertex = entry.getValue();
+            if(!tempVertex.getName().equals("s2")){
+        		a.getEdges().add(new Edge(a2.getEdges().get(i).getSymbol(), tempVertex.getName(), "s2"));
+        		System.out.println("Second");
+        		System.out.println("Symbol = "+a2.getEdges().get(i).getSymbol()+"/source = "+tempVertex.getName());
+            }
+    	}
     }
 
     public Automata getCartesianProduct(Automata a) {
-    	//getAutomataSameAlphabet(this, a);
-    	//getAutomataSameAlphabet(a, this);
+		System.out.println("1ª chamada");
+    	getAutomataSameAlphabet(this, a);
+		System.out.println("2ª chamada");
+    	getAutomataSameAlphabet(a, this);
         Automata newAutomata = new Automata();
         Vertex vertex = null;
 
