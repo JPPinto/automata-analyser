@@ -32,4 +32,5 @@ public class Constants {
 
     /* Dotty parser constants */
     public static final String dottyAcceptanceState = "shape=doublecircle";
+    public static final String epsilonString = "?!";
 }
