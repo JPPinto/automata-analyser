@@ -463,11 +463,7 @@ public class Automata extends JPanel {
         //TODO So funciona para grafos com a mesma linguagem
         for (Map.Entry<String, Vertex> entry : this.getVertexes().entrySet()) {
             for (Map.Entry<String, Vertex> entry2 : a.getVertexes().entrySet()) {
-                if (entry.getValue().isAcceptanceState() && entry2.getValue().isAcceptanceState()) {
-                    vertex = new Vertex(entry.getValue().getName() + "_" + entry2.getValue().getName(), false, false);
-                } else if (entry.getValue().isInitialState() && entry2.getValue().isInitialState()) {
-                    vertex = new Vertex(entry.getValue().getName() + "_" + entry2.getValue().getName(), false, true);
-                } else if (entry.getValue().isInitialState() && entry.getValue().isAcceptanceState() && entry2.getValue().isInitialState() && entry2.getValue().isAcceptanceState()) {
+                if (entry.getValue().isInitialState() && entry2.getValue().isInitialState()) {
                     vertex = new Vertex(entry.getValue().getName() + "_" + entry2.getValue().getName(), false, true);
                 } else {
                     vertex = new Vertex(entry.getValue().getName() + "_" + entry2.getValue().getName(), false, false);
@@ -491,9 +487,9 @@ public class Automata extends JPanel {
         //TODO So funciona para grafos com a mesma linguagem
         for (Map.Entry<String, Vertex> entry : this.getVertexes().entrySet()) {
             for (Map.Entry<String, Vertex> entry2 : a.getVertexes().entrySet()) {
-                if (entry.getValue().isAcceptanceState() && entry2.getValue().isAcceptanceState()) {
+                if (entry.getValue().isAcceptanceState() && entry2.getValue().isAcceptanceState() && (!entry.getValue().isInitialState() || !entry2.getValue().isInitialState())) {
                     vertex = new Vertex(entry.getValue().getName() + "_" + entry2.getValue().getName(), true, false);
-                } else if (entry.getValue().isInitialState() && entry2.getValue().isInitialState()) {
+                } else if (entry.getValue().isInitialState() && entry2.getValue().isInitialState() && (!entry.getValue().isAcceptanceState() || !entry2.getValue().isAcceptanceState())) {
                     vertex = new Vertex(entry.getValue().getName() + "_" + entry2.getValue().getName(), false, true);
                 } else if (entry.getValue().isInitialState() && entry.getValue().isAcceptanceState() && entry2.getValue().isInitialState() && entry2.getValue().isAcceptanceState()) {
                     vertex = new Vertex(entry.getValue().getName() + "_" + entry2.getValue().getName(), true, true);
