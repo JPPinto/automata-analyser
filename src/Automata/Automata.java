@@ -110,7 +110,7 @@ public class Automata extends JPanel {
         }
 
         if (Pattern
-                .compile("[a-zA-Z][a-zA-Z0-9]*->[a-zA-Z][a-zA-Z0-9]*\\[.*\\]")
+                .compile("[a-zA-Z0-9]+->[a-zA-Z0-9]*\\[.*\\]")
                 .matcher(s).matches()) {
             String[] content = s.split("->");
             String[] label_sides = content[1].substring(0, content[1].length() - 1).split("=");
@@ -131,7 +131,7 @@ public class Automata extends JPanel {
             return;
         }
 
-        if (Pattern.compile("\\\"\\\"->[a-zA-Z][a-zA-Z0-9]*").matcher(s)
+        if (Pattern.compile("\\\"\\\"->[a-zA-Z0-9]+").matcher(s)
                 .matches()) {
             String[] content = s.split("->");
             String right_content = content[1].substring(0, content[1].length());
