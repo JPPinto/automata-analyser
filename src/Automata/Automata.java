@@ -403,8 +403,34 @@ public class Automata extends JPanel {
 
         return total;
     }
+    
+    public void getAutomataSameAlphabet(Automata a, Automata a2){
+    	boolean equal=false;
+    	int count =0;
+        for (int i = 0; i < a2.getEdges().size(); i++) {
+            for (int j = 0; j < a.getEdges().size(); j++) {
+            	if(a2.getEdges().get(i).getSymbol().equals(a.getEdges().get(j).getSymbol())){
+            		equal=true;
+            		break;
+            	}
+            }
+            if(!equal && count==0){
+            	count++;
+            	a.getVertexes().put("s2", new Vertex("s2", false, false));
+            	for (Map.Entry<String, Vertex> entry : a.getVertexes().entrySet()) {
+                    Vertex tempVertex = entry.getValue();
+            		a.getEdges().add(new Edge(a2.getEdges().get(i).getSymbol(), tempVertex.getName(), "s2"));
+            	}
+            }else if(!equal && count !=0){
+            	
+            }
+            equal=false;
+        }
+    }
 
     public Automata getCartesianProduct(Automata a) {
+    	//getAutomataSameAlphabet(this, a);
+    	//getAutomataSameAlphabet(a, this);
         Automata newAutomata = new Automata();
         Vertex vertex = null;
 
