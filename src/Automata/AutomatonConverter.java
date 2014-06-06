@@ -72,6 +72,7 @@ public class AutomatonConverter {
         for (AdvancedState currentState : stateCombinations) {
             Set<String> oldStates = currentState.getNames();
 
+            ArrayList<String> addNames = new ArrayList<>();
             /* Check all possible epsilon transitions */
             /* Iterate composite state */
             for (String oldStateName : oldStates) {
@@ -82,12 +83,60 @@ public class AutomatonConverter {
                     /* Check for epsilon transitions */
                     if (edge.getSymbol().equals(Constants.epsilonString) && edge.getSource().equals(oldStateName)) {
                         // Epsilon transition found
-                        //currentState
+
+                        for (Map.Entry<String, Vertex> entry : originalStates.entrySet()){
+                            Vertex originalState = entry.getValue();
+
+                            if (originalState.getName().equals(oldStateName)){
+
+                                addNames.add(edge.getDestination());
+                            }
+                        }
+
                     }
 
                 }
             }
+
+            // Add names here
+            for (String name : addNames){
+                currentState.addName(name);
+            }
         }
+
+        // Clean up duplicated entries on the table
+        ArrayList<AdvancedState> statesToRemove = new ArrayList<>();
+
+        for (AdvancedState compareState1 : stateCombinations){
+
+            for (AdvancedState compareState2 : stateCombinations){
+
+                /* Check if we have two different states with same set of simple states */
+                if (compareState1.equals(compareState2) && compareState1 != compareState2){
+
+                    for (AdvancedTransition transition : advancedTransitions) {
+
+                        if (transition.getSourceState() == compareState2){
+                            transition.setSourceState(compareState1);
+                            statesToRemove.add(compareState2);
+                        }
+
+                    }
+                }
+            }
+        }
+        stateCombinations.removeAll(statesToRemove);
+
+        // Clean up duplicated transitions
+        ArrayList<AdvancedTransition> transitionsToRemove = new ArrayList<>();
+        for (AdvancedTransition compareTransition1 : advancedTransitions){
+            for (AdvancedTransition compareTransition2 : advancedTransitions){
+                if (compareTransition1 != compareTransition2 && compareTransition1.equals(compareTransition2)){
+                    transitionsToRemove.add(compareTransition2);
+                }
+            }
+        }
+        advancedTransitions.removeAll(transitionsToRemove);
 
         // Table is done
 

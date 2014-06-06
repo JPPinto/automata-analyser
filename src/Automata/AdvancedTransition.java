@@ -31,4 +31,42 @@ public class AdvancedTransition {
         }
     }
 
+    public AdvancedState getSourceState(){
+        return sourceState;
+    }
+
+    public AdvancedState getDestinationState(){
+        return destinationState;
+    }
+
+    public void setSourceState(AdvancedState in){
+        sourceState = in;
+    }
+
+    @Override
+    public boolean equals(Object inputO){
+        if (this == inputO){
+            return true;
+        }
+
+        if (!(inputO instanceof AdvancedTransition)){
+            return false;
+        }
+
+        AdvancedTransition temp = (AdvancedTransition) inputO;
+
+        if (!transitionSymbol.equals(temp.transitionSymbol)){
+            return false;
+        }
+
+        if (sourceState != temp.getSourceState()) {
+            return false;
+        }
+
+        if (destinationState != temp.getDestinationState()){
+            return false;
+        }
+        return  true;
+    }
+
 }
