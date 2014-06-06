@@ -417,7 +417,7 @@ public class Automata extends JPanel {
             if (!equal && count == 0) {
                 totalEqual = false;
                 count++;
-                a.getVertexes().put("s2", new Vertex("s2", false, false));
+                a.getVertexes().put("newState", new Vertex("newState", false, false));
                 fillNewVertexWithEdges(a, a2, i);
             } else if (!equal && count != 0) {
                 fillNewVertexWithEdges(a, a2, i);
@@ -428,7 +428,7 @@ public class Automata extends JPanel {
         if (!totalEqual) {
             for (int i = 0; i < a.getEdges().size(); i++) {
                 if (!EdgeExists(a, a.getEdges().get(i).getSymbol())) {
-                    a.getEdges().add(new Edge(a.getEdges().get(i).getSymbol(), "s2", "s2"));
+                    a.getEdges().add(new Edge(a.getEdges().get(i).getSymbol(), "newState", "newState"));
                 }
             }
         }
@@ -437,7 +437,7 @@ public class Automata extends JPanel {
 
     public boolean EdgeExists(Automata a, String edge) {
         for (int i = 0; i < a.getEdges().size(); i++) {
-            if (a.getEdges().get(i).getSymbol().equals(edge) && a.getEdges().get(i).getSource().equals("s2") && a.getEdges().get(i).getDestination().equals("s2")) {
+            if (a.getEdges().get(i).getSymbol().equals(edge) && a.getEdges().get(i).getSource().equals("newState") && a.getEdges().get(i).getDestination().equals("newState")) {
                 return true;
             }
         }
@@ -447,10 +447,11 @@ public class Automata extends JPanel {
     public void fillNewVertexWithEdges(Automata a, Automata a2, int i) {
         for (Map.Entry<String, Vertex> entry : a.getVertexes().entrySet()) {
             Vertex tempVertex = entry.getValue();
-            if (!tempVertex.getName().equals("s2")) {
-                a.getEdges().add(new Edge(a2.getEdges().get(i).getSymbol(), tempVertex.getName(), "s2"));
+            if (!tempVertex.getName().equals("newState")) {
+                a.getEdges().add(new Edge(a2.getEdges().get(i).getSymbol(), tempVertex.getName(), "newState"));
             }
         }
+        
     }
 
     public Automata getCartesianProduct(Automata a) {
