@@ -149,6 +149,27 @@ public class Automata extends JPanel {
             return;
         }
     }
+    
+    public ArrayList<Edge> putMultipleSymbolsInEdges(){
+    	ArrayList<Edge> edgesTemp = new ArrayList<Edge>();
+    	for(int i = 0;i<edges.size(); i++){
+    		edgesTemp.add(new Edge(edges.get(i).getSymbol(),edges.get(i).getSource(), edges.get(i).getDestination()));
+    	}
+    	int nElem = edgesTemp.size();
+    	
+    	for(int i=0;i<nElem-1;i++) {
+    		for(int j=i+1; j<nElem; j++) {
+	    		if(edgesTemp.get(i).getSource().equals(edgesTemp.get(j).getSource()) && edgesTemp.get(i).getDestination().equals(edgesTemp.get(j).getDestination())){
+	    			edgesTemp.get(i).setSymbol(edgesTemp.get(i).getSymbol()+","+edgesTemp.get(j).getSymbol());
+		    		edgesTemp.remove(j);
+		    		j--;
+		    		nElem--;
+	    		}
+    		}
+    	}
+    	
+    	return edgesTemp;
+    }
 
     public void loadGraph() {
 
@@ -159,8 +180,9 @@ public class Automata extends JPanel {
             editVertex(tempVertex);
         }
 
-        for (int i = 0; i < edges.size(); i++) {
-            g.addEdge(edges.get(i).getSource(), edges.get(i).getDestination(), edges.get(i).getSymbol());
+        ArrayList<Edge> edgesTemp = putMultipleSymbolsInEdges();
+        for (int i = 0; i < edgesTemp.size(); i++) {
+            g.addEdge(edgesTemp.get(i).getSource(), edgesTemp.get(i).getDestination(), edgesTemp.get(i).getSymbol());
         }
 
     }
