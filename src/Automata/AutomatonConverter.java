@@ -65,8 +65,28 @@ public class AutomatonConverter {
                 advancedTransitions.add(newTransition);
             }
 
-            /* Check all possible epsilon transitions */
 
+        }
+
+        /* Merge states that are the same due to epsilon transitions */
+        for (AdvancedState currentState : stateCombinations) {
+            Set<String> oldStates = currentState.getNames();
+
+            /* Check all possible epsilon transitions */
+            /* Iterate composite state */
+            for (String oldStateName : oldStates) {
+
+                /* From the original edges */
+                for (Edge edge : originalEdges) {
+
+                    /* Check for epsilon transitions */
+                    if (edge.getSymbol().equals(Constants.epsilonString) && edge.getSource().equals(oldStateName)) {
+                        // Epsilon transition found
+                        //currentState
+                    }
+
+                }
+            }
         }
 
         // Table is done
