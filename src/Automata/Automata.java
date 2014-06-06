@@ -312,24 +312,30 @@ public class Automata extends JPanel {
     }
 
     public boolean isDFA() {
+        if (isEpsilonNFA()){
+            return false;
+        }
 
-        Edge tempEdge;
-        for (int j = 0; j < edges.size(); j++) {
+        for (Edge edgeA : edges) {
 
-            tempEdge = edges.get(j);
+            for (Edge edgeB : edges) {
 
-            if (tempEdge.isEpsilonTranstition())
-                return false;
-
-            for (int i = 0; i < edges.size(); i++) {
-
-                if (tempEdge.getSymbol().equals(edges.get(i).getSymbol())
-                        && !tempEdge.getDestination().equals(edges.get(i).getDestination())
-                        && tempEdge.getSource().equals(edges.get(i).getSource()))
+                if (edgeA.getSymbol().equals(edgeB.getSymbol())
+                        && !edgeA.getDestination().equals(edgeB.getDestination())
+                        && edgeA.getSource().equals(edgeB.getSource()))
                     return false;
             }
         }
         return true;
+    }
+
+    public boolean isEpsilonNFA(){
+        for (Edge edge : edges){
+            if (edge.isEpsilonTranstition()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean acceptsSequence(String sequence, Vertex currentVertex) {
