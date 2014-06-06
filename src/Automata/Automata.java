@@ -260,7 +260,7 @@ public class Automata extends JPanel {
             GraphConstants.setBackground(attr, Color.green);
         }
         if (x.isAcceptanceState()) {
-            Border vertexBorder = BorderFactory.createLineBorder(Constants.guiAccepetanceStateBorderColor, 4); // Blue color from icon
+            Border vertexBorder = BorderFactory.createLineBorder(Constants.guiAcceptanceStateBorderColor, 4); // Blue color from icon
             GraphConstants.setBorder(attr, vertexBorder);
         }
 
