@@ -39,18 +39,15 @@ public class Automata extends JPanel {
     public ListenableDirectedGraph g;
     public HashMap<String, Vertex> vertexes;
     public ArrayList<Edge> edges;
-    public boolean isAutomataDFA;
     public JGraphModelAdapter<String, DefaultEdge> jgAdapter;
 
     public Automata(String graph) {
 
-        edges = new ArrayList<Edge>();
-        vertexes = new HashMap<String, Vertex>();
+        edges = new ArrayList<>();
+        vertexes = new HashMap<>();
 
         g = new ListenableDirectedGraph(org.jgraph.graph.DefaultEdge.class);
         parseDottyFile(graph);
-
-        isAutomataDFA = isDFA();
 
         init();
     }
@@ -80,8 +77,8 @@ public class Automata extends JPanel {
 
         String[] lines = graph.split("\r\n");
 
-        for (int i = 0; i < lines.length; i++) {
-            parseLine(lines[i]);
+        for (String line : lines) {
+            parseLine(line);
         }
 
     }
@@ -146,14 +143,13 @@ public class Automata extends JPanel {
                     vertexes.put(content[0], tempVertex);
             }
 
-            return;
         }
     }
 
     public ArrayList<Edge> putMultipleSymbolsInEdges() {
-        ArrayList<Edge> edgesTemp = new ArrayList<Edge>();
-        for (int i = 0; i < edges.size(); i++) {
-            edgesTemp.add(new Edge(edges.get(i).getSymbol(), edges.get(i).getSource(), edges.get(i).getDestination()));
+        ArrayList<Edge> edgesTemp = new ArrayList<>();
+        for (Edge edge : edges) {
+            edgesTemp.add(new Edge(edge.getSymbol(), edge.getSource(), edge.getDestination()));
         }
         int nElem = edgesTemp.size();
 
@@ -181,8 +177,8 @@ public class Automata extends JPanel {
         }
 
         ArrayList<Edge> edgesTemp = putMultipleSymbolsInEdges();
-        for (int i = 0; i < edgesTemp.size(); i++) {
-            g.addEdge(edgesTemp.get(i).getSource(), edgesTemp.get(i).getDestination(), edgesTemp.get(i).getSymbol());
+        for (Edge anEdgesTemp : edgesTemp) {
+            g.addEdge(anEdgesTemp.getSource(), anEdgesTemp.getDestination(), anEdgesTemp.getSymbol());
         }
 
     }
@@ -288,9 +284,7 @@ public class Automata extends JPanel {
             tempEdges.add(i, edges.get(i).getCopy());
         }
 
-        Automata automata = new Automata(tempEdges, tempVertexes);
-
-        return automata;
+        return new Automata(tempEdges, tempVertexes);
     }
 
     public Automata getComplement() {
@@ -344,21 +338,17 @@ public class Automata extends JPanel {
             return true;
 
         boolean accepted = false;
-        Edge tempEdge;
-        String exceptFirstChar = "";
-        String firstChar = "";
-        Vertex nextVertex = null;
+        String exceptFirstChar;
+        String firstChar;
+        Vertex nextVertex;
 
-        for (int i = 0; i < edges.size(); i++) {
-            tempEdge = edges.get(i);
+        for (Edge tempEdge : edges) {
             firstChar = sequence.substring(0, 1);
 
             if (tempEdge.getSource().equals(currentVertex.getName()) && tempEdge.getSymbol().equals(firstChar)) {
                 nextVertex = vertexes.get(tempEdge.getDestination());
                 if (sequence.length() == 1) {
-                    if (!nextVertex.isAcceptanceState())
-                        return false;
-                    return true;
+                    return nextVertex.isAcceptanceState();
                 }
                 exceptFirstChar = sequence.substring(1, sequence.length());
                 accepted = acceptsSequence(exceptFirstChar, nextVertex);
@@ -380,9 +370,11 @@ public class Automata extends JPanel {
             }
         }
 
-        for (int i = 0; i < edges.size(); i++) {
-            if (edges.get(i).getSource().equals(tempVertex.getName()))
-                return edges.get(i);
+        for (Edge edge : edges) {
+            assert tempVertex != null;
+            if (edge.getSource().equals(tempVertex.getName())){
+                return edge;
+            }
         }
 
         return null;
@@ -402,8 +394,8 @@ public class Automata extends JPanel {
         }
         total += "\"\"->" + temp + "\r\n";
 
-        for (int i = 0; i < edges.size(); i++) {
-            total += edges.get(i).getSource() + "->" + edges.get(i).getDestination() + "[label=" + edges.get(i).getSymbol() + "]\r\n";
+        for (Edge edge : edges) {
+            total += edge.getSource() + "->" + edge.getDestination() + "[label=" + edge.getSymbol() + "]\r\n";
         }
         total += "}";
 
@@ -420,6 +412,7 @@ public class Automata extends JPanel {
                     break;
                 }
             }
+
             if (!equal && count == 0) {
                 totalEqual = false;
                 count++;
@@ -464,7 +457,7 @@ public class Automata extends JPanel {
         getAutomataSameAlphabet(this, a);
         getAutomataSameAlphabet(a, this);
         Automata newAutomata = new Automata();
-        Vertex vertex = null;
+        Vertex vertex;
 
         //TODO So funciona para grafos com a mesma linguagem
         for (Map.Entry<String, Vertex> entry : this.getVertexes().entrySet()) {
@@ -488,7 +481,7 @@ public class Automata extends JPanel {
         getAutomataSameAlphabet(this, a);
         getAutomataSameAlphabet(a, this);
         Automata newAutomata = new Automata();
-        Vertex vertex = null;
+        Vertex vertex;
 
         //TODO So funciona para grafos com a mesma linguagem
         for (Map.Entry<String, Vertex> entry : this.getVertexes().entrySet()) {
@@ -513,7 +506,7 @@ public class Automata extends JPanel {
     }
 
     public ArrayList<Edge> getCartesianProductEdges(Automata a2, String node1, String node2) {
-        ArrayList<Edge> edges = new ArrayList<Edge>();
+        ArrayList<Edge> edges = new ArrayList<>();
 
         for (int i = 0; i < this.edges.size(); i++) {
             for (int j = 0; j < a2.edges.size(); j++) {
@@ -532,9 +525,9 @@ public class Automata extends JPanel {
     public ArrayList<Vertex> getAllPossibleStatesFromTransition(Vertex state, String symbol) {
         ArrayList<Vertex> possibleDestinations = new ArrayList<>();
 
-        for (int i = 0; i < edges.size(); i++) {
-            if (state.getName().equals(edges.get(i).getSource()) && edges.get(i).getSymbol().equals(symbol)) {
-                possibleDestinations.add(vertexes.get(edges.get(i).getDestination()));
+        for (Edge edge : edges) {
+            if (state.getName().equals(edge.getSource()) && edge.getSymbol().equals(symbol)) {
+                possibleDestinations.add(vertexes.get(edge.getDestination()));
             }
         }
 
@@ -644,7 +637,7 @@ public class Automata extends JPanel {
             }
             /* Clean states here since we can't iterate and remove at the same time */
             for (String key : stateKeysToRemove) {
-                System.out.println("Removing non accessible state: " + key.toString());
+                System.out.println("Removing non accessible state: " + key);
                 vertexes.remove(key);
             }
             stateKeysToRemove.clear();
