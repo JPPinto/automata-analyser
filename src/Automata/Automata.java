@@ -405,7 +405,7 @@ public class Automata extends JPanel {
     }
     
     public void getAutomataSameAlphabet(Automata a, Automata a2){
-    	boolean equal=false;
+    	boolean equal=false, totalEqual = true;
     	int count =0;
         for (int i = 0; i < a2.getEdges().size(); i++) {
             for (int j = 0; j < a.getEdges().size(); j++) {
@@ -415,6 +415,7 @@ public class Automata extends JPanel {
             	}
             }
             if(!equal && count==0){
+            	totalEqual=false;
             	count++;
             	a.getVertexes().put("s2", new Vertex("s2", false, false));
             	fillNewVertexWithEdges(a, a2, i);
@@ -423,14 +424,24 @@ public class Automata extends JPanel {
             }
             equal=false;
         }
-		a.getEdges().add(new Edge("a", "s2", "s2"));
-		a.getEdges().add(new Edge("b", "s2", "s2"));
-		a.getEdges().add(new Edge("c", "s2", "s2"));
+        
+        if(!totalEqual){
+	    	for (int i = 0; i < a.getEdges().size(); i++) {
+	            if(!EdgeExists(a, a.getEdges().get(i).getSymbol())){
+					a.getEdges().add(new Edge(a.getEdges().get(i).getSymbol(), "s2", "s2"));
+	            }
+	    	}
+        }
         
     }
     
-    public boolean addToNewVertexOwnEdges(Automata a){
-    	return true;
+    public boolean EdgeExists(Automata a, String edge){
+    	for (int i = 0; i < a.getEdges().size(); i++) {
+    		if(a.getEdges().get(i).getSymbol().equals(edge) && a.getEdges().get(i).getSource().equals("s2") && a.getEdges().get(i).getDestination().equals("s2")){
+    			return true;
+    		}
+    	}
+    	return false;
     }
     
     public void fillNewVertexWithEdges(Automata a, Automata a2, int i){
@@ -438,8 +449,6 @@ public class Automata extends JPanel {
             Vertex tempVertex = entry.getValue();
             if(!tempVertex.getName().equals("s2")){
         		a.getEdges().add(new Edge(a2.getEdges().get(i).getSymbol(), tempVertex.getName(), "s2"));
-        		System.out.println("Second");
-        		System.out.println("Symbol = "+a2.getEdges().get(i).getSymbol()+"/source = "+tempVertex.getName());
             }
     	}
     }
