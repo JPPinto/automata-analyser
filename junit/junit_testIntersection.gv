@@ -1,0 +1,17 @@
+digraph{
+""[shape=none]
+A_X[shape=doublecircle]
+""->A_X
+A_Y->A_X[label=b]
+A_Y->B_Z[label=a]
+A_X->A_X[label=b]
+A_X->B_Y[label=a]
+A_Z->A_Z[label=b]
+A_Z->B_Z[label=a]
+B_Y->A_Z[label=a]
+B_Y->B_X[label=b]
+B_X->A_Y[label=a]
+B_X->B_X[label=b]
+B_Z->A_Z[label=a]
+B_Z->B_Z[label=b]
+}

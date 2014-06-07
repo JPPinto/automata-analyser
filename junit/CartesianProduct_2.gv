@@ -1,0 +1,11 @@
+digraph{
+""[shape=none]
+q1[shape=doublecircle]
+""->q0
+q0->q0[label=a]
+q0->q1[label=b]
+q0->q0[label=c]
+q1->q0[label=a]
+q1->q1[label=b]
+q1->q0[label=c]
+}

@@ -1,0 +1,14 @@
+digraph{
+""[shape=none]
+s1[shape=doublecircle]
+""->s0
+s0->s1[label=a]
+s0->s0[label=b]
+s0->s2[label=c]
+s1->s1[label=a]
+s1->s1[label=b]
+s1->s2[label=c]
+s2->s2[label=a]
+s2->s2[label=b]
+s2->s2[label=c]
+}
