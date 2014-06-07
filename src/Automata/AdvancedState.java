@@ -2,10 +2,11 @@ package Automata;
 
 import java.util.Iterator;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 public class AdvancedState {
-    private Set<String> names;
+    private SortedSet<String> names;
     private boolean acceptanceState;
     private boolean initialState;
 
@@ -59,14 +60,13 @@ public class AdvancedState {
             return true;
         }
 
-        // TODO FIX IT
-        if (!(inputO instanceof Vertex)){
+        if (!(inputO instanceof AdvancedState)){
             return false;
         }
 
         AdvancedState compare = (AdvancedState) inputO;
 
-        if (!names.containsAll(compare.getNames())){
+        if (!((names.containsAll(compare.getNames()) && (compare.getNames().containsAll(names))))){
             return false;
         }
 
