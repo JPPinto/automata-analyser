@@ -68,12 +68,12 @@ public class Automata extends JPanel {
         g = new ListenableDirectedGraph(org.jgraph.graph.DefaultEdge.class);
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
 
         Automata temp_automata = new Automata();
 
         temp_automata.compareRE("(101*)*");
-    }
+    }*/
 
     public void parseDottyFile(String graph) {
         parsing = true;
