@@ -11,6 +11,7 @@
 package Automata;
 
 import org.junit.Test;
+import org.junit.runner.JUnitCore;
 
 import java.io.*;
 
@@ -18,6 +19,11 @@ import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
 public class AutomataTest {
+
+	public static void main(String[] args) throws Exception {
+		JUnitCore.main(
+				"Automata.AutomataTest");
+	}
 
     @Test
     public void testParser() throws Exception {

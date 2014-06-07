@@ -1,9 +1,0 @@
-digraph{
-""[shape=none]
-A[shape=doublecircle]
-""->A
-A->A[label=b]
-A->B[label=a]
-B->A[label=a]
-B->B[label=b]
-}
